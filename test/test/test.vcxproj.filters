@@ -21,6 +21,9 @@
     <ClCompile Include="Token.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="win.lex.yy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Token.h">
