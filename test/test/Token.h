@@ -9,7 +9,12 @@ extern FILE *yyin, *yyout;
 
 typedef enum eTOKENS
 {
+	TOKEN_PROGRAM,
+	TOKEN_END,
+	TOKEN_REAL,
 	TOKEN_INTEGER,
+	TOKEN_VOID,
+	TOKEN_RETURN,
 	TOKEN_IF,
 	TOKEN_WHILE,
 	TOKEN_OP_EQUAL
@@ -38,6 +43,7 @@ typedef struct Node
 } Node;
 
 void create_and_store_token(eTOKENS kind, char* lexeme, int numOfLine);
+char *getTokenKind(eTOKENS kind);
 Token *next_token();
 Token *back_token();
 

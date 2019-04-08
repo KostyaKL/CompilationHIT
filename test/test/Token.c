@@ -98,3 +98,28 @@ Token *back_token() { return NULL; }
 *  returns the token that was created.
 */
 Token *next_token() { return NULL; }
+
+char *getTokenKind(eTOKENS kind) { 
+	switch (kind) {
+	case TOKEN_PROGRAM:
+		return "Program";
+	case TOKEN_END:
+		return "End";
+	case TOKEN_REAL:
+		return "Real";
+	case TOKEN_INTEGER:
+		return "Integer";
+	case TOKEN_VOID:
+		return "Void";
+	case TOKEN_RETURN:
+		return "Return";
+	case TOKEN_IF:
+		return "If";
+	case TOKEN_WHILE:
+		return "While";
+	case TOKEN_OP_EQUAL:
+		return "Equal";
+	default:
+		return "Unknown Token";
+	};
+};
