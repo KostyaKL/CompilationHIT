@@ -1,0 +1,45 @@
+Token of kind KEYWORD was found at line 1, lexeme: program 
+Token of kind KEYWORD was found at line 1, lexeme: program 
+Token of kind ID was found at line 2, lexeme: Void 
+Token of kind KEYWORD was found at line 2, lexeme: void 
+The character v at line 2 does not begin any legal token in the language. 1
+Token of kind ID was found at line 3, lexeme: varName_ok 
+The character v at line 3 does not begin any legal token in the language. 1
+The character _ at line 3 does not begin any legal token in the language. 1
+Token of kind AR OP was found at line 6, lexeme: *
+Token of kind AR OP was found at line 6, lexeme: *
+Token of kind AR OP was found at line 6, lexeme: *
+Token of kind AR OP was found at line 6, lexeme: =
+Token of kind AR OP was found at line 6, lexeme: =
+Token of kind AR OP was found at line 6, lexeme: =
+Token of kind AR OP was found at line 7, lexeme: /
+Token of kind AR OP was found at line 7, lexeme: /
+Token of kind AR OP was found at line 7, lexeme: /
+Token of kind AR OP was found at line 7, lexeme: =
+Token of kind AR OP was found at line 7, lexeme: /
+Token of kind AR OP was found at line 7, lexeme: *
+Token of kind REAL NUMBER was found at line 8, lexeme: 3.14 
+Token of kind NUMBER was found at line 8, lexeme: 556756 
+Token of kind REAL NUMBER was found at line 8, lexeme: 76.54353 
+The character 3 at line 8 does not begin any legal token in the language. 1
+The character . at line 8 does not begin any legal token in the language. 1
+A COMMENT was found at line 8, lexeme: --the last two nums are illegal
+Token of kind SEPARATION SIGN was found at line 9, lexeme: ;
+Token of kind SEPARATION SIGN was found at line 9, lexeme: ;
+Token of kind SEPARATION SIGN was found at line 9, lexeme: ;
+Token of kind SEPARATION SIGN was found at line 10, lexeme: [
+Token of kind SEPARATION SIGN was found at line 11, lexeme: [
+Token of kind SEPARATION SIGN was found at line 12, lexeme: ]
+Token of kind SEPARATION SIGN was found at line 12, lexeme: ]
+Token of kind SEPARATION SIGN was found at line 12, lexeme: ]
+Token of kind SEPARATION SIGN was found at line 13, lexeme: (
+Token of kind SEPARATION SIGN was found at line 13, lexeme: )
+Token of kind SEPARATION SIGN was found at line 13, lexeme: (
+Token of kind SEPARATION SIGN was found at line 13, lexeme: (
+Token of kind SEPARATION SIGN was found at line 13, lexeme: (
+A COMMENT was found at line 13, lexeme: --no error here: @#$%^&
+The character 0 at line 15 does not begin any legal token in the language. 1
+Token of kind REAL NUMBER was found at line 16, lexeme: 0.123 
+The character 0 at line 16 does not begin any legal token in the language. 1
+The character 5 at line 17 does not begin any legal token in the language. 1
+Token of kind EOF was found at line 17
