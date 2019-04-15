@@ -1,5 +1,4 @@
 
-
 %{
 
 #include <stdio.h>
@@ -16,8 +15,6 @@ LETTER	        [a-zA-Z]
 ID		        {LETTER}({LETTER}|{DIGIT})*("_"({LETTER}|{DIGIT})+)*
 INT_NUMBER      0|[1-9]{DIGIT}*
 REAL_NUMBER     0"."{DIGIT}*[1-9]|[1-9]{DIGIT}*"."{DIGIT}*[1-9]
-EOF             <<EOF>>
-
 
 %%
 
@@ -76,9 +73,9 @@ EOF             <<EOF>>
 
 "\n"				{lineNumber++;}
 
-"\t"				{;}
+"\t"				{}
 
-" "					{;}
+" "					{}
 
 {ID}				{create_and_store_token(TOKEN_ID, yytext, lineNumber);
 					fprintf(yyout, "Token of kind ID was found at line %d, lexeme: %s\n", lineNumber, yytext);}
@@ -89,7 +86,7 @@ EOF             <<EOF>>
 {REAL_NUMBER}       {create_and_store_token(TOKEN_REAL_NUMBER, yytext, lineNumber);
 		 			fprintf(yyout, "Token of kind REAL NUMBER was found at line %d, lexeme: %s\n", lineNumber, yytext);}
 
-{EOF}				{create_and_store_token(TOKEN_EOF, yytext, lineNumber);
+<<EOF>>				{create_and_store_token(TOKEN_EOF, yytext, lineNumber);
 		 			fprintf(yyout, "Token of kind EOF was found at line %d", lineNumber);
 					return;}
 
@@ -102,9 +99,31 @@ int yywrap(void){return 1;}
 
 void main(int argc, char* argv[])
 {
-	yyin = fopen("check.txt", "r");
-	yyout = fopen("output.txt", "w");
+	yyin = fopen("test1.txt", "r");
+	yyout = fopen("test1_31133454_310765821_lex.txt", "w");
 	
-	yylex();
+	if(yyin){
+		yylex();
+
+    	fclose(yyin);
+    	fclose(yyout);
+	}
+	else{
+		printf("no test1 file found\n");
+	}
+
+    yyin = fopen("test2.txt", "r");
+	yyout = fopen("test2_31133454_310765821_lex.txt", "w");
+	
+	if(yyin){
+		lineNumber = 1;
+		yylex();
+
+    	fclose(yyin);
+    	fclose(yyout);
+	}
+	else{
+		printf("no test2 file found\n");
+	}
 	
 }
