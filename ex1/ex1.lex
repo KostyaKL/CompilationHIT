@@ -6,103 +6,144 @@
 #include <string.h>
 #include "Token.h"
 
-int lineNumber = 1;
+int lineNumber = 1; /* line counter initialization */
+void print2file(char*); /* declaration of method to print the token database to a text file */
 
 %}
 
-DIGIT	        [0-9]
-LETTER	        [a-zA-Z]
-ID		        {LETTER}({LETTER}|{DIGIT})*("_"({LETTER}|{DIGIT})+)*
-INT_NUMBER      0|[1-9]{DIGIT}*
-REAL_NUMBER     0"."{DIGIT}*[1-9]|[1-9]{DIGIT}*"."{DIGIT}*[1-9]
+PROGRAM				"program"
+END					"end"
+REAL				"real"
+INTEGER				"integer"
+VOID				"void"
+RETURN				"return"
+
+MUL					"*"
+DIV					"/"
+ASSIGN				"="
+
+COMMA				","
+SEMICOLON			";"
+
+OPEN_CIRCULAR_PAR	"("
+CLOSE_CIRCULAR_PAR	")"
+OPEN_SQUARE_PAR		"["
+CLOSE_SQUARE_PAR	"]"
+OPEN_CURLY_PAR		"{"
+CLOSE_CURLY_PAR		"}"
+
+COMMENT_SIGN		"--"
+COMMENT				{COMMENT_SIGN}.*
+NEW_LINE			"\n"
+TAB					"\t"
+SPACE				" "
+
+DIGIT				[0-9]
+NATURAL				[1-9]
+LETTER				[a-zA-Z]
+ID					{LETTER}({LETTER}|{DIGIT})*("_"({LETTER}|{DIGIT})+)*
+INT_NUMBER			0|{NATURAL}{DIGIT}*
+REAL_NUMBER			0"."{DIGIT}*{NATURAL}|{NATURAL}{DIGIT}*"."{DIGIT}*{NATURAL}
 
 %%
 
-"program"		    {create_and_store_token(TOKEN_PROGRAM, yytext, lineNumber);
-					fprintf(yyout, "Token of kind KEYWORD was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{PROGRAM}				{create_and_store_token(TOKEN_PROGRAM, yytext, lineNumber);
+						print2file("KEYWORD");}
 
-"end"		        {create_and_store_token(TOKEN_END, yytext, lineNumber);
-					fprintf(yyout, "Token of kind KEYWORD was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{END}					{create_and_store_token(TOKEN_END, yytext, lineNumber);
+						print2file("KEYWORD");}
 
-"real"		        {create_and_store_token(TOKEN_REAL, yytext, lineNumber);
-					fprintf(yyout, "Token of kind KEYWORD was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{REAL}					{create_and_store_token(TOKEN_REAL, yytext, lineNumber);
+						print2file("KEYWORD");}
 
-"integer"		    {create_and_store_token(TOKEN_INTEGER, yytext, lineNumber);
-					fprintf(yyout, "Token of kind KEYWORD was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{INTEGER}				{create_and_store_token(TOKEN_INTEGER, yytext, lineNumber);
+						print2file("KEYWORD");}
 
-"void"		        {create_and_store_token(TOKEN_VOID, yytext, lineNumber);
-					fprintf(yyout, "Token of kind KEYWORD was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{VOID}					{create_and_store_token(TOKEN_VOID, yytext, lineNumber);
+						print2file("KEYWORD");}
 
-"return"		    {create_and_store_token(TOKEN_RETURN, yytext, lineNumber);
-					fprintf(yyout, "Token of kind KEYWORD was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{RETURN}				{create_and_store_token(TOKEN_RETURN, yytext, lineNumber);
+						print2file("KEYWORD");}
 
-"*"		        	{create_and_store_token(TOKEN_MUL, yytext, lineNumber);
-		        	fprintf(yyout, "Token of kind AR OP was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{MUL}	        		{create_and_store_token(TOKEN_MUL, yytext, lineNumber);
+		        		print2file("OPERATION");}
 
-"/"		        	{create_and_store_token(TOKEN_DIV, yytext, lineNumber);
-		        	fprintf(yyout, "Token of kind AR OP was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{DIV}		        	{create_and_store_token(TOKEN_DIV, yytext, lineNumber);
+		        		print2file("OPERATION");}
 
-"="		        	{create_and_store_token(TOKEN_ASSIGNMENT, yytext, lineNumber);
-		        	fprintf(yyout, "Token of kind AR OP was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{ASSIGN}		        {create_and_store_token(TOKEN_ASSIGNMENT, yytext, lineNumber);
+						print2file("OPERATION");}
 
-","		        	{create_and_store_token(TOKEN_COMMA, yytext, lineNumber);
-		        	fprintf(yyout, "Token of kind SEPARATION SIGN was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{COMMA}		        	{create_and_store_token(TOKEN_COMMA, yytext, lineNumber);
+		        		print2file("SEPARATION SIGN");}
 
-";"		        	{create_and_store_token(TOKEN_SEMICOLON, yytext, lineNumber);
-	        		fprintf(yyout, "Token of kind SEPARATION SIGN was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{SEMICOLON}		        {create_and_store_token(TOKEN_SEMICOLON, yytext, lineNumber);
+	        			print2file("SEPARATION SIGN");}
 
-"("	        		{create_and_store_token(TOKEN_OPEN_CIRCULAR_PAR, yytext, lineNumber);
-	        		fprintf(yyout, "Token of kind SEPARATION SIGN was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{OPEN_CIRCULAR_PAR}	    {create_and_store_token(TOKEN_OPEN_CIRCULAR_PAR, yytext, lineNumber);
+	        			print2file("SEPARATION SIGN");}
 
-")"			        {create_and_store_token(TOKEN_CLOSE_CIRCULAR_PAR, yytext, lineNumber);
-	        		fprintf(yyout, "Token of kind SEPARATION SIGN was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{CLOSE_CIRCULAR_PAR}	{create_and_store_token(TOKEN_CLOSE_CIRCULAR_PAR, yytext, lineNumber);
+	        			print2file("SEPARATION SIGN");}
 
-"["		        	{create_and_store_token(TOKEN_OPEN_SQUER_PAR, yytext, lineNumber);
-        			fprintf(yyout, "Token of kind SEPARATION SIGN was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{OPEN_SQUARE_PAR}		{create_and_store_token(TOKEN_OPEN_SQUER_PAR, yytext, lineNumber);
+        				print2file("SEPARATION SIGN");}
 
-"]"		        	{create_and_store_token(TOKEN_CLOSE_SQUER_PAR, yytext, lineNumber);
-        			fprintf(yyout, "Token of kind SEPARATION SIGN was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{CLOSE_SQUARE_PAR}		{create_and_store_token(TOKEN_CLOSE_SQUER_PAR, yytext, lineNumber);
+        				print2file("SEPARATION SIGN");}
 
-"{"	        		{create_and_store_token(TOKEN_OPEN_CURLY_PAR, yytext, lineNumber);
-			        fprintf(yyout, "Token of kind SEPARATION SIGN was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{OPEN_CURLY_PAR}	    {create_and_store_token(TOKEN_OPEN_CURLY_PAR, yytext, lineNumber);
+						print2file("SEPARATION SIGN");}
 
-"}"	        		{create_and_store_token(TOKEN_CLOSE_CURLY_PAR, yytext, lineNumber);
-		        	fprintf(yyout, "Token of kind SEPARATION SIGN was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{CLOSE_CURLY_PAR}	    {create_and_store_token(TOKEN_CLOSE_CURLY_PAR, yytext, lineNumber);
+		        		print2file("SEPARATION SIGN");}
 
-"--".* 				{fprintf(yyout, "A COMMENT was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{COMMENT} 				{}
 
-"\n"				{lineNumber++;}
+{NEW_LINE}				{lineNumber++;}
 
-"\t"				{}
+{TAB}					{}
 
-" "					{}
+{SPACE}					{}
 
-{ID}				{create_and_store_token(TOKEN_ID, yytext, lineNumber);
-					fprintf(yyout, "Token of kind ID was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{ID}					{create_and_store_token(TOKEN_ID, yytext, lineNumber);
+						print2file("ID");}
 
-{INT_NUMBER}		{create_and_store_token(TOKEN_INT_NUMBER, yytext, lineNumber);
-		 			fprintf(yyout, "Token of kind NUMBER was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{INT_NUMBER}			{create_and_store_token(TOKEN_INT_NUMBER, yytext, lineNumber);
+		 				print2file("INT NUMBER");}
 
-{REAL_NUMBER}       {create_and_store_token(TOKEN_REAL_NUMBER, yytext, lineNumber);
-		 			fprintf(yyout, "Token of kind REAL NUMBER was found at line %d, lexeme: %s\n", lineNumber, yytext);}
+{REAL_NUMBER}			{create_and_store_token(TOKEN_REAL_NUMBER, yytext, lineNumber);
+		 				print2file("REAL NUMBER");}
 
-<<EOF>>				{create_and_store_token(TOKEN_EOF, yytext, lineNumber);
-		 			fprintf(yyout, "Token of kind EOF was found at line %d", lineNumber);
-					return;}
+<<EOF>>					{create_and_store_token(TOKEN_EOF, yytext, lineNumber);
+			 			print2file(1);
+						return;}
 
-.					{fprintf(yyout, "The character %s at line %d does not begin any legal token in the language.\n", yytext, lineNumber);}
+.						{print2file(NULL);}
 														
 
 %%
 
 int yywrap(void){return 1;}
 
+void print2file(char *token_kind){ /* method to print the token database to a text file */
+	if(token_kind == NULL){ /* if token not recognised print error */
+		fprintf(yyout, "The character %s at line %d does not begin any legal token in the language.\n", yytext, lineNumber);
+	}
+	else if(token_kind == 1){ /* if end of file */
+		fprintf(yyout, "Token of kind EOF was found at line %d", lineNumber);
+	}
+	else{ /* recognised tokens */
+		fprintf(yyout, "Token of kind %s was found at line %d, lexeme: %s\n", token_kind, lineNumber, yytext);
+	}
+}
+
 void main(int argc, char* argv[])
 {
-	yyin = fopen("test1.txt", "r");
-	yyout = fopen("test1_31133454_310765821_lex.txt", "w");
+	yyin = fopen("C:\\temp\\test1.txt", "r");
+	yyout = fopen("C:\\temp\\test1_311334544_310765821_lex.txt", "w");
 	
-	if(yyin){
+	if(yyin){ /* if test is openned sucsessfully */
 		yylex();
 
     	fclose(yyin);
@@ -112,11 +153,11 @@ void main(int argc, char* argv[])
 		printf("no test1 file found\n");
 	}
 
-    yyin = fopen("test2.txt", "r");
-	yyout = fopen("test2_31133454_310765821_lex.txt", "w");
+    yyin = fopen("C:\\temp\\test2.txt", "r");
+	yyout = fopen("C:\\temp\\test2_311334544_310765821_lex.txt", "w");
 	
-	if(yyin){
-		lineNumber = 1;
+	if(yyin){ /* if test is openned sucsessfully */
+		lineNumber = 1; /* reset line counter */
 		yylex();
 
     	fclose(yyin);

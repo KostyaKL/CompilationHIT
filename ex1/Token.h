@@ -30,9 +30,6 @@ typedef enum eTOKENS
 	TOKEN_ID,
 	TOKEN_INT_NUMBER,
 	TOKEN_REAL_NUMBER,
-	TOKEN_IF,
-	TOKEN_WHILE,
-	TOKEN_OP_EQUAL,
 	TOKEN_EOF
 	/*
 		Examples of tokens, add/change according to your needs.
