@@ -92,7 +92,7 @@ void create_and_store_token(eTOKENS kind, char* lexeme, int numOfLine)
 Token *back_token() { 
 	if (currentIndex == 0) { /* beginning of current token array */
 		if ( currentNode->prev == NULL){ /* current token is the first token, no more back */
-			return NULL;
+			return &currentNode->tokensArray[currentIndex]; /* return current token */
 		}
 		else { /* go to previous token array */
 			currentIndex = 99;
