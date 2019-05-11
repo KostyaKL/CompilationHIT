@@ -21,7 +21,6 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
-#include "RecursiveDescentParser.h"
 
 /* end standard C headers. */
 
@@ -501,9 +500,11 @@ char *yytext;
 
 int lineNumber = 1; /* line counter initialization */
 void print2file(char*); /* declaration of method to print the token database to a text file */
+FILE *lex_reuslt; /* lex part result file */
+FILE *syntactic_reuslt; /* parser part result file */
 
-#line 504 "win.lex.yy.c"
-#line 505 "win.lex.yy.c"
+#line 506 "win.lex.yy.c"
+#line 507 "win.lex.yy.c"
 
 #define INITIAL 0
 
@@ -717,10 +718,10 @@ YY_DECL
 		}
 
 	{
-#line 48 "ex1.lex"
+#line 50 "ex1.lex"
 
 
-#line 722 "win.lex.yy.c"
+#line 724 "win.lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -779,162 +780,182 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 50 "ex1.lex"
+#line 52 "ex1.lex"
 {create_and_store_token(TOKEN_PROGRAM, yytext, lineNumber);
-						print2file("KEYWORD");}
+						print2file("KEYWORD");
+						return;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 53 "ex1.lex"
+#line 56 "ex1.lex"
 {create_and_store_token(TOKEN_END, yytext, lineNumber);
-						print2file("KEYWORD");}
+						print2file("KEYWORD");
+						return;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 56 "ex1.lex"
+#line 60 "ex1.lex"
 {create_and_store_token(TOKEN_REAL, yytext, lineNumber);
-						print2file("KEYWORD");}
+						print2file("KEYWORD");
+						return;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 59 "ex1.lex"
+#line 64 "ex1.lex"
 {create_and_store_token(TOKEN_INTEGER, yytext, lineNumber);
-						print2file("KEYWORD");}
+						print2file("KEYWORD");
+						return;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 62 "ex1.lex"
+#line 68 "ex1.lex"
 {create_and_store_token(TOKEN_VOID, yytext, lineNumber);
-						print2file("KEYWORD");}
+						print2file("KEYWORD");
+						return;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 65 "ex1.lex"
+#line 72 "ex1.lex"
 {create_and_store_token(TOKEN_RETURN, yytext, lineNumber);
-						print2file("KEYWORD");}
+						print2file("KEYWORD");
+						return;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 68 "ex1.lex"
+#line 76 "ex1.lex"
 {create_and_store_token(TOKEN_MUL, yytext, lineNumber);
-		        		print2file("OPERATION");}
+		        		print2file("OPERATION");
+						return;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 71 "ex1.lex"
+#line 80 "ex1.lex"
 {create_and_store_token(TOKEN_DIV, yytext, lineNumber);
-		        		print2file("OPERATION");}
+		        		print2file("OPERATION");
+						return;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 74 "ex1.lex"
+#line 84 "ex1.lex"
 {create_and_store_token(TOKEN_ASSIGNMENT, yytext, lineNumber);
-						print2file("OPERATION");}
+						print2file("OPERATION");
+						return;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 77 "ex1.lex"
+#line 88 "ex1.lex"
 {create_and_store_token(TOKEN_COMMA, yytext, lineNumber);
-		        		print2file("SEPARATION SIGN");}
+		        		print2file("SEPARATION SIGN");
+						return;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 80 "ex1.lex"
+#line 92 "ex1.lex"
 {create_and_store_token(TOKEN_SEMICOLON, yytext, lineNumber);
-	        			print2file("SEPARATION SIGN");}
+	        			print2file("SEPARATION SIGN");
+						return;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 83 "ex1.lex"
+#line 96 "ex1.lex"
 {create_and_store_token(TOKEN_OPEN_CIRCULAR_PAR, yytext, lineNumber);
-	        			print2file("SEPARATION SIGN");}
+	        			print2file("SEPARATION SIGN");
+						return;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 86 "ex1.lex"
+#line 100 "ex1.lex"
 {create_and_store_token(TOKEN_CLOSE_CIRCULAR_PAR, yytext, lineNumber);
-	        			print2file("SEPARATION SIGN");}
+	        			print2file("SEPARATION SIGN");
+						return;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 89 "ex1.lex"
+#line 104 "ex1.lex"
 {create_and_store_token(TOKEN_OPEN_SQUER_PAR, yytext, lineNumber);
-        				print2file("SEPARATION SIGN");}
+        				print2file("SEPARATION SIGN");
+						return;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 92 "ex1.lex"
+#line 108 "ex1.lex"
 {create_and_store_token(TOKEN_CLOSE_SQUER_PAR, yytext, lineNumber);
-        				print2file("SEPARATION SIGN");}
+        				print2file("SEPARATION SIGN");
+						return;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 95 "ex1.lex"
+#line 112 "ex1.lex"
 {create_and_store_token(TOKEN_OPEN_CURLY_PAR, yytext, lineNumber);
-						print2file("SEPARATION SIGN");}
+						print2file("SEPARATION SIGN");
+						return;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 98 "ex1.lex"
+#line 116 "ex1.lex"
 {create_and_store_token(TOKEN_CLOSE_CURLY_PAR, yytext, lineNumber);
-		        		print2file("SEPARATION SIGN");}
+		        		print2file("SEPARATION SIGN");
+						return;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 101 "ex1.lex"
+#line 120 "ex1.lex"
 {}
 	YY_BREAK
 case 19:
 /* rule 19 can match eol */
 YY_RULE_SETUP
-#line 103 "ex1.lex"
+#line 122 "ex1.lex"
 {lineNumber++;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 105 "ex1.lex"
+#line 124 "ex1.lex"
 {}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 107 "ex1.lex"
+#line 126 "ex1.lex"
 {}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 109 "ex1.lex"
+#line 128 "ex1.lex"
 {create_and_store_token(TOKEN_ID, yytext, lineNumber);
-						print2file("ID");}
+						print2file("ID");
+						return;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 112 "ex1.lex"
+#line 132 "ex1.lex"
 {create_and_store_token(TOKEN_INT_NUMBER, yytext, lineNumber);
-		 				print2file("INT NUMBER");}
+		 				print2file("INT NUMBER");
+						return;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 115 "ex1.lex"
+#line 136 "ex1.lex"
 {create_and_store_token(TOKEN_REAL_NUMBER, yytext, lineNumber);
-		 				print2file("REAL NUMBER");}
+		 				print2file("REAL NUMBER");
+						return;}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 118 "ex1.lex"
+#line 140 "ex1.lex"
 {create_and_store_token(TOKEN_EOF, yytext, lineNumber);
 			 			print2file(1);
 						return;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 122 "ex1.lex"
+#line 144 "ex1.lex"
 {print2file(NULL);}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 125 "ex1.lex"
+#line 147 "ex1.lex"
 ECHO;
 	YY_BREAK
-#line 936 "win.lex.yy.c"
+#line 958 "win.lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1937,52 +1958,54 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 125 "ex1.lex"
+#line 147 "ex1.lex"
 
 
 int yywrap(void){return 1;}
 
 void print2file(char *token_kind){ /* method to print the token database to a text file */
 	if(token_kind == NULL){ /* if token not recognised print error */
-		fprintf(yyout, "The character %s at line %d does not begin any legal token in the language.\n", yytext, lineNumber);
+		fprintf(lex_reuslt, "The character %s at line %d does not begin any legal token in the language.\n", yytext, lineNumber);
 	}
 	else if(token_kind == 1){ /* if end of file */
-		fprintf(yyout, "Token of kind EOF was found at line %d", lineNumber);
+		fprintf(lex_reuslt, "Token of kind EOF was found at line %d", lineNumber);
 	}
 	else{ /* recognised tokens */
-		fprintf(yyout, "Token of kind %s was found at line %d, lexeme: %s\n", token_kind, lineNumber, yytext);
+		fprintf(lex_reuslt, "Token of kind %s was found at line %d, lexeme: %s\n", token_kind, lineNumber, yytext);
 	}
 }
 
 void main(int argc, char* argv[])
 {
 	yyin = fopen("C:\\temp\\test1.txt", "r");
-	yyout = fopen("C:\\temp\\test1_311334544_310765821_lex.txt", "w");
+	lex_reuslt = fopen("C:\\temp\\test1_311334544_310765821_lex.txt", "w");
+	syntactic_reuslt = fopen("C:\\temp\\test1_311334544_310765821_syntactic.txt", "w");
 	
 	if(yyin){ /* if test is openned sucsessfully */
-		yylex();
+		parser();
 
     	fclose(yyin);
-    	fclose(yyout);
+    	fclose(lex_reuslt);
+		fclose(syntactic_reuslt);
 	}
 	else{
 		printf("no test1 file found\n");
 	}
 
-    yyin = fopen("C:\\temp\\test2.txt", "r");
-	yyout = fopen("C:\\temp\\test2_311334544_310765821_lex.txt", "w");
-	
-	if(yyin){ /* if test is openned sucsessfully */
-		lineNumber = 1; /* reset line counter */
-		yylex();
+	yyin = fopen("C:\\temp\\test2.txt", "r");
+	lex_reuslt = fopen("C:\\temp\\test2_311334544_310765821_lex.txt", "w");
+	syntactic_reuslt = fopen("C:\\temp\\test2_311334544_310765821_syntactic.txt", "w");
 
-    	fclose(yyin);
-    	fclose(yyout);
+	if (yyin) { /* if test is openned sucsessfully */
+		lineNumber = 1; /*reset line counter*/
+		parser();
+
+		fclose(yyin);
+		fclose(lex_reuslt);
+		fclose(syntactic_reuslt);
 	}
-	else{
+	else {
 		printf("no test2 file found\n");
 	}
 	
-	parser();
-
 }
