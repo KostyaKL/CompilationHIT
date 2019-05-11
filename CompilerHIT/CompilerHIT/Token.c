@@ -122,7 +122,7 @@ Token *next_token() {
 			currentIndex = 0;
 		}
 	}
-	else if (currentNode->tokensArray[currentIndex + 1].lexeme == 0) { /* need to get new token */
+	else if (currentNode->tokensArray[currentIndex + 1].lexeme == NULL) { /* need to get new token */
 		yylex();
 	}
 	else { /* go to token index */
@@ -135,4 +135,22 @@ void match(eTOKENS t) {
 	if (next_token() != t) {
 		printf("Parser Error"); /* todo: error handling */
 	}
+}
+
+void reset_tokens() {
+	while (currentNode->next != NULL)
+	{
+		currentNode = currentNode->next;
+	}
+	while (currentNode->prev != NULL)
+	{
+		Node *tmp = currentNode->prev;
+		free(currentNode->tokensArray);	
+		free(currentNode);
+		currentNode = tmp;
+	}
+	currentIndex = 0;
+	free(currentNode->tokensArray);
+	free(currentNode);
+	currentNode = NULL;
 }

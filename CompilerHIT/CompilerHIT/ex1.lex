@@ -5,11 +5,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Token.h"
+#include "RecursiveDescentParser.h"
 
 int lineNumber = 1; /* line counter initialization */
 void print2file(char*); /* declaration of method to print the token database to a text file */
-FILE *lex_reuslt; /* lex part result file */
-FILE *syntactic_reuslt; /* parser part result file */
 
 %}
 
@@ -150,47 +149,48 @@ int yywrap(void){return 1;}
 
 void print2file(char *token_kind){ /* method to print the token database to a text file */
 	if(token_kind == NULL){ /* if token not recognised print error */
-		fprintf(lex_reuslt, "The character %s at line %d does not begin any legal token in the language.\n", yytext, lineNumber);
+		fprintf(yyout, "The character %s at line %d does not begin any legal token in the language.\n", yytext, lineNumber);
 	}
 	else if(token_kind == 1){ /* if end of file */
-		fprintf(lex_reuslt, "Token of kind EOF was found at line %d", lineNumber);
+		fprintf(yyout, "Token of kind EOF was found at line %d", lineNumber);
 	}
 	else{ /* recognised tokens */
-		fprintf(lex_reuslt, "Token of kind %s was found at line %d, lexeme: %s\n", token_kind, lineNumber, yytext);
+		fprintf(yyout, "Token of kind %s was found at line %d, lexeme: %s\n", token_kind, lineNumber, yytext);
 	}
 }
 
 void main(int argc, char* argv[])
 {
+	FILE *parser_report;
 	yyin = fopen("C:\\temp\\test1.txt", "r");
-	lex_reuslt = fopen("C:\\temp\\test1_311334544_310765821_lex.txt", "w");
-	syntactic_reuslt = fopen("C:\\temp\\test1_311334544_310765821_syntactic.txt", "w");
+	yyout = fopen("C:\\temp\\test1_311334544_310765821_lex.txt", "w");
+	parser_report = fopen("C:\\temp\\test1_311334544_310765821_syntactic.txt", "w");
 	
 	if(yyin){ /* if test is openned sucsessfully */
-		parser();
+		parser(parser_report);
 
     	fclose(yyin);
-    	fclose(lex_reuslt);
-		fclose(syntactic_reuslt);
+    	fclose(yyout);
+		fclose(parser_report);
 	}
 	else{
 		printf("no test1 file found\n");
 	}
 
 	yyin = fopen("C:\\temp\\test2.txt", "r");
-	lex_reuslt = fopen("C:\\temp\\test2_311334544_310765821_lex.txt", "w");
-	syntactic_reuslt = fopen("C:\\temp\\test2_311334544_310765821_syntactic.txt", "w");
+	yyout = fopen("C:\\temp\\test2_311334544_310765821_lex.txt", "w");
+	parser_report = fopen("C:\\temp\\test2_311334544_310765821_syntactic.txt", "w");
 
 	if (yyin) { /* if test is openned sucsessfully */
 		lineNumber = 1; /*reset line counter*/
-		parser();
+		reset_tokens();
+		parser(parser_report);
 
 		fclose(yyin);
-		fclose(lex_reuslt);
-		fclose(syntactic_reuslt);
+		fclose(yyout);
+		fclose(parser_report);
 	}
 	else {
 		printf("no test2 file found\n");
 	}
-	
 }
