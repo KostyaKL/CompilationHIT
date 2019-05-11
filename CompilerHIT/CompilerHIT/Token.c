@@ -89,7 +89,22 @@ void create_and_store_token(eTOKENS kind, char* lexeme, int numOfLine)
 /*
 * This function returns the token in the storage that is stored immediately before the current token (if exsits).
 */
-Token *back_token() { return NULL; }
+Token *back_token() { 
+	if (currentIndex == 0) { //beginning of current token array
+		if ( currentNode->prev == NULL){ //current token is the first token, no more back
+			return NULL;
+		}
+		else { //go to previous token array
+			currentIndex = 99;
+			currentNode = currentNode->prev;
+		}
+	}
+	else { //go to previous token index
+		currentIndex--;
+	}
+	
+	return &currentNode->tokensArray[currentIndex]; //return back token
+}
 
 /*
 * If the next token already exists in the storage (this happens when back_token was called before this call to next_token):
@@ -97,10 +112,27 @@ Token *back_token() { return NULL; }
 * Else: continues to read the input file in order to identify, create and store a new token (using yylex function);
 *  returns the token that was created.
 */
-Token *next_token() { return NULL; }
+Token *next_token() { 
+	if(currentIndex == 99){ //if current token is end of token array
+		if (currentNode->next == NULL){ //need to get new token from input
+			yylex();
+		}
+		else { //go to token (first of next array)
+			currentNode = currentNode->next;
+			currentIndex = 0;
+		}
+	}
+	else if (currentNode->tokensArray[currentIndex + 1].lexeme == 0) { //need to get new token
+		yylex();
+	}
+	else { //go to token index
+		currentIndex++;
+	}
+	return &currentNode->tokensArray[currentIndex]; //return next token
+}
 
 void match(eTOKENS t) {
 	if (next_token() != t) {
-		error;
+		printf("Parser Error"); //todo: error handling
 	}
 }
