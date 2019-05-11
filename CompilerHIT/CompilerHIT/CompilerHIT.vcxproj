@@ -142,18 +142,64 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="check.txt" />
-    <Text Include="output.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="ex1.lex" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="RecursiveDescentParser.c" />
     <ClCompile Include="Token.c" />
+    <ClCompile Include="parse_block.c" />
+    <ClCompile Include="parse_definitions.c" />
+    <ClCompile Include="parse_expression.c" />
+    <ClCompile Include="parse_expression_clean.c" />
+    <ClCompile Include="parse_function_call.c" />
+    <ClCompile Include="parse_func_definition.c" />
+    <ClCompile Include="parse_func_definitions.c" />
+    <ClCompile Include="parse_func_definitions_celan.c" />
+    <ClCompile Include="parse_parameters_list.c" />
+    <ClCompile Include="parse_param_definitions.c" />
+    <ClCompile Include="parse_program.c" />
+    <ClCompile Include="parse_returned_type.c" />
+    <ClCompile Include="parse_statment.c" />
+    <ClCompile Include="parse_statments.c" />
+    <ClCompile Include="parse_statment_clean.c" />
+    <ClCompile Include="parse_type.c" />
+    <ClCompile Include="parse_variable.c" />
+    <ClCompile Include="parse_variable_clean.c" />
+    <ClCompile Include="parse_variable_list.c" />
+    <ClCompile Include="parse_variable_list_clean.c" />
+    <ClCompile Include="parse_var_definition.c" />
+    <ClCompile Include="parse_var_definitions.c" />
     <ClCompile Include="win.lex.yy.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="RecursiveDescentParser.h" />
     <ClInclude Include="Token.h" />
+    <ClInclude Include="VariableFunctionList.h" />
+    <ClInclude Include="parse_block.h" />
+    <ClInclude Include="parse_definitions.h" />
+    <ClInclude Include="parse_expression.h" />
+    <ClInclude Include="parse_expression_clean.h" />
+    <ClInclude Include="parse_function_call.h" />
+    <ClInclude Include="parse_func_definition.h" />
+    <ClInclude Include="parse_func_definitions.h" />
+    <ClInclude Include="parse_func_definitions_celan.h" />
+    <ClInclude Include="parse_parameters_list.h" />
+    <ClInclude Include="parse_param_definitions.h" />
+    <ClInclude Include="parse_program.h" />
+    <ClInclude Include="parse_returned_type.h" />
+    <ClInclude Include="parse_statment.h" />
+    <ClInclude Include="parse_statments.h" />
+    <ClInclude Include="parse_statment_clean.h" />
+    <ClInclude Include="parse_type.h" />
+    <ClInclude Include="parse_variable.h" />
+    <ClInclude Include="parse_variable_clean.h" />
+    <ClInclude Include="parse_variable_list.h" />
+    <ClInclude Include="parse_variable_list_clean.h" />
+    <ClInclude Include="parse_var_definition.h" />
+    <ClInclude Include="parse_var_definitions.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="information.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

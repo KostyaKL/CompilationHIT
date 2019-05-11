@@ -98,3 +98,9 @@ Token *back_token() { return NULL; }
 *  returns the token that was created.
 */
 Token *next_token() { return NULL; }
+
+void match(eTOKENS t) {
+	if (next_token() != t) {
+		error;
+	}
+}

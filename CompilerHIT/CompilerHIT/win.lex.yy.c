@@ -21,6 +21,7 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
+#include "RecursiveDescentParser.h"
 
 /* end standard C headers. */
 
@@ -1982,4 +1983,6 @@ void main(int argc, char* argv[])
 		printf("no test2 file found\n");
 	}
 	
+	parser();
+
 }
