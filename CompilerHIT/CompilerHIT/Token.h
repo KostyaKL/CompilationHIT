@@ -15,9 +15,22 @@ typedef enum eTOKENS
 	TOKEN_INTEGER,
 	TOKEN_VOID,
 	TOKEN_RETURN,
-	TOKEN_IF,
-	TOKEN_WHILE,
-	TOKEN_OP_EQUAL
+	TOKEN_MUL,
+	TOKEN_DIV,
+	TOKEN_ASSIGNMENT,
+	TOKEN_COMMA,
+	TOKEN_SEMICOLON,
+	TOKEN_OPEN_CIRCULAR_PAR,
+	TOKEN_CLOSE_CIRCULAR_PAR,
+	TOKEN_OPEN_SQUER_PAR,
+	TOKEN_CLOSE_SQUER_PAR,
+	TOKEN_OPEN_CURLY_PAR,
+	TOKEN_CLOSE_CURLY_PAR,
+	TOKEN_COMMENT,
+	TOKEN_ID,
+	TOKEN_INT_NUMBER,
+	TOKEN_REAL_NUMBER,
+	TOKEN_EOF
 	/*
 		Examples of tokens, add/change according to your needs.
 		
@@ -43,7 +56,6 @@ typedef struct Node
 } Node;
 
 void create_and_store_token(eTOKENS kind, char* lexeme, int numOfLine);
-char *getTokenKind(eTOKENS kind);
 Token *next_token();
 Token *back_token();
 

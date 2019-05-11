@@ -11,8 +11,3 @@ Windows10 - 64Bit
 
 Development enviroment:
 Visual Studio 15
-
-Notes:
-1. The path of test files and results are stored in:
-	"c:\temp\"
-	and not "c:\\temp\\" as mentioned in the instructions

@@ -15,14 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Token.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ex1.lex">
+    <Text Include="check.txt">
       <Filter>Resource Files</Filter>
-    </None>
+    </Text>
+    <Text Include="output.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Token.c">
@@ -31,5 +29,15 @@
     <ClCompile Include="win.lex.yy.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Token.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ex1.lex">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

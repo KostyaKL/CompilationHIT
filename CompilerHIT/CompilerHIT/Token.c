@@ -19,23 +19,23 @@ Node* currentNode = NULL;
 * This function creates a token and stores it in the storage.
 */
 void create_and_store_token(eTOKENS kind, char* lexeme, int numOfLine)
-{ 
-	int length = strlen(lexeme)+1;
-	
+{
+	int length = strlen(lexeme) + 1;
+
 	// case 1: there is still no tokens in the storage.
 	if (currentNode == NULL)
 	{
 		currentNode = (Node*)malloc(sizeof(Node));
 
-		if(currentNode == NULL)
+		if (currentNode == NULL)
 		{
-			fprintf(yyout,"\nUnable to allocate memory! \n"); 
+			fprintf(yyout, "\nUnable to allocate memory! \n");
 			exit(0);
 		}
-		currentNode->tokensArray = (Token*)calloc(sizeof(Token),TOKEN_ARRAY_SIZE);
-		if(currentNode->tokensArray == NULL)
+		currentNode->tokensArray = (Token*)calloc(sizeof(Token), TOKEN_ARRAY_SIZE);
+		if (currentNode->tokensArray == NULL)
 		{
-			fprintf(yyout,"\nUnable to allocate memory! \n"); 
+			fprintf(yyout, "\nUnable to allocate memory! \n");
 			exit(0);
 		}
 		currentNode->prev = NULL;
@@ -51,18 +51,18 @@ void create_and_store_token(eTOKENS kind, char* lexeme, int numOfLine)
 			currentIndex = 0;
 			currentNode->next = (Node*)malloc(sizeof(Node));
 
-			if(currentNode == NULL)
+			if (currentNode == NULL)
 			{
-				fprintf(yyout,"\nUnable to allocate memory! \n"); 
+				fprintf(yyout, "\nUnable to allocate memory! \n");
 				exit(0);
 			}
 			currentNode->next->prev = currentNode;
 			currentNode = currentNode->next;
-			currentNode->tokensArray = (Token*)calloc(sizeof(Token),TOKEN_ARRAY_SIZE);
+			currentNode->tokensArray = (Token*)calloc(sizeof(Token), TOKEN_ARRAY_SIZE);
 
-			if(currentNode->tokensArray == NULL)
+			if (currentNode->tokensArray == NULL)
 			{
-				fprintf(yyout,"\nUnable to allocate memory! \n"); 
+				fprintf(yyout, "\nUnable to allocate memory! \n");
 				exit(0);
 			}
 			currentNode->next = NULL;
@@ -75,15 +75,15 @@ void create_and_store_token(eTOKENS kind, char* lexeme, int numOfLine)
 		}
 	}
 
-	currentNode->tokensArray[currentIndex].kind = kind;	
+	currentNode->tokensArray[currentIndex].kind = kind;
 	currentNode->tokensArray[currentIndex].lineNumber = numOfLine;
 
 	currentNode->tokensArray[currentIndex].lexeme = (char*)malloc(sizeof(char)*length);
-	#ifdef _WIN32
-		strcpy_s(currentNode->tokensArray[currentIndex].lexeme, length, lexeme);
-	#else
-		strcpy(currentNode->tokensArray[currentIndex].lexeme, lexeme);
-	#endif		
+#ifdef _WIN32
+	strcpy_s(currentNode->tokensArray[currentIndex].lexeme, length, lexeme);
+#else
+	strcpy(currentNode->tokensArray[currentIndex].lexeme, lexeme);
+#endif		
 }
 
 /*
@@ -92,34 +92,9 @@ void create_and_store_token(eTOKENS kind, char* lexeme, int numOfLine)
 Token *back_token() { return NULL; }
 
 /*
-* If the next token already exists in the storage (this happens when back_token was called before this call to next_token): 
+* If the next token already exists in the storage (this happens when back_token was called before this call to next_token):
 *  this function returns the next stored token.
 * Else: continues to read the input file in order to identify, create and store a new token (using yylex function);
 *  returns the token that was created.
 */
 Token *next_token() { return NULL; }
-
-char *getTokenKind(eTOKENS kind) { 
-	switch (kind) {
-	case TOKEN_PROGRAM:
-		return "Program";
-	case TOKEN_END:
-		return "End";
-	case TOKEN_REAL:
-		return "Real";
-	case TOKEN_INTEGER:
-		return "Integer";
-	case TOKEN_VOID:
-		return "Void";
-	case TOKEN_RETURN:
-		return "Return";
-	case TOKEN_IF:
-		return "If";
-	case TOKEN_WHILE:
-		return "While";
-	case TOKEN_OP_EQUAL:
-		return "Equal";
-	default:
-		return "Unknown Token";
-	};
-};

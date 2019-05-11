@@ -1,5 +1,0 @@
-Token of type Program was found in line 0. His lexema is program
- Token of type Program was found in line 0. His lexema is program
- Void Token of type Void was found in line 1. His lexema is void
- Token of type Void was found in line 1. His lexema is void
-dd		varName_ok var_name_not__ok1 var_name_not_ok2_ _varname_not_ok3* ** = ==///=/*3.14 556756 76.54353 354. .4243 --the last two nums are illegal;;;[[]]]()(((  --no error here: @#$%^&
