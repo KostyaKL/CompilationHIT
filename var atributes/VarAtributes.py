@@ -69,7 +69,7 @@ result = {"nullable": {"PROGRAM": False,
                     "PARAMETERS_LIST": [],
                     "EXPRESSION": [],
                     "EX": []},
-          "follow": {"PROGRAM": [],
+          "follow": {"PROGRAM": ["EOF"],
                      "VAR_DEFINITIONS": [],
                      "VR_DFS": [],
                      "VAR_DEFINITION": [],
@@ -126,10 +126,8 @@ def first(x):
     for rule in tmp_rules:
         tmp_first = rule.split()[0]
         if tmp_first in rules:
-            tmp_first_array = first(tmp_first)
-            for var in tmp_first_array:
-                if var not in ret:
-                    ret.append(var)
+            ret += first(tmp_first)
+            ret = list(set(ret))
         else:
             if tmp_first != "epsilon" and tmp_first not in ret:
                 ret.append(tmp_first)
@@ -146,10 +144,8 @@ def first(x):
                 break
         for null_var in nullable_vars:
             if null_var in rules:
-                tmp_first_array = first(null_var)
-                for var in tmp_first_array:
-                    if var not in ret:
-                        ret.append(var)
+                ret += first(null_var)
+                ret = list(set(ret))
             else:
                 if null_var != "epsilon" and null_var not in ret:
                     ret.append(null_var)
@@ -159,5 +155,48 @@ def first(x):
 for x in rules:
     result["first"][x] = first(x)
 
+
+def follow_func(x):
+    tmp_rules = rules[x].split("|")
+    for rule in tmp_rules:
+        size = len(rule.split())
+        for i in range(0, size):
+            if rule.split()[i] in rules and i < size - 1:
+                if rule.split()[i+1] in rules:
+                    result["follow"][rule.split()[i]] += result["first"][rule.split()[i+1]]
+                    result["follow"][rule.split()[i]] = list(set(result["follow"][rule.split()[i]]))
+                else:
+                    if rule.split()[i+1] != "epsilon" and rule.split()[i+1] not in result["follow"][rule.split()[i]]:
+                        result["follow"][rule.split()[i]].append(rule.split()[i+1])
+
+                nullable_vars = []
+                for j in range(i + 1, size):
+                    if rule.split()[j] in rules:
+                        if result["nullable"][rule.split()[j]] is False:
+                            break
+                        else:
+                            nullable_vars.append(rule.split()[j])
+                    else:
+                        break
+
+                for null_var in nullable_vars:
+                    if null_var in rules:
+                        result["follow"][rule.split()[i]] += result["first"][null_var]
+                        result["follow"][rule.split()[i]] = list(set(result["follow"][rule.split()[i]]))
+                    else:
+                        if null_var != "epsilon" and null_var not in result["follow"][rule.split()[i]]:
+                            result["follow"][rule.split()[i]].append(null_var)
+
+                if j == size-1:
+                    result["follow"][rule.split()[i]] += result["follow"][x]
+                    result["follow"][rule.split()[i]] = list(set(result["follow"][rule.split()[i]]))
+            if i == size - 1 and rule.split()[i] in rules:
+                result["follow"][rule.split()[i]] += result["follow"][x]
+                result["follow"][rule.split()[i]] = list(set(result["follow"][rule.split()[i]]))
+
+
+for i in range(0, 23*23):
+    for x in rules:
+        follow_func(x)
 
 None
