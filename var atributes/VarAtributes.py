@@ -135,17 +135,24 @@ def first(x):
                 ret.append(tmp_first)
 
         nullable_vars = []
-        for var in rule.split():
-            if var in rules:
-                if result["nullable"][var] is False:
+        size = len(rule.split())
+        for i in range(0, size):
+            if rule.split()[i] in rules and i < size-1:
+                if result["nullable"][rule.split()[i]] is False:
                     break
                 else:
-                    nullable_vars.append(var)
+                    nullable_vars.append(rule.split()[i+1])
+            else:
+                break
         for null_var in nullable_vars:
-            tmp_first_array = first(null_var)
-            for var in tmp_first_array:
-                if var not in ret:
-                    ret.append(var)
+            if null_var in rules:
+                tmp_first_array = first(null_var)
+                for var in tmp_first_array:
+                    if var not in ret:
+                        ret.append(var)
+            else:
+                if null_var != "epsilon" and null_var not in ret:
+                    ret.append(null_var)
     return ret
 
 
