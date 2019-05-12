@@ -113,20 +113,26 @@ Token *back_token() {
 *  returns the token that was created.
 */
 Token *next_token() { 
-	if(currentIndex == 99){ /* if current token is end of token array */
-		if (currentNode->next == NULL){ /* need to get new token from input */
-			yylex();
-		}
-		else { /* go to token (first of next array) */
-			currentNode = currentNode->next;
-			currentIndex = 0;
-		}
-	}
-	else if (currentNode->tokensArray[currentIndex + 1].lexeme == NULL) { /* need to get new token */
+	if (currentIndex == 0 && currentNode == NULL)
+	{
 		yylex();
 	}
-	else { /* go to token index */
-		currentIndex++;
+	else {
+		if (currentIndex == 99) { /* if current token is end of token array */
+			if (currentNode->next == NULL) { /* need to get new token from input */
+				yylex();
+			}
+			else { /* go to token (first of next array) */
+				currentNode = currentNode->next;
+				currentIndex = 0;
+			}
+		}
+		else if (currentNode->tokensArray[currentIndex + 1].lexeme == NULL) { /* need to get new token */
+			yylex();
+		}
+		else { /* go to token index */
+			currentIndex++;
+		}
 	}
 	return &currentNode->tokensArray[currentIndex]; /* return next token */
 }

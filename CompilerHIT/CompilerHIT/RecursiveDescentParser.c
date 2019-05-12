@@ -2,8 +2,9 @@
 #include "Token.h"
 #include "VariableFunctionList.h"
 
-void parser(FILE *parser_report) {
-	Token *tmp;
+void parser() {
+	/*for debuging*/
+	/*Token *tmp;
 	yylex();
 	int flag = 1;
 	while (flag)
@@ -18,7 +19,8 @@ void parser(FILE *parser_report) {
 			fprintf(parser_report, "%d) kind: %d, line: %d, lexeme: %s\n", flag++, tmp->kind, tmp->lineNumber, tmp->lexeme);
 			next_token();
 		}
-	}
-	//parse_program();
+	}*/
+	/*for debuging*/
+	parse_program();
 	match(TOKEN_EOF);
 }

@@ -169,6 +169,7 @@
     <ClCompile Include="parse_variable_list_clean.c" />
     <ClCompile Include="parse_var_definition.c" />
     <ClCompile Include="parse_var_definitions.c" />
+    <ClCompile Include="VariableFunctionList.c" />
     <ClCompile Include="win.lex.yy.c" />
   </ItemGroup>
   <ItemGroup>

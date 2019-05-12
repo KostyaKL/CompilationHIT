@@ -90,6 +90,9 @@
     <ClCompile Include="parse_function_call.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="VariableFunctionList.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Token.h">

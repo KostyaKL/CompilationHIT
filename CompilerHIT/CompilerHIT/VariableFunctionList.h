@@ -24,4 +24,12 @@
 #include "parse_variable_list.h"
 #include "parse_variable_list_clean.h"
 
+#include <stdio.h>
+#include "Token.h"
+
+FILE *parser_report;
+
+void print_parser_rule(char *rule);
+void print_parser_error(eTOKENS expected, Token *actual);
+
 #endif
