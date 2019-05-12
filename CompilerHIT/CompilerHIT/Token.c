@@ -132,7 +132,7 @@ Token *next_token() {
 }
 
 void match(eTOKENS t) {
-	if (next_token() != t) {
+	if (next_token()->kind != t) {
 		printf("Parser Error"); /* todo: error handling */
 	}
 }
