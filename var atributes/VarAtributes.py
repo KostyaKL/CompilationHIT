@@ -18,7 +18,6 @@ rules = {"PROGRAM": "program VAR_DEFINITIONS ; STATEMENTS end FUNC_DEFINITIONS",
          "RTN_ST": "epsilon | EXPRESSION",
          "ID_ST": "VR = EXPRESSION | ( PARAMETERS_LIST )",
          "BLOCK": "{ VAR_DEFINITIONS ; STATEMENTS }",
-         "FUNCTION_CALL": "id ( PARAMETERS_LIST )",
          "PARAMETERS_LIST": "epsilon | VARIABLES_LIST",
          "EXPRESSION": "int_number | real_number | id EX",
          "EX": "VR | ar_op EXPRESSION"
@@ -46,7 +45,54 @@ result = {"nullable": {"PROGRAM": False,
                        "BLOCK": False,
                        "PARAMETERS_LIST": False,
                        "EXPRESSION": False,
-                       "EX": False}}
+                       "EX": False},
+          "first": {"PROGRAM": [],
+                    "VAR_DEFINITIONS": [],
+                    "VR_DFS": [],
+                    "VAR_DEFINITION": [],
+                    "TYPE": [],
+                    "VARIABLES_LIST": [],
+                    "VRS_LST": [],
+                    "VARIABLE": [],
+                    "VR": [],
+                    "FUNC_DEFINITIONS": [],
+                    "FNC_DFS": [],
+                    "FUNC_DEFINITION": [],
+                    "RETURNED_TYPE": [],
+                    "PARAM_DEFINITIONS": [],
+                    "STATEMENTS": [],
+                    "STMS": [],
+                    "STATEMENT": [],
+                    "RTN_ST": [],
+                    "ID_ST": [],
+                    "BLOCK": [],
+                    "PARAMETERS_LIST": [],
+                    "EXPRESSION": [],
+                    "EX": []},
+          "follow": {"PROGRAM": [],
+                     "VAR_DEFINITIONS": [],
+                     "VR_DFS": [],
+                     "VAR_DEFINITION": [],
+                     "TYPE": [],
+                     "VARIABLES_LIST": [],
+                     "VRS_LST": [],
+                     "VARIABLE": [],
+                     "VR": [],
+                     "FUNC_DEFINITIONS": [],
+                     "FNC_DFS": [],
+                     "FUNC_DEFINITION": [],
+                     "RETURNED_TYPE": [],
+                     "PARAM_DEFINITIONS": [],
+                     "STATEMENTS": [],
+                     "STMS": [],
+                     "STATEMENT": [],
+                     "RTN_ST": [],
+                     "ID_ST": [],
+                     "BLOCK": [],
+                     "PARAMETERS_LIST": [],
+                     "EXPRESSION": [],
+                     "EX": []}
+          }
 
 for x in rules:
     if rules[x].find("epsilon") >= 0:
@@ -72,5 +118,39 @@ while changed:
         if nullable and result["nullable"][x] is False:
             changed = True
             result["nullable"][x] = True
+
+
+def first(x):
+    ret = []
+    tmp_rules = rules[x].split("|")
+    for rule in tmp_rules:
+        tmp_first = rule.split()[0]
+        if tmp_first in rules:
+            tmp_first_array = first(tmp_first)
+            for var in tmp_first_array:
+                if var not in ret:
+                    ret.append(var)
+        else:
+            if tmp_first != "epsilon" and tmp_first not in ret:
+                ret.append(tmp_first)
+
+        nullable_vars = []
+        for var in rule.split():
+            if var in rules:
+                if result["nullable"][var] is False:
+                    break
+                else:
+                    nullable_vars.append(var)
+        for null_var in nullable_vars:
+            tmp_first_array = first(null_var)
+            for var in tmp_first_array:
+                if var not in ret:
+                    ret.append(var)
+    return ret
+
+
+for x in rules:
+    result["first"][x] = first(x)
+
 
 None
