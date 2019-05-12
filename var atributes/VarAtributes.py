@@ -53,6 +53,16 @@ for x in rules:
         result["nullable"][x] = True
 
 changed = True
-while change
+while changed:
+    changed = False
+    for x in rules:
+        for y in rules[x].split():
+            if result["nullable"][y] not in rules or result["nullable"][y] is not True:
+                nullable = False
+                changed = False
+                break
+        if nullable:
+            changed = True
+            result["nullable"][x] = True
 
 None
