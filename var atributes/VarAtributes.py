@@ -171,11 +171,11 @@ def follow_func(x):
 
                 nullable_vars = []
                 for j in range(i + 1, size):
-                    if rule.split()[j] in rules:
+                    if rule.split()[j] in rules and j < size - 1:
                         if result["nullable"][rule.split()[j]] is False:
                             break
                         else:
-                            nullable_vars.append(rule.split()[j])
+                            nullable_vars.append(rule.split()[j + 1])
                     else:
                         break
 
@@ -187,7 +187,7 @@ def follow_func(x):
                         if null_var != "epsilon" and null_var not in result["follow"][rule.split()[i]]:
                             result["follow"][rule.split()[i]].append(null_var)
 
-                if j == size-1:
+                if j == size-1 and rule.split()[j] in rules and result["nullable"][rule.split()[j]] is True:
                     result["follow"][rule.split()[i]] += result["follow"][x]
                     result["follow"][rule.split()[i]] = list(set(result["follow"][rule.split()[i]]))
             if i == size - 1 and rule.split()[i] in rules:
