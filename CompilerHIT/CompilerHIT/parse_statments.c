@@ -5,25 +5,25 @@
 
 void parse_statments() {
 	Token *cur_token = next_token();
-	eTOKENS expected[NUM_OF_EXPECTED] = { TOKEN_ID,TOKEN_RETURN, TOKEN_OPEN_CURLY_PAR };
+	eTOKENS expected[NUM_OF_EXPECTED] = { TOKEN_ID, TOKEN_RETURN, TOKEN_OPEN_CURLY_PAR };
 	switch (cur_token->kind)
 	{
 	case TOKEN_ID: 
 		print_parser_rule("STATEMENTS -> STATEMENT ; STATEMENTS_CLEAN");
 		parse_statment();
-		match(PROGRAM, TOKEN_SEMICOLON);
+		match(STATEMENTS, TOKEN_SEMICOLON);
 		parse_statments_clean();
 		break;
 	case TOKEN_RETURN:
 		print_parser_rule("STATEMENTS -> STATEMENT ; STATEMENTS_CLEAN");
 		parse_statment();
-		match(PROGRAM, TOKEN_SEMICOLON);
+		match(STATEMENTS, TOKEN_SEMICOLON);
 		parse_statments_clean();
 		break;
 	case TOKEN_OPEN_CURLY_PAR:
 		print_parser_rule("STATEMENTS -> STATEMENT ; STATEMENTS_CLEAN");
 		parse_statment();
-		match(PROGRAM, TOKEN_SEMICOLON);
+		match(STATEMENTS, TOKEN_SEMICOLON);
 		parse_statments_clean();
 		break;
 	default:

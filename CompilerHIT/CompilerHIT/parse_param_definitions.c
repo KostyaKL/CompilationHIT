@@ -18,6 +18,7 @@ void parse_param_definitions() {
 		break;
 	case TOKEN_EOF:
 		print_parser_rule("PARAM_DEFINITIONS -> epsilon");
+		back_token();
 		break;
 	default:
 		error_recovery(PARAM_DEFINITIONS, expected, NUM_OF_EXPECTED, cur_token);

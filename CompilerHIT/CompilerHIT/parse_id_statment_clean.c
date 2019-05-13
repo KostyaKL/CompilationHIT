@@ -11,19 +11,19 @@ void parse_id_statment_clean() {
 	case TOKEN_SEMICOLON: 
 		print_parser_rule("ID_STATEMENT_CLEAN -> VARIABLE_CLEAN = EXPRESSION");
 		parse_variable_clean();
-		match(PROGRAM, TOKEN_ASSIGNMENT);
+		match(ID_STATEMENT_CLEAN, TOKEN_ASSIGNMENT);
 		parse_expression();
 		break;
 	case TOKEN_OPEN_SQUER_PAR:
 		print_parser_rule("ID_STATEMENT_CLEAN -> VARIABLE_CLEAN = EXPRESSION");
 		parse_variable_clean();
-		match(PROGRAM, TOKEN_ASSIGNMENT);
+		match(ID_STATEMENT_CLEAN, TOKEN_ASSIGNMENT);
 		parse_expression();
 		break;
 	case TOKEN_OPEN_CIRCULAR_PAR: 
 		print_parser_rule("ID_STATEMENT_CLEAN -> ( PARAMETERS_LIST )");
 		parse_parameters_list();
-		match(PROGRAM, TOKEN_CLOSE_CIRCULAR_PAR);
+		match(ID_STATEMENT_CLEAN, TOKEN_CLOSE_CIRCULAR_PAR);
 		break;
 	default:
 		error_recovery(ID_STATEMENT_CLEAN, expected, NUM_OF_EXPECTED, cur_token);

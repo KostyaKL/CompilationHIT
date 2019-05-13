@@ -11,28 +11,28 @@ void parse_func_definition() {
 	case TOKEN_REAL:
 		print_parser_rule("FUNC_DEFINITION -> RETURNED_TYPE id ( PARAM_DEFINITIONS ) BLOCK");
 		parse_returned_type();
-		match(PROGRAM, TOKEN_ID);
-		match(PROGRAM, TOKEN_OPEN_CIRCULAR_PAR);
+		match(FUNC_DEFINITION, TOKEN_ID);
+		match(FUNC_DEFINITION, TOKEN_OPEN_CIRCULAR_PAR);
 		parse_param_definitions();
-		match(PROGRAM, TOKEN_CLOSE_CIRCULAR_PAR);
+		match(FUNC_DEFINITION, TOKEN_CLOSE_CIRCULAR_PAR);
 		parse_block();
 		break;
 	case TOKEN_INTEGER:
 		print_parser_rule("FUNC_DEFINITION -> RETURNED_TYPE id ( PARAM_DEFINITIONS ) BLOCK");
 		parse_returned_type();
-		match(PROGRAM, TOKEN_ID);
-		match(PROGRAM, TOKEN_OPEN_CIRCULAR_PAR);
+		match(FUNC_DEFINITION, TOKEN_ID);
+		match(FUNC_DEFINITION, TOKEN_OPEN_CIRCULAR_PAR);
 		parse_param_definitions();
-		match(PROGRAM, TOKEN_CLOSE_CIRCULAR_PAR);
+		match(FUNC_DEFINITION, TOKEN_CLOSE_CIRCULAR_PAR);
 		parse_block();
 		break;
 	case TOKEN_VOID:
 		print_parser_rule("FUNC_DEFINITION -> RETURNED_TYPE id ( PARAM_DEFINITIONS ) BLOCK");
 		parse_returned_type();
-		match(PROGRAM, TOKEN_ID);
-		match(PROGRAM, TOKEN_OPEN_CIRCULAR_PAR);
+		match(FUNC_DEFINITION, TOKEN_ID);
+		match(FUNC_DEFINITION, TOKEN_OPEN_CIRCULAR_PAR);
 		parse_param_definitions();
-		match(PROGRAM, TOKEN_CLOSE_CIRCULAR_PAR);
+		match(FUNC_DEFINITION, TOKEN_CLOSE_CIRCULAR_PAR);
 		parse_block();
 		break;
 	default:

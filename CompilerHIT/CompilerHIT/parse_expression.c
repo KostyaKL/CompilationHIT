@@ -13,10 +13,10 @@ void parse_expression() {
 		parse_expression_clean();
 		break;
 	case TOKEN_INT_NUMBER:
-		print_parser_rule("EXPRESSION -> id int_number");
+		print_parser_rule("EXPRESSION -> int_number");
 		break;
 	case TOKEN_REAL_NUMBER:
-		print_parser_rule("EXPRESSION -> id real_number");
+		print_parser_rule("EXPRESSION -> real_number");
 		break;
 	default:
 		error_recovery(EXPRESSION, expected, NUM_OF_EXPECTED, cur_token);
