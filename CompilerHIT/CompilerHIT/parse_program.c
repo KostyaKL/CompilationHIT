@@ -3,18 +3,19 @@
 
 void parse_program() {
 	Token *cur_token = next_token();
+	eTOKENS expected[1] = { TOKEN_PROGRAM };
 	switch (cur_token->kind)
 	{
 	case TOKEN_PROGRAM:
 		print_parser_rule("PROGRAM -> program VAR_DEFINITIONS; STATMENTS end FUNC_DEFINITIONS");
 		parse_var_definitions();
-		match(TOKEN_SEMICOLON);
+		match(PROGRAM, TOKEN_SEMICOLON);
 		parse_statments();
-		match(TOKEN_END);
+		match(PROGRAM, TOKEN_END);
 		parse_func_definitions();
 		break;
 	default:
-		error_recovery(TOKEN_PROGRAM, cur_token);
+		error_recovery(PROGRAM, expected, 1, cur_token);
 		break;
 	}
 }

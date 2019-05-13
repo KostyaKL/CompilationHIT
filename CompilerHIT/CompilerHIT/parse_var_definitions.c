@@ -3,6 +3,7 @@
 
 void parse_var_definitions() {
 	Token *cur_token = next_token();
+	eTOKENS expected[2] = { TOKEN_REAL, TOKEN_INTEGER };
 	switch (cur_token->kind)
 	{
 	case TOKEN_REAL:
@@ -16,7 +17,7 @@ void parse_var_definitions() {
 		parse_var_definitions_clean();
 		break;
 	default:
-		error_recovery(TOKEN_REAL, cur_token);
+		error_recovery(VAR_DEFINITIONS, expected, 2, cur_token);
 		break;
 	}
 }
