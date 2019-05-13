@@ -41,9 +41,15 @@ void print_parser_error(eTOKENS expected, Token *actual) {
 
 Token *error_recovery(eTOKENS expected, Token *cur_token) {
 	print_parser_error(expected, cur_token);
-	while (cur_token->kind /*not in follow(program)*/ && cur_token->kind != TOKEN_EOF)
+	int in_follow_flag = 1;
+	while (in_follow_flag && cur_token->kind != TOKEN_EOF)
 	{
 		cur_token = next_token();
+		for (int i = 0;i < 5;i++) {
+			if (cur_token->kind == follow[expected][i]) {
+				in_follow_flag = 0;
+			}
+		}
 	}
 	return back_token();
 }
