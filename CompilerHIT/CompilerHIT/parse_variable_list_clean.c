@@ -1,17 +1,23 @@
-#include "parse_variable_list_clean.h"
+#include "VariableFunctionList.h"
 #include "Token.h"
+
+#define NUM_OF_EXPECTED 2
 
 void parse_variable_list_clean() {
 	Token *cur_token = next_token();
+	eTOKENS expected[NUM_OF_EXPECTED] = { TOKEN_COMMA, TOKEN_EOF };
 	switch (cur_token->kind)
 	{
+	case TOKEN_COMMA: 
+		print_parser_rule("VARIABLES_LIST_CLEAN -> , VARIABLE VARIABLES_LIST_CLEAN");
+		parse_variable();
+		parse_variable_list_clean();
+		break;
 	case TOKEN_EOF:
-		//print;
-		match(TOKEN_EOF);
+		print_parser_rule("VARIABLES_LIST_CLEAN -> epsilon");
 		break;
 	default:
-		//error;
+		error_recovery(VARIABLES_LIST_CLEAN, expected, NUM_OF_EXPECTED, cur_token);
 		break;
 	}
-
 }

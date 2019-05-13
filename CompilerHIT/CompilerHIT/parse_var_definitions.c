@@ -1,9 +1,11 @@
 #include "VariableFunctionList.h"
 #include "Token.h"
 
+#define NUM_OF_EXPECTED 2
+
 void parse_var_definitions() {
 	Token *cur_token = next_token();
-	eTOKENS expected[2] = { TOKEN_REAL, TOKEN_INTEGER };
+	eTOKENS expected[NUM_OF_EXPECTED] = { TOKEN_REAL, TOKEN_INTEGER };
 	switch (cur_token->kind)
 	{
 	case TOKEN_REAL:
@@ -17,7 +19,7 @@ void parse_var_definitions() {
 		parse_var_definitions_clean();
 		break;
 	default:
-		error_recovery(VAR_DEFINITIONS, expected, 2, cur_token);
+		error_recovery(VAR_DEFINITIONS, expected, NUM_OF_EXPECTED, cur_token);
 		break;
 	}
 }

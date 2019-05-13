@@ -1,9 +1,11 @@
 #include "VariableFunctionList.h"
 #include "Token.h"
 
+#define NUM_OF_EXPECTED 1
+
 void parse_program() {
 	Token *cur_token = next_token();
-	eTOKENS expected[1] = { TOKEN_PROGRAM };
+	eTOKENS expected[NUM_OF_EXPECTED] = { TOKEN_PROGRAM };
 	switch (cur_token->kind)
 	{
 	case TOKEN_PROGRAM:
@@ -15,7 +17,7 @@ void parse_program() {
 		parse_func_definitions();
 		break;
 	default:
-		error_recovery(PROGRAM, expected, 1, cur_token);
+		error_recovery(PROGRAM, expected, NUM_OF_EXPECTED, cur_token);
 		break;
 	}
 }

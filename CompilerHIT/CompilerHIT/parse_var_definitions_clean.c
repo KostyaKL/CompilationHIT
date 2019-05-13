@@ -1,9 +1,11 @@
 #include "VariableFunctionList.h"
 #include "Token.h"
 
+#define NUM_OF_EXPECTED 2
+
 void parse_var_definitions_clean() {
 	Token *cur_token = next_token();
-	eTOKENS expected[2] = { TOKEN_SEMICOLON, TOKEN_EOF };
+	eTOKENS expected[NUM_OF_EXPECTED] = { TOKEN_SEMICOLON, TOKEN_EOF };
 	switch (cur_token->kind)
 	{
 	case TOKEN_SEMICOLON:
@@ -15,7 +17,7 @@ void parse_var_definitions_clean() {
 		print_parser_rule("VAR_DEFINITIONS_CLEAN -> epsilon");
 		break;
 	default:
-		error_recovery(VAR_DEFINITIONS_CLEAN, expected, 2, cur_token);
+		error_recovery(VAR_DEFINITIONS_CLEAN, expected, NUM_OF_EXPECTED, cur_token);
 		break;
 	}
 }
