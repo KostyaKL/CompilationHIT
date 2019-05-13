@@ -60,9 +60,6 @@
     <ClCompile Include="parse_statment.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="parse_statment_clean.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="parse_statments.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -94,6 +91,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="parse_var_definitions_clean.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="parse_statments_clean.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="parse_id_statment_clean.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="parse_return_statment_clean.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -146,9 +152,6 @@
     <ClInclude Include="parse_statment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="parse_statment_clean.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="parse_statments.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -174,6 +177,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="parse_var_definitions_clean.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="parse_statments_clean.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="parse_id_statment_clean.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="parse_return_statment_clean.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

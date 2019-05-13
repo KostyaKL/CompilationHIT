@@ -9,7 +9,7 @@ void parse_program() {
 	switch (cur_token->kind)
 	{
 	case TOKEN_PROGRAM:
-		print_parser_rule("PROGRAM -> program VAR_DEFINITIONS; STATMENTS end FUNC_DEFINITIONS");
+		print_parser_rule("PROGRAM -> program VAR_DEFINITIONS ; STATMENTS end FUNC_DEFINITIONS");
 		parse_var_definitions();
 		match(PROGRAM, TOKEN_SEMICOLON);
 		parse_statments();

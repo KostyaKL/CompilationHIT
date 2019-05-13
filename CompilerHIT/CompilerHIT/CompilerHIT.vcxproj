@@ -145,6 +145,8 @@
     <None Include="ex1.lex" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="parse_id_statment_clean.c" />
+    <ClCompile Include="parse_return_statment_clean.c" />
     <ClCompile Include="parse_var_definitions_clean.c" />
     <ClCompile Include="RecursiveDescentParser.c" />
     <ClCompile Include="Token.c" />
@@ -162,7 +164,7 @@
     <ClCompile Include="parse_returned_type.c" />
     <ClCompile Include="parse_statment.c" />
     <ClCompile Include="parse_statments.c" />
-    <ClCompile Include="parse_statment_clean.c" />
+    <ClCompile Include="parse_statments_clean.c" />
     <ClCompile Include="parse_type.c" />
     <ClCompile Include="parse_variable.c" />
     <ClCompile Include="parse_variable_clean.c" />
@@ -174,6 +176,8 @@
     <ClCompile Include="win.lex.yy.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="parse_id_statment_clean.h" />
+    <ClInclude Include="parse_return_statment_clean.h" />
     <ClInclude Include="parse_var_definitions_clean.h" />
     <ClInclude Include="RecursiveDescentParser.h" />
     <ClInclude Include="Token.h" />
@@ -192,7 +196,7 @@
     <ClInclude Include="parse_returned_type.h" />
     <ClInclude Include="parse_statment.h" />
     <ClInclude Include="parse_statments.h" />
-    <ClInclude Include="parse_statment_clean.h" />
+    <ClInclude Include="parse_statments_clean.h" />
     <ClInclude Include="parse_type.h" />
     <ClInclude Include="parse_variable.h" />
     <ClInclude Include="parse_variable_clean.h" />
