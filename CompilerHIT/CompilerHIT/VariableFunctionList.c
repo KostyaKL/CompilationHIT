@@ -1,5 +1,4 @@
 #include "VariableFunctionList.h"
-#include "Token.h"
 
 int follow[23][5] = {
 	{ TOKEN_EOF, 30, 30, 30, 30 },
@@ -84,7 +83,7 @@ Token *error_recovery(eVARIABLE var, eTOKENS *expected, int size, Token *cur_tok
 		cur_token = next_token();
 		for (int i = 0;i < 5;i++) {
 			if (cur_token->kind == follow[var][i]) {
-				in_follow_flag;
+				in_follow_flag = 0;
 			}
 		}
 	}

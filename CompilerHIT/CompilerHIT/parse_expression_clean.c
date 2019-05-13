@@ -1,5 +1,4 @@
 #include "VariableFunctionList.h"
-#include "Token.h"
 
 #define NUM_OF_EXPECTED 5
 

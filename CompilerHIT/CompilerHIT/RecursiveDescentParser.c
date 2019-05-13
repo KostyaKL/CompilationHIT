@@ -1,5 +1,4 @@
 #include "RecursiveDescentParser.h"
-#include "Token.h"
 #include "VariableFunctionList.h"
 
 void parser() {

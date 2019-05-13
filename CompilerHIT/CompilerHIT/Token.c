@@ -77,7 +77,7 @@ void create_and_store_token(eTOKENS kind, char* lexeme, int numOfLine)
 
 	currentNode->tokensArray[currentIndex].kind = kind;
 	currentNode->tokensArray[currentIndex].lineNumber = numOfLine;
-
+	
 	currentNode->tokensArray[currentIndex].lexeme = (char*)malloc(sizeof(char)*length);
 #ifdef _WIN32
 	strcpy_s(currentNode->tokensArray[currentIndex].lexeme, length, lexeme);
