@@ -64,9 +64,9 @@ void print_parser_error(eTOKENS *expected, int size, Token *actual) {
 	char *expected_str;
 	int length = strlen(getTokenName(expected[0]));
 	for (int i = 1;i < size;i++) {
-		length += strlen(getTokenName(expected[i])) + 4;
+		length += (strlen(getTokenName(expected[i])) + 4);
 	}
-	expected_str = (char*)malloc(sizeof(char)*length);
+	expected_str = (char*)calloc(sizeof(char), length+1);
 	strcat(expected_str, getTokenName(expected[0]));
 	for (int i = 1;i < size;i++) {
 		strcat(expected_str, " or ");
@@ -75,7 +75,7 @@ void print_parser_error(eTOKENS *expected, int size, Token *actual) {
 	fprintf(parser_report, "Expected token of type %s at line: %d, Actual token of type %s, lexeme: %s.\n", expected_str, actual->lineNumber, getTokenName(actual->kind), actual->lexeme);
 }
 
-Token *error_recovery(eVARIABLE var, eTOKENS *expected, int size, Token *cur_token) {
+void error_recovery(eVARIABLE var, eTOKENS *expected, int size, Token *cur_token) {
 	print_parser_error(expected, size, cur_token);
 	int in_follow_flag = 1;
 	while (in_follow_flag && cur_token->kind != TOKEN_EOF)
@@ -87,12 +87,14 @@ Token *error_recovery(eVARIABLE var, eTOKENS *expected, int size, Token *cur_tok
 			}
 		}
 	}
-	return back_token();
+	back_token();
 }
 
-void match(eVARIABLE var, eTOKENS *t) {
+void match(eVARIABLE var, eTOKENS t) {
 	Token *cur_token = next_token();
-	if (cur_token->kind != t[0]) {
-		error_recovery(var, t, 1, cur_token);
+	eTOKENS *expected = (eTOKENS*)malloc(sizeof(eTOKENS));
+	*expected = t;
+	if (cur_token->kind != t) {
+		error_recovery(var, expected, 1, cur_token);
 	}
 }
