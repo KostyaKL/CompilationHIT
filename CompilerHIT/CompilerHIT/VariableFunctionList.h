@@ -29,7 +29,36 @@
 
 FILE *parser_report;
 
+typedef enum eVARIABLE
+{
+	PROGRAM,
+	VAR_DEFINITIONS,
+	VAR_DEFINITIONS_T,
+	VAR_DEFINITION,
+	TYPE,
+	VARIABLES_LIST,
+	VARIABLES_LIST_T,
+	VARIABLE,
+	VARIABLE_T,
+	FUNC_DEFINITIONS,
+	FUNC_DEFINITIONS_T,
+	FUNC_DEFINITION,
+	RETURNED_TYPE,
+	PARAM_DEFINITIONS,
+	STATEMENTS,
+	STATEMENTS_T,
+	STATEMENT,
+	RETURN_STATEMENT_T,
+	ID_STATEMENT_T,
+	BLOCK,
+	PARAMETERS_LIST,
+	EXPRESSION,
+	EXPRESSION_T
+}eVARIABLE;
+
 void print_parser_rule(char *rule);
 void print_parser_error(eTOKENS expected, Token *actual);
+Token *error_recovery(eTOKENS expected, Token *cur_token);
+void match(eTOKENS t);
 
 #endif

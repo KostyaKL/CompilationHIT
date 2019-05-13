@@ -137,12 +137,6 @@ Token *next_token() {
 	return &currentNode->tokensArray[currentIndex]; /* return next token */
 }
 
-void match(eTOKENS t) {
-	if (next_token()->kind != t) {
-		printf("Parser Error"); /* todo: error handling */
-	}
-}
-
 void reset_tokens() {
 	while (currentNode->next != NULL)
 	{

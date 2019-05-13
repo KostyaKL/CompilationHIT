@@ -14,12 +14,7 @@ void parse_program() {
 		parse_func_definitions();
 		break;
 	default:
-		print_parser_error(TOKEN_PROGRAM, cur_token);
-		while (cur_token->kind /*not in follow(program)*/ && cur_token->kind != TOKEN_EOF)
-		{
-			cur_token = next_token();
-		}
-		cur_token = back_token();
+		error_recovery(TOKEN_PROGRAM, cur_token);
 		break;
 	}
 

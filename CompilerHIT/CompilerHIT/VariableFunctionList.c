@@ -38,3 +38,19 @@ void print_parser_rule(char *rule) {
 void print_parser_error(eTOKENS expected, Token *actual) {
 	fprintf(parser_report, "Expected token of type %s at line: %d, Actual token of type %s, lexeme: %s.\n", getTokenName(expected), actual->lineNumber, getTokenName(actual->kind), actual->lexeme);
 }
+
+Token *error_recovery(eTOKENS expected, Token *cur_token) {
+	print_parser_error(expected, cur_token);
+	while (cur_token->kind /*not in follow(program)*/ && cur_token->kind != TOKEN_EOF)
+	{
+		cur_token = next_token();
+	}
+	return back_token();
+}
+
+void match(eTOKENS t) {
+	Token *cur_token = next_token();
+	if (cur_token->kind != t) {
+		error_recovery(t, cur_token);
+	}
+}
