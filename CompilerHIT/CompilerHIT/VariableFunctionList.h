@@ -25,7 +25,6 @@
 #include "parse_variables_list.h"
 #include "parse_variables_list_clean.h"
 
-//#include <stdio.h>
 #include "Token.h"
 
 FILE *parser_report;
