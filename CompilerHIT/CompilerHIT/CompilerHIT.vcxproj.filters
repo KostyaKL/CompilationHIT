@@ -93,6 +93,9 @@
     <ClCompile Include="VariableFunctionList.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="parse_var_definitions_clean.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Token.h">
@@ -168,6 +171,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="parse_variable_list_clean.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="parse_var_definitions_clean.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

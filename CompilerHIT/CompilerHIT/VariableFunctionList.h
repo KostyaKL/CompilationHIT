@@ -19,6 +19,7 @@
 #include "parse_type.h"
 #include "parse_var_definition.h"
 #include "parse_var_definitions.h"
+#include "parse_var_definitions_clean.h"
 #include "parse_variable.h"
 #include "parse_variable_clean.h"
 #include "parse_variable_list.h"
@@ -33,27 +34,27 @@ typedef enum eVARIABLE
 {
 	PROGRAM,
 	VAR_DEFINITIONS,
-	VAR_DEFINITIONS_T,
+	VAR_DEFINITIONS_CLEAN,
 	VAR_DEFINITION,
 	TYPE,
 	VARIABLES_LIST,
-	VARIABLES_LIST_T,
+	VARIABLES_LIST_CLEAN,
 	VARIABLE,
 	VARIABLE_T,
 	FUNC_DEFINITIONS,
-	FUNC_DEFINITIONS_T,
+	FUNC_DEFINITIONS_CLEAN,
 	FUNC_DEFINITION,
 	RETURNED_TYPE,
 	PARAM_DEFINITIONS,
 	STATEMENTS,
-	STATEMENTS_T,
+	STATEMENTS_CLEAN,
 	STATEMENT,
-	RETURN_STATEMENT_T,
-	ID_STATEMENT_T,
+	RETURN_STATEMENT_CLEAN,
+	ID_STATEMENT_CLEAN,
 	BLOCK,
 	PARAMETERS_LIST,
 	EXPRESSION,
-	EXPRESSION_T
+	EXPRESSION_CLEAN
 }eVARIABLE;
 
 const int follow[23][5] = {	

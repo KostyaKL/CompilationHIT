@@ -145,6 +145,7 @@
     <None Include="ex1.lex" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="parse_var_definitions_clean.c" />
     <ClCompile Include="RecursiveDescentParser.c" />
     <ClCompile Include="Token.c" />
     <ClCompile Include="parse_block.c" />
@@ -173,6 +174,7 @@
     <ClCompile Include="win.lex.yy.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="parse_var_definitions_clean.h" />
     <ClInclude Include="RecursiveDescentParser.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="VariableFunctionList.h" />

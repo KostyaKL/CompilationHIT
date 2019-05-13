@@ -17,5 +17,4 @@ void parse_program() {
 		error_recovery(TOKEN_PROGRAM, cur_token);
 		break;
 	}
-
 }
