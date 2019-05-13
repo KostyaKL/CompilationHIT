@@ -66,13 +66,18 @@ void print_parser_error(eTOKENS *expected, int size, Token *actual) {
 	for (int i = 1;i < size;i++) {
 		length += (strlen(getTokenName(expected[i])) + 4);
 	}
-	expected_str = (char*)calloc(sizeof(char), length+1);
+	expected_str = (char*)calloc(sizeof(char), length + 1);
 	strcat(expected_str, getTokenName(expected[0]));
 	for (int i = 1;i < size;i++) {
 		strcat(expected_str, " or ");
 		strcat(expected_str, getTokenName(expected[i]));
 	}
-	fprintf(parser_report, "Expected token of type %s at line: %d, Actual token of type %s, lexeme: %s.\n", expected_str, actual->lineNumber, getTokenName(actual->kind), actual->lexeme);
+	if (actual->kind == TOKEN_EOF) {
+		fprintf(parser_report, "Expected token of type %s at line: %d, Actual token of type %s\n", expected_str, actual->lineNumber, getTokenName(actual->kind));
+	}
+	else {
+		fprintf(parser_report, "Expected token of type %s at line: %d, Actual token of type %s, lexeme: %s\n", expected_str, actual->lineNumber, getTokenName(actual->kind), actual->lexeme);
+	}
 }
 
 void error_recovery(eVARIABLE var, eTOKENS *expected, int size, Token *cur_token) {
