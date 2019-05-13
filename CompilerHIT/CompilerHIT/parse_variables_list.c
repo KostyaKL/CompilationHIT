@@ -11,7 +11,7 @@ void parse_variables_list() {
 	case TOKEN_ID: 
 		print_parser_rule("VARIABLES_LIST -> VARIABLE VARIABLES_LIST_CLEAN");
 		parse_variable();
-		parse_variable_list_clean();
+		parse_variables_list_clean();
 		break;
 	default:
 		error_recovery(VARIABLES_LIST, expected, NUM_OF_EXPECTED, cur_token);

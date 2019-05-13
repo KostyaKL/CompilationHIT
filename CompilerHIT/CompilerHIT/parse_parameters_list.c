@@ -10,7 +10,7 @@ void parse_parameters_list() {
 	{
 	case TOKEN_ID: 
 		print_parser_rule("PARAMETERS_LIST -> VARIABLES_LIST");
-		parse_variable_list();
+		parse_variables_list();
 		break;
 	case TOKEN_EOF:
 		print_parser_rule("PARAMETERS_LIST -> epsilon");

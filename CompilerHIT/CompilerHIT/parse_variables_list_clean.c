@@ -11,7 +11,7 @@ void parse_variables_list_clean() {
 	case TOKEN_COMMA: 
 		print_parser_rule("VARIABLES_LIST_CLEAN -> , VARIABLE VARIABLES_LIST_CLEAN");
 		parse_variable();
-		parse_variable_list_clean();
+		parse_variables_list_clean();
 		break;
 	case TOKEN_EOF:
 		print_parser_rule("VARIABLES_LIST_CLEAN -> epsilon");

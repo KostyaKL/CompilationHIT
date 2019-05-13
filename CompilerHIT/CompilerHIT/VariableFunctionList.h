@@ -57,31 +57,7 @@ typedef enum eVARIABLE
 	EXPRESSION_CLEAN
 }eVARIABLE;
 
-const int follow[23][5] = {	
-						{ TOKEN_EOF, 30, 30, 30, 30 },
-						{ TOKEN_CLOSE_CIRCULAR_PAR, TOKEN_SEMICOLON, 30 , 30 , 30 },
-						{ TOKEN_CLOSE_CIRCULAR_PAR, TOKEN_SEMICOLON, 30 , 30 , 30 },
-						{ TOKEN_CLOSE_CIRCULAR_PAR, TOKEN_SEMICOLON, 30 , 30 , 30 },
-						{ TOKEN_ID, 30 , 30 , 30 , 30 },
-						{ TOKEN_CLOSE_CIRCULAR_PAR, TOKEN_SEMICOLON, 30 , 30 , 30 },
-						{ TOKEN_CLOSE_CIRCULAR_PAR, TOKEN_SEMICOLON, 30 , 30 , 30 },
-						{ TOKEN_COMMA, TOKEN_SEMICOLON, TOKEN_CLOSE_CIRCULAR_PAR, 30 , 30 },
-						{ TOKEN_COMMA, TOKEN_SEMICOLON, TOKEN_CLOSE_CIRCULAR_PAR, TOKEN_ASSIGNMENT, 30 },
-						{ TOKEN_EOF, 30 , 30 , 30 , 30 },
-						{ TOKEN_EOF, 30 , 30 , 30 , 30 },
-						{ TOKEN_REAL_NUMBER, TOKEN_EOF, TOKEN_INT_NUMBER, TOKEN_VOID, 30 },
-						{ TOKEN_ID, 30 , 30 , 30 , 30 },
-						{ TOKEN_CLOSE_CIRCULAR_PAR, 30 , 30 , 30 , 30 },
-						{ TOKEN_CLOSE_CURLY_PAR, TOKEN_END, 30 , 30 , 30 },
-						{ TOKEN_CLOSE_CURLY_PAR, TOKEN_END, 30 , 30 , 30 },
-						{ TOKEN_SEMICOLON, 30 , 30 , 30 , 30 },
-						{ TOKEN_SEMICOLON, 30 , 30 , 30 , 30 },
-						{ TOKEN_SEMICOLON, 30 , 30 , 30 , 30 },
-						{ TOKEN_REAL_NUMBER, TOKEN_INT_NUMBER, TOKEN_SEMICOLON, TOKEN_EOF, TOKEN_VOID },
-						{ TOKEN_CLOSE_CIRCULAR_PAR, 30 , 30 , 30 , 30 },
-						{ TOKEN_SEMICOLON, 30 , 30 , 30 , 30 },
-						{ TOKEN_SEMICOLON, 30 , 30 , 30 , 30 }
-};
+int follow[23][5];
 
 void print_parser_rule(char *rule);
 void print_parser_error(eTOKENS *expected, int size, Token *actual);
