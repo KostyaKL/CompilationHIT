@@ -151,10 +151,8 @@
     <ClCompile Include="RecursiveDescentParser.c" />
     <ClCompile Include="Token.c" />
     <ClCompile Include="parse_block.c" />
-    <ClCompile Include="parse_definitions.c" />
     <ClCompile Include="parse_expression.c" />
     <ClCompile Include="parse_expression_clean.c" />
-    <ClCompile Include="parse_function_call.c" />
     <ClCompile Include="parse_func_definition.c" />
     <ClCompile Include="parse_func_definitions.c" />
     <ClCompile Include="parse_func_definitions_celan.c" />
@@ -183,10 +181,8 @@
     <ClInclude Include="Token.h" />
     <ClInclude Include="VariableFunctionList.h" />
     <ClInclude Include="parse_block.h" />
-    <ClInclude Include="parse_definitions.h" />
     <ClInclude Include="parse_expression.h" />
     <ClInclude Include="parse_expression_clean.h" />
-    <ClInclude Include="parse_function_call.h" />
     <ClInclude Include="parse_func_definition.h" />
     <ClInclude Include="parse_func_definitions.h" />
     <ClInclude Include="parse_func_definitions_celan.h" />
