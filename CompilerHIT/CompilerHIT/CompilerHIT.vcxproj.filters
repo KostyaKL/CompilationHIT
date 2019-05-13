@@ -75,12 +75,6 @@
     <ClCompile Include="parse_variable_clean.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="parse_variable_list.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_variable_list_clean.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="VariableFunctionList.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -94,6 +88,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="parse_return_statment_clean.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="parse_variables_list_clean.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="parse_variables_list.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -158,12 +158,6 @@
     <ClInclude Include="parse_variable_clean.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="parse_variable_list.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="parse_variable_list_clean.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="parse_var_definitions_clean.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -174,6 +168,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="parse_return_statment_clean.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="parse_variables_list.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="parse_variables_list_clean.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

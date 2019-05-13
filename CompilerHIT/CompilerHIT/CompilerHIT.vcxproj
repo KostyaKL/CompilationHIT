@@ -166,8 +166,8 @@
     <ClCompile Include="parse_type.c" />
     <ClCompile Include="parse_variable.c" />
     <ClCompile Include="parse_variable_clean.c" />
-    <ClCompile Include="parse_variable_list.c" />
-    <ClCompile Include="parse_variable_list_clean.c" />
+    <ClCompile Include="parse_variables_list.c" />
+    <ClCompile Include="parse_variables_list_clean.c" />
     <ClCompile Include="parse_var_definition.c" />
     <ClCompile Include="parse_var_definitions.c" />
     <ClCompile Include="VariableFunctionList.c" />
@@ -196,8 +196,8 @@
     <ClInclude Include="parse_type.h" />
     <ClInclude Include="parse_variable.h" />
     <ClInclude Include="parse_variable_clean.h" />
-    <ClInclude Include="parse_variable_list.h" />
-    <ClInclude Include="parse_variable_list_clean.h" />
+    <ClInclude Include="parse_variables_list.h" />
+    <ClInclude Include="parse_variables_list_clean.h" />
     <ClInclude Include="parse_var_definition.h" />
     <ClInclude Include="parse_var_definitions.h" />
   </ItemGroup>

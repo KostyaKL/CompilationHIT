@@ -10,11 +10,11 @@ void parse_var_definitions_clean() {
 	{
 	case TOKEN_SEMICOLON:
 		print_parser_rule("VAR_DEFINITIONS_CLEAN -> ; VAR_DEFINITIONS");
-		match(VAR_DEFINITIONS_CLEAN, TOKEN_SEMICOLON);
 		parse_var_definitions();
 		break;
 	case TOKEN_EOF:
 		print_parser_rule("VAR_DEFINITIONS_CLEAN -> epsilon");
+		back_token();
 		break;
 	default:
 		error_recovery(VAR_DEFINITIONS_CLEAN, expected, NUM_OF_EXPECTED, cur_token);

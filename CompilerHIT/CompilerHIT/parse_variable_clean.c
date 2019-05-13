@@ -15,6 +15,7 @@ void parse_variable_clean() {
 		break;
 	case TOKEN_EOF:
 		print_parser_rule("VARIABLE_CLEAN -> epsilon");
+		back_token();
 		break;
 	default:
 		error_recovery(VARIABLE_CLEAN, expected, NUM_OF_EXPECTED, cur_token);

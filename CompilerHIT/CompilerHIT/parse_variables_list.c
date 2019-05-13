@@ -3,7 +3,7 @@
 
 #define NUM_OF_EXPECTED 1
 
-void parse_variable_list() {
+void parse_variables_list() {
 	Token *cur_token = next_token();
 	eTOKENS expected[NUM_OF_EXPECTED] = { TOKEN_ID };
 	switch (cur_token->kind)

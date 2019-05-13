@@ -22,8 +22,8 @@
 #include "parse_var_definitions_clean.h"
 #include "parse_variable.h"
 #include "parse_variable_clean.h"
-#include "parse_variable_list.h"
-#include "parse_variable_list_clean.h"
+#include "parse_variables_list.h"
+#include "parse_variables_list_clean.h"
 
 #include <stdio.h>
 #include "Token.h"
