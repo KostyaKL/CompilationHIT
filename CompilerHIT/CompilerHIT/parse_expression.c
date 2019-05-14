@@ -20,5 +20,5 @@ void parse_expression() {
 	default:
 		error_recovery(EXPRESSION, expected, NUM_OF_EXPECTED, cur_token);
 		break;
-	}
+	} 
 }
