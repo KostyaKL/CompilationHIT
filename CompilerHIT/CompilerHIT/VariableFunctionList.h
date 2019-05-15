@@ -28,6 +28,7 @@
 #include "Token.h"
 
 FILE *parser_report;
+Token *cur_token;
 
 typedef enum eVARIABLE
 {

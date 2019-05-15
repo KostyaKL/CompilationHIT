@@ -3,13 +3,13 @@
 #define NUM_OF_EXPECTED 1
 
 void parse_variable() {
-	Token *cur_token = next_token();
+	cur_token = next_token();
 	eTOKENS expected[NUM_OF_EXPECTED] = { TOKEN_ID };
 	switch (cur_token->kind)
 	{
 	case TOKEN_ID:
 		print_parser_rule("VARIABLE -> id VARIABLE_CLEAN");
-		back_token();
+		//cur_token = back_token();
 		parse_variable_clean();
 		break;
 	default:

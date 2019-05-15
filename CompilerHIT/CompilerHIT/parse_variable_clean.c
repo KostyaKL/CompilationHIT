@@ -3,30 +3,31 @@
 #define NUM_OF_EXPECTED 5
 
 void parse_variable_clean() {
-	Token *cur_token = next_token();
+	cur_token = next_token();
 	eTOKENS expected[NUM_OF_EXPECTED] = { TOKEN_OPEN_SQUER_PAR, TOKEN_ASSIGNMENT, TOKEN_COMMA, TOKEN_SEMICOLON, TOKEN_CLOSE_CIRCULAR_PAR };
 	switch (cur_token->kind)
 	{
 	case TOKEN_OPEN_SQUER_PAR:
 		print_parser_rule("VARIABLE_CLEAN -> [ int_number ]");
+		cur_token = next_token();
 		match(TOKEN_INT_NUMBER);
 		match(TOKEN_CLOSE_SQUER_PAR);
 		break;
 	case TOKEN_ASSIGNMENT:
 		print_parser_rule("VARIABLE_CLEAN -> epsilon");
-		back_token();
+		//cur_token = back_token();
 		break;
 	case TOKEN_COMMA:
 		print_parser_rule("VARIABLE_CLEAN -> epsilon");
-		back_token();
+		//cur_token = back_token();
 		break;
 	case TOKEN_SEMICOLON:
 		print_parser_rule("VARIABLE_CLEAN -> epsilon");
-		back_token();
+		//cur_token = back_token();
 		break;
 	case TOKEN_CLOSE_CIRCULAR_PAR:
 		print_parser_rule("VARIABLE_CLEAN -> epsilon");
-		back_token();
+		//cur_token = back_token();
 		break;
 	default:
 		error_recovery(VARIABLE_CLEAN, expected, NUM_OF_EXPECTED, cur_token);
