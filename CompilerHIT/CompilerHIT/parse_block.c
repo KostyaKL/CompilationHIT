@@ -17,5 +17,5 @@ void parse_block() {
 	default:
 		error_recovery(BLOCK, expected, NUM_OF_EXPECTED, cur_token);
 		break;
-	}
+	} 
 }
