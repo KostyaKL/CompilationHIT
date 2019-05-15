@@ -12,8 +12,8 @@ void parse_statment() {
 		parse_id_statment_clean();
 		break;
 	case TOKEN_RETURN: 
-		print_parser_rule("STATEMENT -> return ID_STATEMENT_CLEAN");
-		parse_id_statment_clean();
+		print_parser_rule("STATEMENT -> return RETURN_STATEMENT_CLEAN");
+		parse_return_statment_clean();
 		break;
 	case TOKEN_OPEN_CURLY_PAR:
 		print_parser_rule("STATEMENT -> BLOCK");
