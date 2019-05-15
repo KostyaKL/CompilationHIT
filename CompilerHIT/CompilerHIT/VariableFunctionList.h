@@ -33,6 +33,8 @@ typedef enum eVARIABLE
 	EXPRESSION_CLEAN
 }eVARIABLE;
 
+void parser();
+
 void parse_block();
 void parse_expression();
 void parse_expression_clean();

@@ -174,7 +174,6 @@
     <ClCompile Include="win.lex.yy.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RecursiveDescentParser.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="VariableFunctionList.h" />
   </ItemGroup>

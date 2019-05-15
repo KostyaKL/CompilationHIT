@@ -101,9 +101,6 @@
     <ClInclude Include="Token.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RecursiveDescentParser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="VariableFunctionList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
