@@ -4,7 +4,7 @@
 
 void parse_param_definitions() {
 	Token *cur_token = next_token();
-	eTOKENS expected[NUM_OF_EXPECTED] = { TOKEN_REAL, TOKEN_INTEGER, TOKEN_EOF };
+	eTOKENS expected[NUM_OF_EXPECTED] = { TOKEN_REAL, TOKEN_INTEGER, TOKEN_CLOSE_CIRCULAR_PAR };
 	switch (cur_token->kind)
 	{
 	case TOKEN_REAL:
@@ -15,7 +15,7 @@ void parse_param_definitions() {
 		print_parser_rule("PARAM_DEFINITIONS -> VAR_DEFINITIONS");
 		parse_var_definitions();
 		break;
-	case TOKEN_EOF:
+	case TOKEN_CLOSE_CIRCULAR_PAR:
 		print_parser_rule("PARAM_DEFINITIONS -> epsilon");
 		back_token();
 		break;

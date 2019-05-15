@@ -9,12 +9,16 @@ void parse_var_definitions() {
 	{
 	case TOKEN_REAL:
 		print_parser_rule(" VAR_DEFINITIONS -> VAR_DEFINITION VAR_DEFINITIONS_CLEAN");
+		back_token();
 		parse_var_definition();
+		back_token();
 		parse_var_definitions_clean();
 		break;
 	case TOKEN_INTEGER:
 		print_parser_rule(" VAR_DEFINITIONS -> VAR_DEFINITION VAR_DEFINITIONS_CLEAN");
+		back_token();
 		parse_var_definition();
+		back_token();
 		parse_var_definitions_clean();
 		break;
 	default:

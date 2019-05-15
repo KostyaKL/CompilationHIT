@@ -9,10 +9,12 @@ void parse_block() {
 	{
 	case TOKEN_OPEN_CURLY_PAR:
 		print_parser_rule("BLOCK -> { VAR_DEFINITIONS ; STATMENTS }");
+		back_token();
 		parse_var_definitions();
-		match(BLOCK, TOKEN_SEMICOLON);
+		match(TOKEN_SEMICOLON);
+		back_token();
 		parse_statments();
-		match(BLOCK, TOKEN_CLOSE_CURLY_PAR);
+		match(TOKEN_CLOSE_CURLY_PAR);
 		break;
 	default:
 		error_recovery(BLOCK, expected, NUM_OF_EXPECTED, cur_token);

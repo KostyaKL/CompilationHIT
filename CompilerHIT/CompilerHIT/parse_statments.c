@@ -9,20 +9,26 @@ void parse_statments() {
 	{
 	case TOKEN_ID: 
 		print_parser_rule("STATEMENTS -> STATEMENT ; STATEMENTS_CLEAN");
+		back_token();
 		parse_statment();
-		match(STATEMENTS, TOKEN_SEMICOLON);
+		match(TOKEN_SEMICOLON);
+		back_token();
 		parse_statments_clean();
 		break;
 	case TOKEN_RETURN:
 		print_parser_rule("STATEMENTS -> STATEMENT ; STATEMENTS_CLEAN");
+		back_token();
 		parse_statment();
-		match(STATEMENTS, TOKEN_SEMICOLON);
+		match(TOKEN_SEMICOLON);
+		back_token();
 		parse_statments_clean();
 		break;
 	case TOKEN_OPEN_CURLY_PAR:
 		print_parser_rule("STATEMENTS -> STATEMENT ; STATEMENTS_CLEAN");
+		back_token();
 		parse_statment();
-		match(STATEMENTS, TOKEN_SEMICOLON);
+		match(TOKEN_SEMICOLON);
+		back_token();
 		parse_statments_clean();
 		break;
 	default:

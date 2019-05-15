@@ -9,7 +9,9 @@ void parse_variables_list() {
 	{
 	case TOKEN_ID: 
 		print_parser_rule("VARIABLES_LIST -> VARIABLE VARIABLES_LIST_CLEAN");
+		back_token();
 		parse_variable();
+		back_token();
 		parse_variables_list_clean();
 		break;
 	default:

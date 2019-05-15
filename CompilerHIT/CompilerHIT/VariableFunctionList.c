@@ -95,11 +95,11 @@ void error_recovery(eVARIABLE var, eTOKENS *expected, int size, Token *cur_token
 	back_token();
 }
 
-void match(eVARIABLE var, eTOKENS t) {
+void match(eTOKENS t) {
 	Token *cur_token = next_token();
 	eTOKENS *expected = (eTOKENS*)malloc(sizeof(eTOKENS));
 	*expected = t;
 	if (cur_token->kind != t) {
-		error_recovery(var, expected, 1, cur_token);
+		print_parser_error(expected, 1, cur_token);
 	}
 }

@@ -9,6 +9,7 @@ void parse_expression() {
 	{
 	case TOKEN_ID: 
 		print_parser_rule("EXPRESSION -> id EXPRESSION_CLEAN");
+		back_token();
 		parse_expression_clean();
 		break;
 	case TOKEN_INT_NUMBER:
