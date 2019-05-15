@@ -49,71 +49,71 @@ REAL_NUMBER			0"."{DIGIT}*|{NATURAL}{DIGIT}*"."{DIGIT}*
 %%
 
 {PROGRAM}				{create_and_store_token(TOKEN_PROGRAM, yytext, lineNumber);
-						print2file("TOKEN_PROGRAM");
+						print2file("KEYWORD");
 						return;}
 
 {END}					{create_and_store_token(TOKEN_END, yytext, lineNumber);
-						print2file("TOKEN_END");
+						print2file("KEYWORD");
 						return;}
 
 {REAL}					{create_and_store_token(TOKEN_REAL, yytext, lineNumber);
-						print2file("TOKEN_REAL");
+						print2file("KEYWORD");
 						return;}
 
 {INTEGER}				{create_and_store_token(TOKEN_INTEGER, yytext, lineNumber);
-						print2file("TOKEN_INTEGER");
+						print2file("KEYWORD");
 						return;}
 
 {VOID}					{create_and_store_token(TOKEN_VOID, yytext, lineNumber);
-						print2file("TOKEN_VOID");
+						print2file("KEYWORD");
 						return;}
 
 {RETURN}				{create_and_store_token(TOKEN_RETURN, yytext, lineNumber);
-						print2file("TOKEN_RETURN");
+						print2file("KEYWORD");
 						return;}
 
 {MUL}	        		{create_and_store_token(TOKEN_MUL, yytext, lineNumber);
-		        		print2file("TOKEN_MUL");
+		        		print2file("OPERATION");
 						return;}
 
 {DIV}		        	{create_and_store_token(TOKEN_DIV, yytext, lineNumber);
-		        		print2file("TOKEN_DIV");
+		        		print2file("OPERATION");
 						return;}
 
 {ASSIGN}		        {create_and_store_token(TOKEN_ASSIGNMENT, yytext, lineNumber);
-						print2file("TOKEN_ASSIGNMENT");
+						print2file("OPERATION");
 						return;}
 
 {COMMA}		        	{create_and_store_token(TOKEN_COMMA, yytext, lineNumber);
-		        		print2file("TOKEN_COMMA");
+		        		print2file("SEPARATION SIGN");
 						return;}
 
 {SEMICOLON}		        {create_and_store_token(TOKEN_SEMICOLON, yytext, lineNumber);
-	        			print2file("TOKEN_SEMICOLON");
+	        			print2file("SEPARATION SIGN");
 						return;}
 
 {OPEN_CIRCULAR_PAR}	    {create_and_store_token(TOKEN_OPEN_CIRCULAR_PAR, yytext, lineNumber);
-	        			print2file("TOKEN_OPEN_CIRCULAR_PAR");
+	        			print2file("SEPARATION SIGN");
 						return;}
 
 {CLOSE_CIRCULAR_PAR}	{create_and_store_token(TOKEN_CLOSE_CIRCULAR_PAR, yytext, lineNumber);
-	        			print2file("TOKEN_CLOSE_CIRCULAR_PAR");
+	        			print2file("SEPARATION SIGN");
 						return;}
 
 {OPEN_SQUARE_PAR}		{create_and_store_token(TOKEN_OPEN_SQUER_PAR, yytext, lineNumber);
-        				print2file("TOKEN_OPEN_SQUER_PAR");
+        				print2file("SEPARATION SIGN");
 						return;}
 
 {CLOSE_SQUARE_PAR}		{create_and_store_token(TOKEN_CLOSE_SQUER_PAR, yytext, lineNumber);
-        				print2file("TOKEN_CLOSE_SQUER_PAR");
+        				print2file("SEPARATION SIGN");
 						return;}
 
 {OPEN_CURLY_PAR}	    {create_and_store_token(TOKEN_OPEN_CURLY_PAR, yytext, lineNumber);
-						print2file("TOKEN_OPEN_CURLY_PAR");
+						print2file("SEPARATION SIGN");
 						return;}
 
 {CLOSE_CURLY_PAR}	    {create_and_store_token(TOKEN_CLOSE_CURLY_PAR, yytext, lineNumber);
-		        		print2file("TOKEN_CLOSE_CURLY_PAR");
+		        		print2file("SEPARATION SIGN");
 						return;}
 
 {COMMENT} 				{}
@@ -125,15 +125,15 @@ REAL_NUMBER			0"."{DIGIT}*|{NATURAL}{DIGIT}*"."{DIGIT}*
 {SPACE}					{}
 
 {ID}					{create_and_store_token(TOKEN_ID, yytext, lineNumber);
-						print2file("TOKEN_ID");
+						print2file("ID");
 						return;}
 
 {INT_NUMBER}			{create_and_store_token(TOKEN_INT_NUMBER, yytext, lineNumber);
-		 				print2file("TOKEN_INT_NUMBER");
+		 				print2file("INT NUMBER");
 						return;}
 
 {REAL_NUMBER}			{create_and_store_token(TOKEN_REAL_NUMBER, yytext, lineNumber);
-		 				print2file("TOKEN_REAL_NUMBER");
+		 				print2file("REAL NUMBER");
 						return;}
 
 <<EOF>>					{create_and_store_token(TOKEN_EOF, yytext, lineNumber);
@@ -152,7 +152,7 @@ void print2file(char *token_kind){ /* method to print the token database to a te
 		fprintf(yyout, "The character %s at line %d does not begin any legal token in the language.\n", yytext, lineNumber);
 	}
 	else if(token_kind == 1){ /* if end of file */
-		fprintf(yyout, "Token of kind TOKEN_EOF was found at line %d", lineNumber);
+		fprintf(yyout, "Token of kind EOF was found at line %d", lineNumber);
 	}
 	else{ /* recognised tokens */
 		fprintf(yyout, "Token of kind %s was found at line %d, lexeme: %s\n", token_kind, lineNumber, yytext);
@@ -161,6 +161,7 @@ void print2file(char *token_kind){ /* method to print the token database to a te
 
 void main(int argc, char* argv[])
 {
+	FILE *parser_report;
 	yyin = fopen("C:\\temp\\test1.txt", "r");
 	yyout = fopen("C:\\temp\\test1_311334544_310765821_lex.txt", "w");
 	parser_report = fopen("C:\\temp\\test1_311334544_310765821_syntactic.txt", "w");
