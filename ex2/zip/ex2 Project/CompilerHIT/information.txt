@@ -11,9 +11,3 @@ Windows10 - 64Bit
 
 Development enviroment:
 Visual Studio 15
-
-Notes:
-To build the Nullable, First and Follow Table and Predictive Parsing Table
-we wrote a scrip in python wich gets the grammar as input and outputs the desired tables
-we also have built those tables manualy and compared the two reaults for confirmation.
-python script is in var atributes folder in the zip.
