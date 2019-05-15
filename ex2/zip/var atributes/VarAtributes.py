@@ -332,9 +332,14 @@ for rule in rules:
         alfa_null = True
         for var in current_rule.split():
             if var in rules and var_atributes["nullable"][var] is False:
+                for token in var_atributes["first"][var]:
+                    predictive_table[rule][token].append(current_rule)
+                    predictive_table[rule][token] = list(set(predictive_table[rule][token]))
                 alfa_null = False
                 break
-            elif var not in rules:
+            elif var not in rules and var != "epsilon":
+                predictive_table[rule][var].append(current_rule)
+                predictive_table[rule][var] = list(set(predictive_table[rule][var]))
                 alfa_null = False
                 break
         if alfa_null:
