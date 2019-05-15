@@ -22,10 +22,12 @@ void parse_expression_clean() {
 	case TOKEN_SEMICOLON:
 		print_parser_rule("EXPRESSION_CLEAN -> VARIABLE_CLEAN");
 		cur_token = back_token();
+		parse_variable_clean();
 		break;
 	case TOKEN_OPEN_SQUER_PAR:
 		print_parser_rule("EXPRESSION_CLEAN -> VARIABLE_CLEAN");
 		cur_token = back_token();
+		parse_variable_clean();
 		break;
 	default:
 		error_recovery(EXPRESSION_CLEAN, expected, NUM_OF_EXPECTED);
