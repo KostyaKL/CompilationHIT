@@ -9,9 +9,9 @@ void parse_variable_clean() {
 	{
 	case TOKEN_OPEN_SQUER_PAR:
 		print_parser_rule("VARIABLE_CLEAN -> [ int_number ]");
-		cur_token = next_token();
 		match(TOKEN_INT_NUMBER);
 		match(TOKEN_CLOSE_SQUER_PAR);
+		cur_token = next_token();
 		break;
 	case TOKEN_ASSIGNMENT:
 		print_parser_rule("VARIABLE_CLEAN -> epsilon");

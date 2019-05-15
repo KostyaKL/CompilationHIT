@@ -10,14 +10,14 @@ void parse_var_definitions_clean() {
 	switch (cur_token->kind)
 	{
 	case TOKEN_SEMICOLON:
-		if (peek->kind == TOKEN_EOF) {
-			print_parser_rule("VAR_DEFINITIONS_CLEAN -> epsilon");
-			//cur_token = back_token();
-		}
-		else {
+		if (peek->kind == TOKEN_REAL || peek->kind == TOKEN_INTEGER) {
 			print_parser_rule("VAR_DEFINITIONS_CLEAN -> ; VAR_DEFINITIONS");
 			//cur_token = back_token();
 			parse_var_definitions();
+		}
+		else {
+			print_parser_rule("VAR_DEFINITIONS_CLEAN -> epsilon");
+			//cur_token = back_token();
 		}
 		break;
 	default:
