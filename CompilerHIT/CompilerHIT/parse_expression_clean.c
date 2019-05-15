@@ -14,7 +14,7 @@ void parse_expression_clean() {
 	case TOKEN_DIV:
 		print_parser_rule("EXPRESSION_CLEAN -> ar_op EXPRESSION");
 		parse_expression();
-		break;
+		break; 
 	case TOKEN_ASSIGNMENT:
 		print_parser_rule("EXPRESSION_CLEAN -> ar_op EXPRESSION");
 		parse_expression();
