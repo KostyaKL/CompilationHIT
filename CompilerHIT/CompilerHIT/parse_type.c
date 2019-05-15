@@ -16,7 +16,7 @@ void parse_type() {
 		cur_token = next_token();
 		break;
 	default:
-		error_recovery(TYPE, expected, NUM_OF_EXPECTED, cur_token);
+		error_recovery(TYPE, expected, NUM_OF_EXPECTED);
 		break;
 	}
 }

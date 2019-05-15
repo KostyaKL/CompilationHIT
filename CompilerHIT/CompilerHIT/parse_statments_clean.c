@@ -31,7 +31,7 @@ void parse_statments_clean() {
 		//cur_token = back_token();
 		break;
 	default:
-		error_recovery(STATEMENTS_CLEAN, expected, NUM_OF_EXPECTED, cur_token);
+		error_recovery(STATEMENTS_CLEAN, expected, NUM_OF_EXPECTED);
 		break;
 	}
 }

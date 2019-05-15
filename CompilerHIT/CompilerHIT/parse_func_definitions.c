@@ -29,7 +29,7 @@ void parse_func_definitions() {
 		parse_func_definitions_celan();
 		break;
 	default:
-		error_recovery(FUNC_DEFINITIONS, expected, NUM_OF_EXPECTED, cur_token);
+		error_recovery(FUNC_DEFINITIONS, expected, NUM_OF_EXPECTED);
 		break;
 	}
 }

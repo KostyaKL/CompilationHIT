@@ -31,7 +31,7 @@ void parse_expression_clean() {
 		//cur_token = back_token();
 		break;
 	default:
-		error_recovery(EXPRESSION_CLEAN, expected, NUM_OF_EXPECTED, cur_token);
+		error_recovery(EXPRESSION_CLEAN, expected, NUM_OF_EXPECTED);
 		break;
 	}
 }

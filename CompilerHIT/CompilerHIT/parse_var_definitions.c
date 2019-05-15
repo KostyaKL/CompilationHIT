@@ -22,7 +22,7 @@ void parse_var_definitions() {
 		parse_var_definitions_clean();
 		break;
 	default:
-		error_recovery(VAR_DEFINITIONS, expected, NUM_OF_EXPECTED, cur_token);
+		error_recovery(VAR_DEFINITIONS, expected, NUM_OF_EXPECTED);
 		break;
 	}
 }

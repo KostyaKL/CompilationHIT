@@ -21,7 +21,7 @@ void parse_var_definitions_clean() {
 		}
 		break;
 	default:
-		error_recovery(VAR_DEFINITIONS_CLEAN, expected, NUM_OF_EXPECTED, cur_token);
+		error_recovery(VAR_DEFINITIONS_CLEAN, expected, NUM_OF_EXPECTED);
 		break;
 	}
 }

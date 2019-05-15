@@ -44,7 +44,7 @@ void parse_func_definition() {
 		parse_block();
 		break;
 	default:
-		error_recovery(FUNC_DEFINITION, expected, NUM_OF_EXPECTED, cur_token);
+		error_recovery(FUNC_DEFINITION, expected, NUM_OF_EXPECTED);
 		break;
 	}
 }

@@ -22,7 +22,7 @@ void parse_returned_type() {
 		cur_token = next_token();
 		break;
 	default:
-		error_recovery(RETURNED_TYPE, expected, NUM_OF_EXPECTED, cur_token);
+		error_recovery(RETURNED_TYPE, expected, NUM_OF_EXPECTED);
 		break;
 	}
 }

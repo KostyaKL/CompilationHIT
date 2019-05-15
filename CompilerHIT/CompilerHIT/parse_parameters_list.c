@@ -17,7 +17,7 @@ void parse_parameters_list() {
 		//cur_token = back_token();
 		break;
 	default:
-		error_recovery(PARAMETERS_LIST, expected, NUM_OF_EXPECTED, cur_token);
+		error_recovery(PARAMETERS_LIST, expected, NUM_OF_EXPECTED);
 		break;
 	}
 }

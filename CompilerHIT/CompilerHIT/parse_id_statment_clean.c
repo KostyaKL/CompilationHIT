@@ -21,7 +21,7 @@ void parse_id_statment_clean() {
 		match(TOKEN_CLOSE_CIRCULAR_PAR);
 		break;
 	default:
-		error_recovery(ID_STATEMENT_CLEAN, expected, NUM_OF_EXPECTED, cur_token);
+		error_recovery(ID_STATEMENT_CLEAN, expected, NUM_OF_EXPECTED);
 		break;
 	}
 }

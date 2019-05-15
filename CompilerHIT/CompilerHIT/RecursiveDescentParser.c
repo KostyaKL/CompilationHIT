@@ -20,5 +20,5 @@ void parser() {
 	}*/
 	/*for debuging*/
 	parse_program();
-	match(PROGRAM, TOKEN_EOF);
+	match(TOKEN_EOF);
 }

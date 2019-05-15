@@ -15,7 +15,7 @@ void parse_variables_list() {
 		parse_variables_list_clean();
 		break;
 	default:
-		error_recovery(VARIABLES_LIST, expected, NUM_OF_EXPECTED, cur_token);
+		error_recovery(VARIABLES_LIST, expected, NUM_OF_EXPECTED);
 		break;
 	}
 }

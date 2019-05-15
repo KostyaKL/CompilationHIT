@@ -32,7 +32,7 @@ void parse_statments() {
 		parse_statments_clean();
 		break;
 	default:
-		error_recovery(STATEMENTS, expected, NUM_OF_EXPECTED, cur_token);
+		error_recovery(STATEMENTS, expected, NUM_OF_EXPECTED);
 		break;
 	}
 }

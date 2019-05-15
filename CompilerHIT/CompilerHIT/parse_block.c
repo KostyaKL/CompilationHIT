@@ -17,7 +17,7 @@ void parse_block() {
 		match(TOKEN_CLOSE_CURLY_PAR);
 		break;
 	default:
-		error_recovery(BLOCK, expected, NUM_OF_EXPECTED, cur_token);
+		error_recovery(BLOCK, expected, NUM_OF_EXPECTED);
 		break;
 	} 
 }

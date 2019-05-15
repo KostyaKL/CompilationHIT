@@ -22,7 +22,7 @@ void parse_param_definitions() {
 		//cur_token = back_token();
 		break;
 	default:
-		error_recovery(PARAM_DEFINITIONS, expected, NUM_OF_EXPECTED, cur_token);
+		error_recovery(PARAM_DEFINITIONS, expected, NUM_OF_EXPECTED);
 		break;
 	}
 }

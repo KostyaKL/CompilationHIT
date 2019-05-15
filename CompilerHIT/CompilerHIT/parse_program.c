@@ -19,7 +19,7 @@ void parse_program() {
 		parse_func_definitions();
 		break;
 	default:
-		error_recovery(PROGRAM, expected, NUM_OF_EXPECTED, cur_token);
+		error_recovery(PROGRAM, expected, NUM_OF_EXPECTED);
 		break;
 	}
 }

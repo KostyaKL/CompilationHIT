@@ -13,7 +13,7 @@ void parse_variable() {
 		parse_variable_clean();
 		break;
 	default:
-		error_recovery(VARIABLE, expected, NUM_OF_EXPECTED, cur_token);
+		error_recovery(VARIABLE, expected, NUM_OF_EXPECTED);
 		break;
 	}
 }

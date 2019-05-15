@@ -60,7 +60,7 @@ typedef enum eVARIABLE
 int follow[23][5];
 
 void print_parser_rule(char *rule);
-void print_parser_error(eTOKENS *expected, int size, Token *actual);
-void error_recovery(eVARIABLE var, eTOKENS *expected, int size, Token *cur_token);
+void print_parser_error(eTOKENS *expected, int size);
+void error_recovery(eVARIABLE var, eTOKENS *expected, int size);
 void match(eTOKENS t);
 #endif
