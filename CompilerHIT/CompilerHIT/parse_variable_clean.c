@@ -11,23 +11,23 @@ void parse_variable_clean() {
 		print_parser_rule("VARIABLE_CLEAN -> [ int_number ]");
 		match(TOKEN_INT_NUMBER);
 		match(TOKEN_CLOSE_SQUER_PAR);
-		cur_token = next_token();
+		//cur_token = next_token();
 		break;
 	case TOKEN_ASSIGNMENT:
 		print_parser_rule("VARIABLE_CLEAN -> epsilon");
-		//cur_token = back_token();
+		cur_token = back_token();
 		break;
 	case TOKEN_COMMA:
 		print_parser_rule("VARIABLE_CLEAN -> epsilon");
-		//cur_token = back_token();
+		cur_token = back_token();
 		break;
 	case TOKEN_SEMICOLON:
 		print_parser_rule("VARIABLE_CLEAN -> epsilon");
-		//cur_token = back_token();
+		cur_token = back_token();
 		break;
 	case TOKEN_CLOSE_CIRCULAR_PAR:
 		print_parser_rule("VARIABLE_CLEAN -> epsilon");
-		//cur_token = back_token();
+		cur_token = back_token();
 		break;
 	default:
 		error_recovery(VARIABLE_CLEAN, expected, NUM_OF_EXPECTED);

@@ -9,13 +9,10 @@ void parse_program() {
 	{
 	case TOKEN_PROGRAM:
 		print_parser_rule("PROGRAM -> program VAR_DEFINITIONS ; STATMENTS end FUNC_DEFINITIONS");
-		//cur_token = back_token();
 		parse_var_definitions();
 		match(TOKEN_SEMICOLON);
-		cur_token = back_token();
 		parse_statments();
 		match(TOKEN_END);
-		cur_token = back_token();
 		parse_func_definitions();
 		break;
 	default:

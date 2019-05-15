@@ -9,7 +9,6 @@ void parse_variable() {
 	{
 	case TOKEN_ID:
 		print_parser_rule("VARIABLE -> id VARIABLE_CLEAN");
-		//cur_token = back_token();
 		parse_variable_clean();
 		break;
 	default:

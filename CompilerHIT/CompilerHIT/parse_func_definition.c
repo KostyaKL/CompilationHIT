@@ -13,10 +13,8 @@ void parse_func_definition() {
 		parse_returned_type();
 		match(TOKEN_ID);
 		match(TOKEN_OPEN_CIRCULAR_PAR);
-		cur_token = back_token();
 		parse_param_definitions();
 		match(TOKEN_CLOSE_CIRCULAR_PAR);
-		cur_token = back_token();
 		parse_block();
 		break;
 	case TOKEN_INTEGER:
@@ -25,10 +23,8 @@ void parse_func_definition() {
 		parse_returned_type();
 		match(TOKEN_ID);
 		match(TOKEN_OPEN_CIRCULAR_PAR);
-		cur_token = back_token();
 		parse_param_definitions();
 		match(TOKEN_CLOSE_CIRCULAR_PAR);
-		cur_token = back_token();
 		parse_block();
 		break;
 	case TOKEN_VOID:
@@ -37,10 +33,8 @@ void parse_func_definition() {
 		parse_returned_type();
 		match(TOKEN_ID);
 		match(TOKEN_OPEN_CIRCULAR_PAR);
-		cur_token = back_token();
 		parse_param_definitions();
 		match(TOKEN_CLOSE_CIRCULAR_PAR);
-		cur_token = back_token();
 		parse_block();
 		break;
 	default:

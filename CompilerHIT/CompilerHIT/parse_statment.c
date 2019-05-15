@@ -9,12 +9,10 @@ void parse_statment() {
 	{
 	case TOKEN_ID: 
 		print_parser_rule("STATEMENT -> id ID_STATEMENT_CLEAN");
-		//cur_token = back_token();
 		parse_id_statment_clean();
 		break;
 	case TOKEN_RETURN: 
 		print_parser_rule("STATEMENT -> return ID_STATEMENT_CLEAN");
-		//cur_token = back_token();
 		parse_id_statment_clean();
 		break;
 	case TOKEN_OPEN_CURLY_PAR:

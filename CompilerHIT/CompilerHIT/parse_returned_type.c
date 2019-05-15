@@ -19,7 +19,6 @@ void parse_returned_type() {
 		break;
 	case TOKEN_VOID:
 		print_parser_rule("RETURNED_TYPE -> void");
-		cur_token = next_token();
 		break;
 	default:
 		error_recovery(RETURNED_TYPE, expected, NUM_OF_EXPECTED);

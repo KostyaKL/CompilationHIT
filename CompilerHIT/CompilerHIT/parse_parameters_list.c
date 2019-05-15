@@ -14,7 +14,7 @@ void parse_parameters_list() {
 		break;
 	case TOKEN_CLOSE_CIRCULAR_PAR:
 		print_parser_rule("PARAMETERS_LIST -> epsilon");
-		//cur_token = back_token();
+		cur_token = back_token();
 		break;
 	default:
 		error_recovery(PARAMETERS_LIST, expected, NUM_OF_EXPECTED);

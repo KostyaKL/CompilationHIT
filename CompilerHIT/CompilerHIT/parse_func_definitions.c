@@ -11,21 +11,18 @@ void parse_func_definitions() {
 		print_parser_rule("FUNC_DEFINITIONS -> FUNC_DEFINITION FUNC_DEFINITIONS_CLEAN");
 		cur_token = back_token();
 		parse_func_definition();
-		cur_token = back_token();
 		parse_func_definitions_celan();
 		break;
 	case TOKEN_INTEGER:
 		print_parser_rule("FUNC_DEFINITIONS -> FUNC_DEFINITION FUNC_DEFINITIONS_CLEAN");
 		cur_token = back_token();
 		parse_func_definition();
-		cur_token = back_token();
 		parse_func_definitions_celan();
 		break;
 	case TOKEN_VOID:
 		print_parser_rule("FUNC_DEFINITIONS -> FUNC_DEFINITION FUNC_DEFINITIONS_CLEAN");
 		cur_token = back_token();
 		parse_func_definition();
-		cur_token = back_token();
 		parse_func_definitions_celan();
 		break;
 	default:

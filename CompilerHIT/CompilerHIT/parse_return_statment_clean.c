@@ -24,7 +24,7 @@ void parse_return_statment_clean() {
 		break;
 	case TOKEN_SEMICOLON:
 		print_parser_rule("RETURN_STATEMENT_CLEAN -> epsilon");
-		//cur_token = back_token();
+		cur_token = back_token();
 		break;
 	default:
 		error_recovery(RETURN_STATEMENT_CLEAN, expected, NUM_OF_EXPECTED);

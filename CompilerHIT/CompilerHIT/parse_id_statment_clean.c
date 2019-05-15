@@ -16,7 +16,6 @@ void parse_id_statment_clean() {
 		break;
 	case TOKEN_OPEN_CIRCULAR_PAR: 
 		print_parser_rule("ID_STATEMENT_CLEAN -> ( PARAMETERS_LIST )");
-		//cur_token = back_token();
 		parse_parameters_list();
 		match(TOKEN_CLOSE_CIRCULAR_PAR);
 		break;

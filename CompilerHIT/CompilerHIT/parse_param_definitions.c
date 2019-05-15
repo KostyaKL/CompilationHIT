@@ -19,7 +19,7 @@ void parse_param_definitions() {
 		break;
 	case TOKEN_CLOSE_CIRCULAR_PAR:
 		print_parser_rule("PARAM_DEFINITIONS -> epsilon");
-		//cur_token = back_token();
+		cur_token = back_token();
 		break;
 	default:
 		error_recovery(PARAM_DEFINITIONS, expected, NUM_OF_EXPECTED);

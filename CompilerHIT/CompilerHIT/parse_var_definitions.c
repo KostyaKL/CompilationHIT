@@ -11,14 +11,12 @@ void parse_var_definitions() {
 		print_parser_rule("VAR_DEFINITIONS -> VAR_DEFINITION VAR_DEFINITIONS_CLEAN");
 		cur_token = back_token();
 		parse_var_definition();
-		cur_token = back_token();
 		parse_var_definitions_clean();
 		break;
 	case TOKEN_INTEGER:
 		print_parser_rule("VAR_DEFINITIONS -> VAR_DEFINITION VAR_DEFINITIONS_CLEAN");
 		cur_token = back_token();
 		parse_var_definition();
-		cur_token = back_token();
 		parse_var_definitions_clean();
 		break;
 	default:

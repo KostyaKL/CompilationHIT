@@ -9,10 +9,8 @@ void parse_block() {
 	{
 	case TOKEN_OPEN_CURLY_PAR:
 		print_parser_rule("BLOCK -> { VAR_DEFINITIONS ; STATMENTS }");
-		//cur_token = back_token();
 		parse_var_definitions();
 		match(TOKEN_SEMICOLON);
-		cur_token = back_token();
 		parse_statments();
 		match(TOKEN_CLOSE_CURLY_PAR);
 		break;

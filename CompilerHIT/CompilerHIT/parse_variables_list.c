@@ -11,7 +11,6 @@ void parse_variables_list() {
 		print_parser_rule("VARIABLES_LIST -> VARIABLE VARIABLES_LIST_CLEAN");
 		cur_token = back_token();
 		parse_variable();
-		cur_token = back_token();
 		parse_variables_list_clean();
 		break;
 	default:

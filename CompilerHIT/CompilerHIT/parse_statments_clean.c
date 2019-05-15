@@ -24,11 +24,11 @@ void parse_statments_clean() {
 		break;
 	case TOKEN_END:
 		print_parser_rule("STATEMENTS_CLEAN -> epsilon");
-		//cur_token = back_token();
+		cur_token = back_token();
 		break;
 	case TOKEN_CLOSE_CURLY_PAR:
 		print_parser_rule("STATEMENTS_CLEAN -> epsilon");
-		//cur_token = back_token();
+		cur_token = back_token();
 		break;
 	default:
 		error_recovery(STATEMENTS_CLEAN, expected, NUM_OF_EXPECTED);

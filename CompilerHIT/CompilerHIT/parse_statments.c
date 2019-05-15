@@ -12,7 +12,6 @@ void parse_statments() {
 		cur_token = back_token();
 		parse_statment();
 		match(TOKEN_SEMICOLON);
-		cur_token = back_token();
 		parse_statments_clean();
 		break;
 	case TOKEN_RETURN:
@@ -20,7 +19,6 @@ void parse_statments() {
 		cur_token = back_token();
 		parse_statment();
 		match(TOKEN_SEMICOLON);
-		cur_token = back_token();
 		parse_statments_clean();
 		break;
 	case TOKEN_OPEN_CURLY_PAR:
@@ -28,7 +26,6 @@ void parse_statments() {
 		cur_token = back_token();
 		parse_statment();
 		match(TOKEN_SEMICOLON);
-		cur_token = back_token();
 		parse_statments_clean();
 		break;
 	default:
