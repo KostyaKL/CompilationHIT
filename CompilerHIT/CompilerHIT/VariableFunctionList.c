@@ -100,6 +100,6 @@ void match(eTOKENS t) {
 	eTOKENS *expected = (eTOKENS*)malloc(sizeof(eTOKENS));
 	*expected = t;
 	if (cur_token->kind != t) {
-		print_parser_error(expected, 1, cur_token);
+		print_parser_error(expected, 1);
 	}
 }
