@@ -24,76 +24,7 @@
     <ClCompile Include="RecursiveDescentParser.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="parse_block.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_expression.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_expression_clean.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_func_definition.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_func_definitions.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_func_definitions_celan.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_param_definitions.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_parameters_list.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_program.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_returned_type.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_statment.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_statments.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_type.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_var_definition.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_var_definitions.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_variable.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_variable_clean.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VariableFunctionList.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_var_definitions_clean.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_statments_clean.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_id_statment_clean.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_return_statment_clean.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_variables_list_clean.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parse_variables_list.c">
+    <ClCompile Include="ParserUtilityFunctions.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -101,7 +32,7 @@
     <ClInclude Include="Token.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VariableFunctionList.h">
+    <ClInclude Include="Parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

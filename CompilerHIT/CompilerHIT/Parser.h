@@ -1,5 +1,5 @@
-#ifndef VariableFunctionList_H
-#define VariableFunctionList_H
+#ifndef Parser_H
+#define Parser_H
 
 #include "Token.h"
 

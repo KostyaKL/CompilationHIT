@@ -495,7 +495,7 @@ char *yytext;
 #include <stdlib.h>
 #include <string.h>
 /*#include "Token.h"  declare after yylex is declared */
-#include "VariableFunctionList.h"
+#include "Parser.h"
 
 int lineNumber = 1; /* line counter initialization */
 void print2file(char*); /* declaration of method to print the token database to a text file */
@@ -665,7 +665,7 @@ extern int yylex (void);
 #define YY_DECL int yylex (void)
 #endif /* !YY_DECL */
 
-#include "Token.h"
+#include "Token.h" /*moved from ex.lex declarations*/
 
 /* Code executed at the beginning of each rule, after yytext and yyleng
  * have been set up.

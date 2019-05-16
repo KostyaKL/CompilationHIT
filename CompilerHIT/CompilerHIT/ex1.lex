@@ -4,8 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Token.h"
-#include "VariableFunctionList.h"
+/*#include "Token.h"  declare after yylex is declared */
+#include "Token.h" /*moved from ex.lex declarations*/
+#include "Parser.h"
 
 int lineNumber = 1; /* line counter initialization */
 void print2file(char*); /* declaration of method to print the token database to a text file */
