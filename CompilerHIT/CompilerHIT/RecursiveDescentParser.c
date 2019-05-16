@@ -1,13 +1,13 @@
 #include "Parser.h"
 
-void parser() {
-	parse_program();
-	match(TOKEN_EOF);
+void parser() { /*main parser methond*/
+	parse_program(); /*parser start rule of grammar*/
+	match(TOKEN_EOF); /*check that parser is actually is finished on EOF*/
 }
 
-void parse_program() {
-	match(TOKEN_PROGRAM);
+void parse_program() { /*one case rule*/
 	print_parser_rule("PROGRAM -> program VAR_DEFINITIONS ; STATMENTS end FUNC_DEFINITIONS");
+	match(TOKEN_PROGRAM);
 	parse_var_definitions();
 	match(TOKEN_SEMICOLON);
 	parse_statments();
@@ -17,7 +17,7 @@ void parse_program() {
 
 void parse_var_definitions() {
 	cur_token = next_token();
-	eTOKENS expected[2] = { TOKEN_REAL, TOKEN_INTEGER };
+	eTOKENS expected[2] = { TOKEN_REAL, TOKEN_INTEGER }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_REAL:
@@ -33,7 +33,7 @@ void parse_var_definitions() {
 		parse_var_definitions_clean();
 		break;
 	default:
-		error_recovery(VAR_DEFINITIONS, expected, 2);
+		error_recovery(VAR_DEFINITIONS, expected, 2); /*print error and try to recover*/
 		break;
 	}
 }
@@ -41,7 +41,7 @@ void parse_var_definitions() {
 void parse_var_definitions_clean() {
 	next_token();
 	Token *peek = next_token();
-	eTOKENS expected[2] = { TOKEN_SEMICOLON, TOKEN_CLOSE_CIRCULAR_PAR };
+	eTOKENS expected[2] = { TOKEN_SEMICOLON, TOKEN_CLOSE_CIRCULAR_PAR }; /*expected tokens for error printing purpose*/
 	cur_token = back_token();
 	switch (cur_token->kind)
 	{
@@ -60,14 +60,14 @@ void parse_var_definitions_clean() {
 		cur_token = back_token();
 		break;
 	default:
-		error_recovery(VAR_DEFINITIONS_CLEAN, expected, 2);
+		error_recovery(VAR_DEFINITIONS_CLEAN, expected, 2); /*print error and try to recover*/
 		break;
 	}
 }
 
 void parse_var_definition() {
 	cur_token = next_token();
-	eTOKENS expected[2] = { TOKEN_REAL, TOKEN_INTEGER };
+	eTOKENS expected[2] = { TOKEN_REAL, TOKEN_INTEGER }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_REAL:
@@ -83,14 +83,14 @@ void parse_var_definition() {
 		parse_variables_list();
 		break;
 	default:
-		error_recovery(VAR_DEFINITION, expected, 2);
+		error_recovery(VAR_DEFINITION, expected, 2); /*print error and try to recover*/
 		break;
 	}
 }
 
 void parse_type() {
 	cur_token = next_token();
-	eTOKENS expected[2] = { TOKEN_REAL, TOKEN_INTEGER };
+	eTOKENS expected[2] = { TOKEN_REAL, TOKEN_INTEGER }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_REAL:
@@ -100,14 +100,14 @@ void parse_type() {
 		print_parser_rule("TYPE -> integer");
 		break;
 	default:
-		error_recovery(TYPE, expected, 2);
+		error_recovery(TYPE, expected, 2); /*print error and try to recover*/
 		break;
 	}
 }
 
-void parse_variables_list() {
-	match(TOKEN_ID);
+void parse_variables_list() { /*one case rule*/
 	print_parser_rule("VARIABLES_LIST -> VARIABLE VARIABLES_LIST_CLEAN");
+	match(TOKEN_ID);
 	cur_token = back_token();
 	parse_variable();
 	parse_variables_list_clean();
@@ -115,7 +115,7 @@ void parse_variables_list() {
 
 void parse_variables_list_clean() {
 	cur_token = next_token();
-	eTOKENS expected[3] = { TOKEN_COMMA, TOKEN_SEMICOLON, TOKEN_CLOSE_CIRCULAR_PAR };
+	eTOKENS expected[3] = { TOKEN_COMMA, TOKEN_SEMICOLON, TOKEN_CLOSE_CIRCULAR_PAR }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_COMMA:
@@ -132,20 +132,20 @@ void parse_variables_list_clean() {
 		cur_token = back_token();
 		break;
 	default:
-		error_recovery(VARIABLES_LIST_CLEAN, expected, 3);
+		error_recovery(VARIABLES_LIST_CLEAN, expected, 3); /*print error and try to recover*/
 		break;
 	}
 }
 
-void parse_variable() {
-	match(TOKEN_ID);
+void parse_variable() { /*one case rule*/
 	print_parser_rule("VARIABLE -> id VARIABLE_CLEAN");
+	match(TOKEN_ID);
 	parse_variable_clean();
 }
 
 void parse_variable_clean() {
 	cur_token = next_token();
-	eTOKENS expected[5] = { TOKEN_OPEN_SQUER_PAR, TOKEN_ASSIGNMENT, TOKEN_COMMA, TOKEN_SEMICOLON, TOKEN_CLOSE_CIRCULAR_PAR };
+	eTOKENS expected[5] = { TOKEN_OPEN_SQUER_PAR, TOKEN_ASSIGNMENT, TOKEN_COMMA, TOKEN_SEMICOLON, TOKEN_CLOSE_CIRCULAR_PAR }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_OPEN_SQUER_PAR:
@@ -171,14 +171,14 @@ void parse_variable_clean() {
 		cur_token = back_token();
 		break;
 	default:
-		error_recovery(VARIABLE_CLEAN, expected, 5);
+		error_recovery(VARIABLE_CLEAN, expected, 5); /*print error and try to recover*/
 		break;
 	}
 }
 
 void parse_func_definitions() {
 	cur_token = next_token();
-	eTOKENS expected[3] = { TOKEN_REAL, TOKEN_INTEGER, TOKEN_VOID };
+	eTOKENS expected[3] = { TOKEN_REAL, TOKEN_INTEGER, TOKEN_VOID }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_REAL:
@@ -200,14 +200,14 @@ void parse_func_definitions() {
 		parse_func_definitions_celan();
 		break;
 	default:
-		error_recovery(FUNC_DEFINITIONS, expected, 3);
+		error_recovery(FUNC_DEFINITIONS, expected, 3); /*print error and try to recover*/
 		break;
 	}
 }
 
 void parse_func_definitions_celan() {
 	cur_token = next_token();
-	eTOKENS expected[4] = { TOKEN_REAL, TOKEN_INTEGER, TOKEN_VOID, TOKEN_EOF };
+	eTOKENS expected[4] = { TOKEN_REAL, TOKEN_INTEGER, TOKEN_VOID, TOKEN_EOF }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_REAL:
@@ -233,14 +233,14 @@ void parse_func_definitions_celan() {
 		cur_token = back_token();
 		break;
 	default:
-		error_recovery(FUNC_DEFINITIONS_CLEAN, expected, 4);
+		error_recovery(FUNC_DEFINITIONS_CLEAN, expected, 4); /*print error and try to recover*/
 		break;
 	}
 }
 
 void parse_func_definition() {
 	cur_token = next_token();
-	eTOKENS expected[3] = { TOKEN_REAL, TOKEN_INTEGER, TOKEN_VOID };
+	eTOKENS expected[3] = { TOKEN_REAL, TOKEN_INTEGER, TOKEN_VOID }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_REAL:
@@ -274,14 +274,14 @@ void parse_func_definition() {
 		parse_block();
 		break;
 	default:
-		error_recovery(FUNC_DEFINITION, expected, 3);
+		error_recovery(FUNC_DEFINITION, expected, 3); /*print error and try to recover*/
 		break;
 	}
 }
 
 void parse_returned_type() {
 	cur_token = next_token();
-	eTOKENS expected[3] = { TOKEN_REAL, TOKEN_INTEGER, TOKEN_VOID };
+	eTOKENS expected[3] = { TOKEN_REAL, TOKEN_INTEGER, TOKEN_VOID }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_REAL:
@@ -298,14 +298,14 @@ void parse_returned_type() {
 		print_parser_rule("RETURNED_TYPE -> void");
 		break;
 	default:
-		error_recovery(RETURNED_TYPE, expected, 3);
+		error_recovery(RETURNED_TYPE, expected, 3); /*print error and try to recover*/
 		break;
 	}
 }
 
 void parse_param_definitions() {
 	cur_token = next_token();
-	eTOKENS expected[3] = { TOKEN_REAL, TOKEN_INTEGER, TOKEN_CLOSE_CIRCULAR_PAR };
+	eTOKENS expected[3] = { TOKEN_REAL, TOKEN_INTEGER, TOKEN_CLOSE_CIRCULAR_PAR }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_REAL:
@@ -323,14 +323,14 @@ void parse_param_definitions() {
 		cur_token = back_token();
 		break;
 	default:
-		error_recovery(PARAM_DEFINITIONS, expected, 3);
+		error_recovery(PARAM_DEFINITIONS, expected, 3); /*print error and try to recover*/
 		break;
 	}
 }
 
 void parse_statments() {
 	cur_token = next_token();
-	eTOKENS expected[3] = { TOKEN_ID, TOKEN_RETURN, TOKEN_OPEN_CURLY_PAR };
+	eTOKENS expected[3] = { TOKEN_ID, TOKEN_RETURN, TOKEN_OPEN_CURLY_PAR }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_ID:
@@ -355,14 +355,14 @@ void parse_statments() {
 		parse_statments_clean();
 		break;
 	default:
-		error_recovery(STATEMENTS, expected, 3);
+		error_recovery(STATEMENTS, expected, 3); /*print error and try to recover*/
 		break;
 	}
 }
 
 void parse_statments_clean() {
 	cur_token = next_token();
-	eTOKENS expected[5] = { TOKEN_ID, TOKEN_RETURN, TOKEN_OPEN_CURLY_PAR, TOKEN_END, TOKEN_CLOSE_CURLY_PAR };
+	eTOKENS expected[5] = { TOKEN_ID, TOKEN_RETURN, TOKEN_OPEN_CURLY_PAR, TOKEN_END, TOKEN_CLOSE_CURLY_PAR }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_ID:
@@ -389,14 +389,14 @@ void parse_statments_clean() {
 		cur_token = back_token();
 		break;
 	default:
-		error_recovery(STATEMENTS_CLEAN, expected, 5);
+		error_recovery(STATEMENTS_CLEAN, expected, 5); /*print error and try to recover*/
 		break;
 	}
 }
 
 void parse_statment() {
 	cur_token = next_token();
-	eTOKENS expected[3] = { TOKEN_ID, TOKEN_RETURN, TOKEN_OPEN_CURLY_PAR };
+	eTOKENS expected[3] = { TOKEN_ID, TOKEN_RETURN, TOKEN_OPEN_CURLY_PAR }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_ID:
@@ -413,14 +413,14 @@ void parse_statment() {
 		parse_block();
 		break;
 	default:
-		error_recovery(STATEMENT, expected, 3);
+		error_recovery(STATEMENT, expected, 3); /*print error and try to recover*/
 		break;
 	}
 }
 
 void parse_return_statment_clean() {
 	cur_token = next_token();
-	eTOKENS expected[4] = { TOKEN_ID, TOKEN_INT_NUMBER, TOKEN_REAL_NUMBER, TOKEN_SEMICOLON };
+	eTOKENS expected[4] = { TOKEN_ID, TOKEN_INT_NUMBER, TOKEN_REAL_NUMBER, TOKEN_SEMICOLON }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_ID:
@@ -443,14 +443,14 @@ void parse_return_statment_clean() {
 		cur_token = back_token();
 		break;
 	default:
-		error_recovery(RETURN_STATEMENT_CLEAN, expected, 4);
+		error_recovery(RETURN_STATEMENT_CLEAN, expected, 4); /*print error and try to recover*/
 		break;
 	}
 }
 
 void parse_id_statment_clean() {
 	cur_token = next_token();
-	eTOKENS expected[3] = { TOKEN_OPEN_SQUER_PAR, TOKEN_OPEN_CIRCULAR_PAR, TOKEN_ASSIGNMENT };
+	eTOKENS expected[3] = { TOKEN_OPEN_SQUER_PAR, TOKEN_OPEN_CIRCULAR_PAR, TOKEN_ASSIGNMENT }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_OPEN_SQUER_PAR:
@@ -473,14 +473,14 @@ void parse_id_statment_clean() {
 		match(TOKEN_CLOSE_CIRCULAR_PAR);
 		break;
 	default:
-		error_recovery(ID_STATEMENT_CLEAN, expected, 3);
+		error_recovery(ID_STATEMENT_CLEAN, expected, 3); /*print error and try to recover*/
 		break;
 	}
 }
 
-void parse_block() {
-	match(TOKEN_OPEN_CURLY_PAR);
+void parse_block() { /*one case rule*/
 	print_parser_rule("BLOCK -> { VAR_DEFINITIONS ; STATMENTS }");
+	match(TOKEN_OPEN_CURLY_PAR);
 	parse_var_definitions();
 	match(TOKEN_SEMICOLON);
 	parse_statments();
@@ -489,7 +489,7 @@ void parse_block() {
 
 void parse_parameters_list() {
 	cur_token = next_token();
-	eTOKENS expected[2] = { TOKEN_ID, TOKEN_CLOSE_CIRCULAR_PAR };
+	eTOKENS expected[2] = { TOKEN_ID, TOKEN_CLOSE_CIRCULAR_PAR }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_ID:
@@ -502,14 +502,14 @@ void parse_parameters_list() {
 		cur_token = back_token();
 		break;
 	default:
-		error_recovery(PARAMETERS_LIST, expected, 2);
+		error_recovery(PARAMETERS_LIST, expected, 2); /*print error and try to recover*/
 		break;
 	}
 }
 
 void parse_expression() {
 	cur_token = next_token();
-	eTOKENS expected[3] = { TOKEN_ID, TOKEN_INT_NUMBER, TOKEN_REAL_NUMBER };
+	eTOKENS expected[3] = { TOKEN_ID, TOKEN_INT_NUMBER, TOKEN_REAL_NUMBER }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_ID:
@@ -523,14 +523,14 @@ void parse_expression() {
 		print_parser_rule("EXPRESSION -> real_number");
 		break;
 	default:
-		error_recovery(EXPRESSION, expected, 3);
+		error_recovery(EXPRESSION, expected, 3); /*print error and try to recover*/
 		break;
 	}
 }
 
 void parse_expression_clean() {
 	cur_token = next_token();
-	eTOKENS expected[5] = { TOKEN_SEMICOLON, TOKEN_OPEN_SQUER_PAR, TOKEN_MUL, TOKEN_DIV, TOKEN_ASSIGNMENT };
+	eTOKENS expected[5] = { TOKEN_SEMICOLON, TOKEN_OPEN_SQUER_PAR, TOKEN_MUL, TOKEN_DIV, TOKEN_ASSIGNMENT }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_MUL:
@@ -556,7 +556,7 @@ void parse_expression_clean() {
 		parse_variable_clean();
 		break;
 	default:
-		error_recovery(EXPRESSION_CLEAN, expected, 5);
+		error_recovery(EXPRESSION_CLEAN, expected, 5); /*print error and try to recover*/
 		break;
 	}
 }

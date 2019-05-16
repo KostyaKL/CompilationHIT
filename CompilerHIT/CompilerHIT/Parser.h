@@ -3,10 +3,10 @@
 
 #include "Token.h"
 
-FILE *parser_report;
-Token *cur_token;
+FILE *parser_report; /*file pointer for parser report*/
+Token *cur_token; /*pointer to current token*/
 
-typedef enum eVARIABLE
+typedef enum eVARIABLE /*enum for each variable in grammar*/
 {
 	PROGRAM,
 	VAR_DEFINITIONS,
@@ -33,6 +33,7 @@ typedef enum eVARIABLE
 	EXPRESSION_CLEAN
 }eVARIABLE;
 
+/*explained in RecursiveDescentParser.c*/
 void parser();
 
 void parse_block();
@@ -58,12 +59,15 @@ void parse_variable();
 void parse_variable_clean();
 void parse_variables_list();
 void parse_variables_list_clean();
+/*explained in RecursiveDescentParser.c*/
 
+/*explained in ParserUtilityFunctions.c*/
 int follow[23][5];
 
 void print_parser_rule(char *rule);
 void print_parser_error(eTOKENS *expected, int size);
 void error_recovery(eVARIABLE var, eTOKENS *expected, int size);
 void match(eTOKENS t);
+/*explained in ParserUtilityFunctions.c*/
 
 #endif
