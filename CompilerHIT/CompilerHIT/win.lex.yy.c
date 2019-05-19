@@ -365,7 +365,7 @@ static const flex_int16_t yy_accept[63] =
     {   0,
         0,    0,   27,   25,   20,   19,   21,   12,   13,    7,
        10,   25,    8,   23,   23,   11,    9,   22,   14,   15,
-       22,   22,   22,   22,   22,   16,   17,   18,   24,   24,
+       22,   22,   22,   22,   22,   16,   17,   18,    0,    0,
        23,   22,    0,   22,   22,   22,   22,   22,   18,   24,
        24,   22,    2,   22,   22,   22,   22,   22,   22,   22,
         3,   22,    5,   22,   22,   22,   22,   22,    6,    4,
@@ -495,13 +495,14 @@ char *yytext;
 #include <stdlib.h>
 #include <string.h>
 /*#include "Token.h"  declare after yylex is declared */
+#include "Token.h" /*moved from ex.lex declarations*/
 #include "Parser.h"
 
 int lineNumber = 1; /* line counter initialization */
 void print2file(char*); /* declaration of method to print the token database to a text file */
 
-#line 503 "win.lex.yy.c"
 #line 504 "win.lex.yy.c"
+#line 505 "win.lex.yy.c"
 
 #define INITIAL 0
 
@@ -665,8 +666,6 @@ extern int yylex (void);
 #define YY_DECL int yylex (void)
 #endif /* !YY_DECL */
 
-#include "Token.h" /*moved from ex.lex declarations*/
-
 /* Code executed at the beginning of each rule, after yytext and yyleng
  * have been set up.
  */
@@ -717,10 +716,10 @@ YY_DECL
 		}
 
 	{
-#line 49 "ex1.lex"
+#line 50 "ex1.lex"
 
 
-#line 721 "win.lex.yy.c"
+#line 722 "win.lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -779,182 +778,182 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 51 "ex1.lex"
+#line 52 "ex1.lex"
 {create_and_store_token(TOKEN_PROGRAM, yytext, lineNumber);
 						print2file("TOKEN_PROGRAM");
 						return TOKEN_PROGRAM;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 55 "ex1.lex"
+#line 56 "ex1.lex"
 {create_and_store_token(TOKEN_END, yytext, lineNumber);
 						print2file("TOKEN_END");
 						return TOKEN_END;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 59 "ex1.lex"
+#line 60 "ex1.lex"
 {create_and_store_token(TOKEN_REAL, yytext, lineNumber);
 						print2file("TOKEN_REAL");
 						return TOKEN_REAL;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 63 "ex1.lex"
+#line 64 "ex1.lex"
 {create_and_store_token(TOKEN_INTEGER, yytext, lineNumber);
 						print2file("TOKEN_INTEGER");
 						return TOKEN_INTEGER;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 67 "ex1.lex"
+#line 68 "ex1.lex"
 {create_and_store_token(TOKEN_VOID, yytext, lineNumber);
 						print2file("TOKEN_VOID");
 						return TOKEN_VOID;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 71 "ex1.lex"
+#line 72 "ex1.lex"
 {create_and_store_token(TOKEN_RETURN, yytext, lineNumber);
 						print2file("TOKEN_RETURN");
 						return TOKEN_RETURN;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 75 "ex1.lex"
+#line 76 "ex1.lex"
 {create_and_store_token(TOKEN_MUL, yytext, lineNumber);
 		        		print2file("TOKEN_MUL");
 						return TOKEN_MUL;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 79 "ex1.lex"
+#line 80 "ex1.lex"
 {create_and_store_token(TOKEN_DIV, yytext, lineNumber);
 		        		print2file("TOKEN_DIV");
 						return TOKEN_DIV;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 83 "ex1.lex"
+#line 84 "ex1.lex"
 {create_and_store_token(TOKEN_ASSIGNMENT, yytext, lineNumber);
 						print2file("TOKEN_ASSIGNMENT");
 						return TOKEN_ASSIGNMENT;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 87 "ex1.lex"
+#line 88 "ex1.lex"
 {create_and_store_token(TOKEN_COMMA, yytext, lineNumber);
 		        		print2file("TOKEN_COMMA");
 						return TOKEN_COMMA;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 91 "ex1.lex"
+#line 92 "ex1.lex"
 {create_and_store_token(TOKEN_SEMICOLON, yytext, lineNumber);
 	        			print2file("TOKEN_SEMICOLON");
 						return TOKEN_SEMICOLON;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 95 "ex1.lex"
+#line 96 "ex1.lex"
 {create_and_store_token(TOKEN_OPEN_CIRCULAR_PAR, yytext, lineNumber);
 	        			print2file("TOKEN_OPEN_CIRCULAR_PAR");
 						return TOKEN_OPEN_CIRCULAR_PAR;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 99 "ex1.lex"
+#line 100 "ex1.lex"
 {create_and_store_token(TOKEN_CLOSE_CIRCULAR_PAR, yytext, lineNumber);
 	        			print2file("TOKEN_CLOSE_CIRCULAR_PAR");
 						return TOKEN_CLOSE_CIRCULAR_PAR;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 103 "ex1.lex"
+#line 104 "ex1.lex"
 {create_and_store_token(TOKEN_OPEN_SQUER_PAR, yytext, lineNumber);
         				print2file("TOKEN_OPEN_SQUER_PAR");
 						return TOKEN_OPEN_SQUER_PAR;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 107 "ex1.lex"
+#line 108 "ex1.lex"
 {create_and_store_token(TOKEN_CLOSE_SQUER_PAR, yytext, lineNumber);
         				print2file("TOKEN_CLOSE_SQUER_PAR");
 						return TOKEN_CLOSE_SQUER_PAR;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 111 "ex1.lex"
+#line 112 "ex1.lex"
 {create_and_store_token(TOKEN_OPEN_CURLY_PAR, yytext, lineNumber);
 						print2file("TOKEN_OPEN_CURLY_PAR");
 						return TOKEN_OPEN_CURLY_PAR;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 115 "ex1.lex"
+#line 116 "ex1.lex"
 {create_and_store_token(TOKEN_CLOSE_CURLY_PAR, yytext, lineNumber);
 		        		print2file("TOKEN_CLOSE_CURLY_PAR");
 						return TOKEN_CLOSE_CURLY_PAR;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 119 "ex1.lex"
+#line 120 "ex1.lex"
 {}
 	YY_BREAK
 case 19:
 /* rule 19 can match eol */
 YY_RULE_SETUP
-#line 121 "ex1.lex"
+#line 122 "ex1.lex"
 {lineNumber++;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 123 "ex1.lex"
+#line 124 "ex1.lex"
 {}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 125 "ex1.lex"
+#line 126 "ex1.lex"
 {}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 127 "ex1.lex"
+#line 128 "ex1.lex"
 {create_and_store_token(TOKEN_ID, yytext, lineNumber);
 						print2file("TOKEN_ID");
 						return TOKEN_ID;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 131 "ex1.lex"
+#line 132 "ex1.lex"
 {create_and_store_token(TOKEN_INT_NUMBER, yytext, lineNumber);
 		 				print2file("TOKEN_INT_NUMBER");
 						return TOKEN_INT_NUMBER;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 135 "ex1.lex"
+#line 136 "ex1.lex"
 {create_and_store_token(TOKEN_REAL_NUMBER, yytext, lineNumber);
 		 				print2file("TOKEN_REAL_NUMBER");
 						return TOKEN_REAL_NUMBER;}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 139 "ex1.lex"
+#line 140 "ex1.lex"
 {create_and_store_token(TOKEN_EOF, yytext, lineNumber);
 			 			print2file("\v");
 						return TOKEN_EOF;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 143 "ex1.lex"
+#line 144 "ex1.lex"
 {print2file(NULL);}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 146 "ex1.lex"
+#line 147 "ex1.lex"
 ECHO;
 	YY_BREAK
-#line 955 "win.lex.yy.c"
+#line 956 "win.lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1957,7 +1956,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 146 "ex1.lex"
+#line 147 "ex1.lex"
 
 
 int yywrap(void){return 1;}

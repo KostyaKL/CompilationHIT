@@ -113,9 +113,9 @@ Token *back_token() {
 *  returns the token that was created.
 */
 Token *next_token() { 
-	if (currentIndex == 0 && currentNode == NULL)
+	if (currentIndex == 0 && currentNode == NULL) /*if there is no tokens at all yet*/
 	{
-		yylex();
+		yylex(); /*get new token from input*/
 	}
 	else {
 		if (currentIndex == 99) { /* if current token is end of token array */
@@ -137,7 +137,7 @@ Token *next_token() {
 	return &currentNode->tokensArray[currentIndex]; /* return next token */
 }
 
-void reset_tokens() {
+void reset_tokens() { /*when changing input file, reset token data (memory release)*/
 	while (currentNode->next != NULL)
 	{
 		currentNode = currentNode->next;

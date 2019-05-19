@@ -87,7 +87,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,61 +145,14 @@
     <None Include="ex1.lex" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="parse_id_statment_clean.c" />
-    <ClCompile Include="parse_return_statment_clean.c" />
-    <ClCompile Include="parse_var_definitions_clean.c" />
     <ClCompile Include="RecursiveDescentParser.c" />
     <ClCompile Include="Token.c" />
-    <ClCompile Include="parse_block.c" />
-    <ClCompile Include="parse_expression.c" />
-    <ClCompile Include="parse_expression_clean.c" />
-    <ClCompile Include="parse_func_definition.c" />
-    <ClCompile Include="parse_func_definitions.c" />
-    <ClCompile Include="parse_func_definitions_celan.c" />
-    <ClCompile Include="parse_parameters_list.c" />
-    <ClCompile Include="parse_param_definitions.c" />
-    <ClCompile Include="parse_program.c" />
-    <ClCompile Include="parse_returned_type.c" />
-    <ClCompile Include="parse_statment.c" />
-    <ClCompile Include="parse_statments.c" />
-    <ClCompile Include="parse_statments_clean.c" />
-    <ClCompile Include="parse_type.c" />
-    <ClCompile Include="parse_variable.c" />
-    <ClCompile Include="parse_variable_clean.c" />
-    <ClCompile Include="parse_variables_list.c" />
-    <ClCompile Include="parse_variables_list_clean.c" />
-    <ClCompile Include="parse_var_definition.c" />
-    <ClCompile Include="parse_var_definitions.c" />
-    <ClCompile Include="VariableFunctionList.c" />
+    <ClCompile Include="ParserUtilityFunctions.c" />
     <ClCompile Include="win.lex.yy.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="parse_id_statment_clean.h" />
-    <ClInclude Include="parse_return_statment_clean.h" />
-    <ClInclude Include="parse_var_definitions_clean.h" />
-    <ClInclude Include="RecursiveDescentParser.h" />
     <ClInclude Include="Token.h" />
-    <ClInclude Include="VariableFunctionList.h" />
-    <ClInclude Include="parse_block.h" />
-    <ClInclude Include="parse_expression.h" />
-    <ClInclude Include="parse_expression_clean.h" />
-    <ClInclude Include="parse_func_definition.h" />
-    <ClInclude Include="parse_func_definitions.h" />
-    <ClInclude Include="parse_func_definitions_celan.h" />
-    <ClInclude Include="parse_parameters_list.h" />
-    <ClInclude Include="parse_param_definitions.h" />
-    <ClInclude Include="parse_program.h" />
-    <ClInclude Include="parse_returned_type.h" />
-    <ClInclude Include="parse_statment.h" />
-    <ClInclude Include="parse_statments.h" />
-    <ClInclude Include="parse_statments_clean.h" />
-    <ClInclude Include="parse_type.h" />
-    <ClInclude Include="parse_variable.h" />
-    <ClInclude Include="parse_variable_clean.h" />
-    <ClInclude Include="parse_variables_list.h" />
-    <ClInclude Include="parse_variables_list_clean.h" />
-    <ClInclude Include="parse_var_definition.h" />
-    <ClInclude Include="parse_var_definitions.h" />
+    <ClInclude Include="Parser.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="information.txt" />

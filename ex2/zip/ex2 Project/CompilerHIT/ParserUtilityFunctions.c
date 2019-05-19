@@ -1,6 +1,6 @@
-#include "VariableFunctionList.h"
+#include "Parser.h"
 
-int follow[23][5] = {
+int follow[23][5] = {  /*static table of follow(x) for each variable in grammar*/
 	{ TOKEN_EOF, 30, 30, 30, 30 },
 	{ TOKEN_CLOSE_CIRCULAR_PAR, TOKEN_SEMICOLON, 30 , 30 , 30 },
 	{ TOKEN_CLOSE_CIRCULAR_PAR, TOKEN_SEMICOLON, 30 , 30 , 30 },
@@ -26,7 +26,7 @@ int follow[23][5] = {
 	{ TOKEN_SEMICOLON, 30 , 30 , 30 , 30 }
 };
 
-const char* getTokenName(eTOKENS token)
+const char* getTokenName(eTOKENS token) /*dictionary of eTOKEN to actual token "string"*/
 {
 	switch (token)
 	{
@@ -57,49 +57,49 @@ const char* getTokenName(eTOKENS token)
 	}
 }
 
-void print_parser_rule(char *rule) {
+void print_parser_rule(char *rule) { /*print variable rule in parser report file*/
 	fprintf(parser_report, "Rule(%s)\n", rule);
 }
-void print_parser_error(eTOKENS *expected, int size) {
+void print_parser_error(eTOKENS *expected, int size) { /*print parser error in report file*/
 	char *expected_str;
-	int length = strlen(getTokenName(expected[0]));
+	int length = strlen(getTokenName(expected[0])); /*determine the size of string of all expected token names*/
 	for (int i = 1;i < size;i++) {
 		length += (strlen(getTokenName(expected[i])) + 4);
 	}
-	expected_str = (char*)calloc(sizeof(char), length + 1);
+	expected_str = (char*)calloc(sizeof(char), length + 1); /*allocate memory to string of expected token names*/
 	strcat(expected_str, getTokenName(expected[0]));
-	for (int i = 1;i < size;i++) {
+	for (int i = 1;i < size;i++) { /*build a string of expected token names*/
 		strcat(expected_str, " or ");
 		strcat(expected_str, getTokenName(expected[i]));
 	}
-	if (cur_token->kind == TOKEN_EOF) {
+	if (cur_token->kind == TOKEN_EOF) { /*if current toke is EOF print the error*/
 		fprintf(parser_report, "Expected token of type %s at line: %d, Actual token of type %s\n", expected_str, cur_token->lineNumber, getTokenName(cur_token->kind));
 	}
-	else {
+	else { /*print parser error massege*/
 		fprintf(parser_report, "Expected token of type %s at line: %d, Actual token of type %s, lexeme: %s\n", expected_str, cur_token->lineNumber, getTokenName(cur_token->kind), cur_token->lexeme);
 	}
 }
 
-void error_recovery(eVARIABLE var, eTOKENS *expected, int size) {
-	print_parser_error(expected, size);
-	int in_follow_flag = 1;
-	while (in_follow_flag && cur_token->kind != TOKEN_EOF)
+void error_recovery(eVARIABLE var, eTOKENS *expected, int size) { /*recover from parser error*/
+	print_parser_error(expected, size); /*print massege in report file with expected tokens*/
+	int in_follow_flag = 1; /*1 - current token not in follow(x)*/
+	while (in_follow_flag && cur_token->kind != TOKEN_EOF) /*while current token no in follow(x) and its not EOF*/
 	{
-		cur_token = next_token();
-		for (int i = 0;i < 5;i++) {
-			if (cur_token->kind == follow[var][i]) {
-				in_follow_flag = 0;
+		cur_token = next_token(); /*get next token*/
+		for (int i = 0;i < 5;i++) { /*check if token in follow(x)*/
+			if (cur_token->kind == follow[var][i]) { /*if token in follow(x)*/
+				in_follow_flag = 0; /*update flag*/
 			}
 		}
 	}
-	cur_token = back_token();
+	cur_token = back_token(); /*go one token back in purpose to resume parsing*/
 }
 
-void match(eTOKENS t) {
-	cur_token = next_token();
-	eTOKENS *expected = (eTOKENS*)malloc(sizeof(eTOKENS));
-	*expected = t;
-	if (cur_token->kind != t) {
-		print_parser_error(expected, 1, cur_token);
+void match(eTOKENS t) { /*check if current token is as expected*/
+	cur_token = next_token(); /*get current token*/
+	eTOKENS *expected = (eTOKENS*)malloc(sizeof(eTOKENS)); 
+	*expected = t; /*save expected for printing purpose*/
+	if (cur_token->kind != t) { /*if token is not as expected*/
+		print_parser_error(expected, 1); /*print error in report file*/
 	}
 }
