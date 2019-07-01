@@ -4,26 +4,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "Hash.h"
 
 FILE *semantic_report; /*file pointer for parser report*/
-
-typedef enum elm_type
-{
-	REAL,
-	INTEGER,
-	NULL_type
-} elm_type;
-
-typedef struct table_entry
-{
-	//table entry parameters
-	int a;
-} table_entry;
 
 typedef struct table_ptr
 {
 	struct table_ptr *father;
+	hashtable_t *hashtable;
 	table_entry *entry;
+	int depth;
 } table_ptr;
 
 table_ptr *make_table(table_ptr *current_table);

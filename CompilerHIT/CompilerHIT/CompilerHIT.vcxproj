@@ -145,6 +145,7 @@
     <None Include="ex1.lex" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Hash.c" />
     <ClCompile Include="RecursiveDescentParser.c" />
     <ClCompile Include="Table.c" />
     <ClCompile Include="Token.c" />
@@ -152,6 +153,7 @@
     <ClCompile Include="win.lex.yy.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Hash.h" />
     <ClInclude Include="Table.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="Parser.h" />
