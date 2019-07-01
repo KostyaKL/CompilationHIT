@@ -2,6 +2,7 @@
 #define Parser_H
 
 #include "Token.h"
+#include "Table.h"
 
 FILE *parser_report; /*file pointer for parser report*/
 Token *cur_token; /*pointer to current token*/

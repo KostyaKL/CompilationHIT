@@ -6,6 +6,7 @@
 #include <string.h>
 /*#include "Token.h"  declare after yylex is declared */
 #include "Token.h" /*moved from ex.lex declarations*/
+#include "Table.h"
 #include "Parser.h"
 
 int lineNumber = 1; /* line counter initialization */
@@ -165,13 +166,15 @@ void main(int argc, char* argv[])
 	yyin = fopen("C:\\temp\\test1.txt", "r");
 	yyout = fopen("C:\\temp\\test1_311334544_310765821_lex.txt", "w");
 	parser_report = fopen("C:\\temp\\test1_311334544_310765821_syntactic.txt", "w");
+	semantic_report = fopen("C:\\temp\\test1_311334544_310765821_semantic.txt", "w");
 	
 	if(yyin){ /* if test is openned sucsessfully */
-		parser(parser_report);
+		parser();
 
     	fclose(yyin);
     	fclose(yyout);
 		fclose(parser_report);
+		fclose(semantic_report);
 	}
 	else{
 		printf("no test1 file found\n");
@@ -180,15 +183,18 @@ void main(int argc, char* argv[])
 	yyin = fopen("C:\\temp\\test2.txt", "r");
 	yyout = fopen("C:\\temp\\test2_311334544_310765821_lex.txt", "w");
 	parser_report = fopen("C:\\temp\\test2_311334544_310765821_syntactic.txt", "w");
+	semantic_report = fopen("C:\\temp\\test2_311334544_310765821_semantic.txt", "w");
 
 	if (yyin) { /* if test is openned sucsessfully */
 		lineNumber = 1; /*reset line counter*/
 		reset_tokens();
-		parser(parser_report);
+		reset_table();
+		parser();
 
 		fclose(yyin);
 		fclose(yyout);
 		fclose(parser_report);
+		fclose(semantic_report);
 	}
 	else {
 		printf("no test2 file found\n");

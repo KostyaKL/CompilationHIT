@@ -5,23 +5,26 @@
 #include <stdlib.h>
 #include <string.h>
 
+FILE *semantic_report; /*file pointer for parser report*/
+
 typedef enum elm_type
 {
 	REAL,
 	INTEGER,
 	NULL_type
-}elm_type;
+} elm_type;
 
 typedef struct table_entry
 {
 	//table entry parameters
-}table_entry;
+	int a;
+} table_entry;
 
 typedef struct table_ptr
 {
-	table_ptr *father;
+	struct table_ptr *father;
 	table_entry *entry;
-}table_ptr;
+} table_ptr;
 
 table_ptr *make_table(table_ptr *current_table);
 
@@ -36,5 +39,7 @@ table_entry *find(table_ptr *current_table, char *id_name);
 void set_id_type(table_entry *id_entry, elm_type id_type);                                                             
 
 elm_type get_id_type(table_entry *id_entry);
+
+void reset_table();
 
 #endif

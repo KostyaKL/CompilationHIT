@@ -8,7 +8,7 @@ table_ptr *make_table(table_ptr *current_table) {
 		cur_table = (table_ptr*)malloc(sizeof(table_ptr));
 		if (cur_table == NULL)
 		{
-			fprintf(yyout, "\nUnable to allocate memory! \n");
+			fprintf(semantic_report, "\nUnable to allocate memory! \n");
 			exit(0);
 		}
 		cur_table->father = NULL;
@@ -19,7 +19,7 @@ table_ptr *make_table(table_ptr *current_table) {
 	tmp = (table_ptr*)malloc(sizeof(table_ptr));
 	if (tmp == NULL)
 	{
-		fprintf(yyout, "\nUnable to allocate memory! \n");
+		fprintf(semantic_report, "\nUnable to allocate memory! \n");
 		exit(0);
 	}
 	tmp->father = current_table;
@@ -50,4 +50,15 @@ void set_id_type(table_entry *id_entry, elm_type id_type) {
 
 elm_type get_id_type(table_entry *id_entry) {
 
+}
+
+void reset_table() {
+	table_ptr *tmp;
+	while (cur_table->father != NULL) {
+		free(cur_table->entry); //free entry data structure????
+		tmp = cur_table;
+		cur_table = cur_table->father;
+		free(tmp);
+	}
+	free(cur_table->entry); //free entry data structure????
 }
