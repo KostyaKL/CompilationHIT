@@ -83,19 +83,20 @@ void parse_var_definitions_clean() {
 void parse_var_definition() {
 	cur_token = next_token();
 	eTOKENS expected[2] = { TOKEN_REAL, TOKEN_INTEGER }; /*expected tokens for error printing purpose*/
+	elm_type type;
 	switch (cur_token->kind)
 	{
 	case TOKEN_REAL:
 		print_parser_rule("VAR_DEFINITION -> TYPE VARIABLES_LIST");
 		cur_token = back_token();
-		parse_type();
-		parse_variables_list();
+		type = parse_type();
+		parse_variables_list(type);
 		break;
 	case TOKEN_INTEGER:
 		print_parser_rule("VAR_DEFINITION -> TYPE VARIABLES_LIST");
 		cur_token = back_token();
-		parse_type();
-		parse_variables_list();
+		type = parse_type();
+		parse_variables_list(type);
 		break;
 	default:
 		error_recovery(VAR_DEFINITION, expected, 2); /*print error and try to recover*/
@@ -103,40 +104,43 @@ void parse_var_definition() {
 	}
 }
 
-void parse_type() {
+elm_type parse_type() {
 	cur_token = next_token();
 	eTOKENS expected[2] = { TOKEN_REAL, TOKEN_INTEGER }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_REAL:
 		print_parser_rule("TYPE -> real");
+		return REAL;
 		break;
 	case TOKEN_INTEGER:
 		print_parser_rule("TYPE -> integer");
+		return INTEGER;
 		break;
 	default:
 		error_recovery(TYPE, expected, 2); /*print error and try to recover*/
 		break;
 	}
+	return NULL_type;
 }
 
-void parse_variables_list() { /*one case rule*/
+void parse_variables_list(elm_type type) { /*one case rule*/
 	print_parser_rule("VARIABLES_LIST -> VARIABLE VARIABLES_LIST_CLEAN");
 	match(TOKEN_ID);
 	cur_token = back_token();
-	parse_variable();
-	parse_variables_list_clean();
+	parse_variable(type);
+	parse_variables_list_clean(type);
 }
 
-void parse_variables_list_clean() {
+void parse_variables_list_clean(elm_type type) {
 	cur_token = next_token();
 	eTOKENS expected[3] = { TOKEN_COMMA, TOKEN_SEMICOLON, TOKEN_CLOSE_CIRCULAR_PAR }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_COMMA:
 		print_parser_rule("VARIABLES_LIST_CLEAN -> , VARIABLE VARIABLES_LIST_CLEAN");
-		parse_variable();
-		parse_variables_list_clean();
+		parse_variable(type);
+		parse_variables_list_clean(type);
 		break;
 	case TOKEN_SEMICOLON:
 		print_parser_rule("VARIABLES_LIST_CLEAN -> epsilon");
@@ -152,13 +156,29 @@ void parse_variables_list_clean() {
 	}
 }
 
-void parse_variable() { /*one case rule*/
+void parse_variable(elm_type type) { /*one case rule*/
+	table_entry *entry;
+	int size = 0;
+	int i = 1;
+	char *tmp;
 	print_parser_rule("VARIABLE -> id VARIABLE_CLEAN");
 	match(TOKEN_ID);
-	parse_variable_clean();
+	entry = insert(cur_table, cur_token->lexeme, cur_token->lineNumber);
+	tmp = parse_variable_clean();
+	if (entry != NULL) {
+		set_id_type(entry, type);
+		size = tmp[0] - 48;
+		while (tmp[i] != '\0') {
+			size *= 10;
+			size += tmp[i] - 48;
+			i++;
+		}
+		entry->size = size;
+	}
 }
 
-void parse_variable_clean() {
+char *parse_variable_clean() {
+	int ret;
 	cur_token = next_token();
 	eTOKENS expected[5] = { TOKEN_OPEN_SQUER_PAR, TOKEN_ASSIGNMENT, TOKEN_COMMA, TOKEN_SEMICOLON, TOKEN_CLOSE_CIRCULAR_PAR }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
@@ -166,8 +186,9 @@ void parse_variable_clean() {
 	case TOKEN_OPEN_SQUER_PAR:
 		print_parser_rule("VARIABLE_CLEAN -> [ int_number ]");
 		match(TOKEN_INT_NUMBER);
+		ret = cur_token->lexeme;
 		match(TOKEN_CLOSE_SQUER_PAR);
-		//cur_token = next_token();
+		return ret;
 		break;
 	case TOKEN_ASSIGNMENT:
 		print_parser_rule("VARIABLE_CLEAN -> epsilon");
@@ -189,6 +210,7 @@ void parse_variable_clean() {
 		error_recovery(VARIABLE_CLEAN, expected, 5); /*print error and try to recover*/
 		break;
 	}
+	return "0";
 }
 
 void parse_func_definitions() {
@@ -496,10 +518,15 @@ void parse_id_statment_clean() {
 void parse_block() { /*one case rule*/
 	print_parser_rule("BLOCK -> { VAR_DEFINITIONS ; STATMENTS }");
 	match(TOKEN_OPEN_CURLY_PAR);
+
+	make_table(cur_table, "BLOCK -> { VAR_DEFINITIONS ; STATMENTS }");
+
 	parse_var_definitions();
 	match(TOKEN_SEMICOLON);
 	parse_statments();
 	match(TOKEN_CLOSE_CURLY_PAR);
+
+	pop_table(cur_table, "BLOCK -> { VAR_DEFINITIONS ; STATMENTS }");
 }
 
 void parse_parameters_list() {
@@ -510,7 +537,7 @@ void parse_parameters_list() {
 	case TOKEN_ID:
 		print_parser_rule("PARAMETERS_LIST -> VARIABLES_LIST");
 		cur_token = back_token();
-		parse_variables_list();
+		parse_variables_list(0);
 		break;
 	case TOKEN_CLOSE_CIRCULAR_PAR:
 		print_parser_rule("PARAMETERS_LIST -> epsilon");

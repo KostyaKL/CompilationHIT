@@ -52,14 +52,14 @@ void parse_statments_clean();
 void parse_statments();
 void parse_id_statment_clean();
 void parse_return_statment_clean();
-void parse_type();
+elm_type parse_type();
 void parse_var_definition();
 void parse_var_definitions();
 void parse_var_definitions_clean();
-void parse_variable();
-void parse_variable_clean();
-void parse_variables_list();
-void parse_variables_list_clean();
+void parse_variable(elm_type type);
+char *parse_variable_clean();
+void parse_variables_list(elm_type type);
+void parse_variables_list_clean(elm_type type);
 /*explained in RecursiveDescentParser.c*/
 
 /*explained in ParserUtilityFunctions.c*/

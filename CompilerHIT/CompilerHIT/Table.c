@@ -43,14 +43,14 @@ table_ptr *make_table(table_ptr *current_table, char *rule) {
 		fprintf(semantic_report, "\nUnable to allocate memory! \n");
 		exit(0);
 	}
-	tmp->father = current_table;
+	tmp->father = cur_table;
 	tmp->hashtable = zcreate_hash_table();
 	zhash_set(tmp->hashtable, "_init", NULL);
 
 	hash = zgenerate_hash(tmp->hashtable, "_init");
 	entry = tmp->hashtable->entries[hash];
 	while (entry) {
-		if (entry->val != NULL) {
+		if (entry->val != NULL && strcmp(entry->key, "_init") != 0) {
 			memcpy(tmp_entry, (table_entry*)entry->val, sizeof(table_entry));
 		}
 		zhash_set(tmp->hashtable, entry->key, tmp_entry);
@@ -59,6 +59,9 @@ table_ptr *make_table(table_ptr *current_table, char *rule) {
 
 	tmp->entry = NULL;
 	tmp->depth = current_table->depth + 1;
+
+	current_table = tmp;
+	cur_table = tmp;
 
 	char * new_str;
 	if ((new_str = malloc(strlen("new scope ") + strlen(rule) + 2)) != NULL) {
@@ -78,10 +81,23 @@ table_ptr *make_table(table_ptr *current_table, char *rule) {
 
 table_ptr *pop_table(table_ptr *current_table, char *rule) {
 	table_ptr *tmp;
+	
+	struct ZHashEntry *entry;
+	size_t size, hash;
+	hash = zgenerate_hash(cur_table->hashtable, "_init");
+	entry = cur_table->hashtable->entries[hash];
+	while (entry) {
+		if (entry->val != NULL && strcmp(entry->key, "_init") != 0) {
+			fprintf(semantic_report, "\ttype: %d, id: %s, size: %d\n", ((table_entry*)entry->val)->type, ((table_entry*)entry->val)->name, ((table_entry*)entry->val)->size);
+		}
+		entry = entry->next;
+	}
+
+
 	//free(current_table->entry); //free entry data structure????
 								//free hash table?
-	tmp = current_table->father;
-	free(current_table);
+	tmp = cur_table->father;
+	free(cur_table);
 
 	char * new_str;
 	if ((new_str = malloc(strlen("end scope ") + strlen(rule) + 2)) != NULL) {
@@ -96,19 +112,22 @@ table_ptr *pop_table(table_ptr *current_table, char *rule) {
 	}
 	fprintf(semantic_report, new_str);
 
+	current_table = tmp;
+	cur_table = tmp;
+
 	return tmp;
 }
 
 table_entry *insert(table_ptr *current_table, char *id_name, int line) {
 	table_entry *new_entry;
-	new_entry = lookup(current_table->hashtable, id_name);
+	new_entry = lookup(cur_table->hashtable, id_name);
 	if (new_entry != NULL) {
-		if (new_entry->depth == current_table->depth) {
-			fprintf(semantic_report, "ERROR line %d: duplicate declaration of the same name %s \n", line, id_name);
+		if (new_entry->depth == cur_table->depth) {
+			fprintf(semantic_report, "\tERROR line %d: duplicate declaration of the same name %s \n", line, id_name);
 			return NULL;
 		}
 		else{
-			new_entry->depth = current_table->depth;
+			new_entry->depth = cur_table->depth;
 			return new_entry;
 		}
 	}
@@ -120,7 +139,7 @@ table_entry *insert(table_ptr *current_table, char *id_name, int line) {
 		exit(0);
 	}
 	new_entry->is_function = 0;
-	new_entry->depth = current_table->depth;
+	new_entry->depth = cur_table->depth;
 	new_entry->name = id_name;
 	new_entry->num_of_parameters = 0;
 	new_entry->parameters_list = NULL;
@@ -128,19 +147,19 @@ table_entry *insert(table_ptr *current_table, char *id_name, int line) {
 	new_entry->size = 1;
 	new_entry->type = NULL_type;
 
-	zhash_set(current_table->hashtable, id_name, new_entry);
+	zhash_set(cur_table->hashtable, id_name, new_entry);
 
 	return new_entry;
 }
 
 table_entry *lookup(table_ptr *current_table, char *id_name) {
-	return zhash_get(current_table->hashtable, id_name);
+	return zhash_get(cur_table->hashtable, id_name);
 }
 
 table_entry *find(table_ptr *current_table, char *id_name, int line) {
-	table_entry *srch = zhash_get(current_table->hashtable, id_name);
+	table_entry *srch = zhash_get(cur_table->hashtable, id_name);
 	if (srch == NULL) {
-		fprintf(semantic_report, "ERROR line %d: undeclared identifier %s \n", line, id_name);
+		fprintf(semantic_report, "\tERROR line %d: undeclared identifier %s \n", line, id_name);
 		return NULL;
 	}
 	return srch;
