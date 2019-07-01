@@ -30,7 +30,7 @@ typedef struct table_entry {
 
 	//settings
 	int is_function;
-	int depth;
+	int is_used;
 
 } table_entry;
 
@@ -39,8 +39,11 @@ typedef struct table_ptr
 	struct table_ptr *father;
 	ZHashTable *hashtable;
 	table_entry *entry;
-	int depth;
 } table_ptr;
+
+char *getTypeName(elm_type type);
+
+void print_sem(char **msg, int num);
 
 table_ptr *cur_table;
 

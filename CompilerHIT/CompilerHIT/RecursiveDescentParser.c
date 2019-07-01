@@ -8,26 +8,26 @@ void parser() { /*main parser methond*/
 void parse_program() { /*one case rule*/
 	print_parser_rule("PROGRAM -> program VAR_DEFINITIONS ; STATMENTS end FUNC_DEFINITIONS");
 
-	make_table(cur_table, "GLOBAL");
+	cur_table = make_table(cur_table, "GLOBAL");
 
 	match(TOKEN_PROGRAM);
 
-	make_table(cur_table, "PROGRAM -> program VAR_DEFINITIONS ; STATMENTS end");
+	cur_table = make_table(cur_table, "PROGRAM -> program VAR_DEFINITIONS ; STATMENTS end");
 
 	parse_var_definitions();
 	match(TOKEN_SEMICOLON);
 	parse_statments();
 	match(TOKEN_END);
 
-	pop_table(cur_table, "PROGRAM -> program VAR_DEFINITIONS ; STATMENTS end");
+	cur_table = pop_table(cur_table, "PROGRAM -> program VAR_DEFINITIONS ; STATMENTS end");
 
-	make_table(cur_table, "FUNC_DEFINITIONS");
+	cur_table = make_table(cur_table, "FUNC_DEFINITIONS");
 
 	parse_func_definitions();
 
-	pop_table(cur_table, "FUNC_DEFINITIONS");
+	cur_table = pop_table(cur_table, "FUNC_DEFINITIONS");
 
-	pop_table(cur_table, "GLOBAL");
+	cur_table = pop_table(cur_table, "GLOBAL");
 }
 
 void parse_var_definitions() {
@@ -174,6 +174,9 @@ void parse_variable(elm_type type) { /*one case rule*/
 			i++;
 		}
 		entry->size = size;
+
+		char *msg[6] = { "\ttype: ", getTypeName(type), " id: ", entry->name, " size: ", tmp };
+		print_sem(msg, 6);
 	}
 }
 
@@ -519,14 +522,14 @@ void parse_block() { /*one case rule*/
 	print_parser_rule("BLOCK -> { VAR_DEFINITIONS ; STATMENTS }");
 	match(TOKEN_OPEN_CURLY_PAR);
 
-	make_table(cur_table, "BLOCK -> { VAR_DEFINITIONS ; STATMENTS }");
+	cur_table = make_table(cur_table, "BLOCK -> { VAR_DEFINITIONS ; STATMENTS }");
 
 	parse_var_definitions();
 	match(TOKEN_SEMICOLON);
 	parse_statments();
 	match(TOKEN_CLOSE_CURLY_PAR);
 
-	pop_table(cur_table, "BLOCK -> { VAR_DEFINITIONS ; STATMENTS }");
+	cur_table = pop_table(cur_table, "BLOCK -> { VAR_DEFINITIONS ; STATMENTS }");
 }
 
 void parse_parameters_list() {

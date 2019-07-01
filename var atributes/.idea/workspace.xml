@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="608d23c4-76b9-4aa2-b214-7506fbb508e0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/var atributes.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/var atributes.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VarAtributes.csv" beforeDir="false" afterPath="$PROJECT_DIR$/VarAtributes.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VarAtributes.py" beforeDir="false" afterPath="$PROJECT_DIR$/VarAtributes.py" afterDir="false" />
-    </list>
+    <list default="true" id="608d23c4-76b9-4aa2-b214-7506fbb508e0" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,6 +61,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -76,7 +73,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
