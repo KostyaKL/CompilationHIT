@@ -24,7 +24,7 @@ typedef struct table_entry {
 	//function
 	elm_type return_type;
 	int num_of_parameters;
-	table_entry *parameters_list;
+	struct table_entry *parameters_list;
 
 	//settings
 	int is_function;

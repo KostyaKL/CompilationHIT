@@ -16,15 +16,17 @@ typedef struct table_ptr
 	int depth;
 } table_ptr;
 
+table_ptr *cur_table;
+
 table_ptr *make_table(table_ptr *current_table);
 
 table_ptr *pop_table(table_ptr *current_table);
 
-table_entry *insert(table_ptr *current_table, char *id_name);
+table_entry *insert(table_ptr *current_table, char *id_name, int line);
 
 table_entry *lookup(table_ptr *current_table, char *id_name);
 
-table_entry *find(table_ptr *current_table, char *id_name);                                                                
+table_entry *find(table_ptr *current_table, char *id_name, int line);
 
 void set_id_type(table_entry *id_entry, elm_type id_type);                                                             
 
