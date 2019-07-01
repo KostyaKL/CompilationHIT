@@ -165,6 +165,7 @@ void parse_variable(elm_type type) { /*one case rule*/
 	match(TOKEN_ID);
 	entry = insert(cur_table, cur_token->lexeme, cur_token->lineNumber);
 	tmp = parse_variable_clean();
+
 	if (entry != NULL) {
 		set_id_type(entry, type);
 		size = tmp[0] - 48;
