@@ -47,13 +47,14 @@ table_ptr *make_table(table_ptr *current_table, char *rule) {
 	tmp->hashtable = zcreate_hash_table();
 	zhash_set(tmp->hashtable, "_init", NULL);
 
-	hash = zgenerate_hash(tmp->hashtable, "_init");
-	entry = tmp->hashtable->entries[hash];
+	hash = zgenerate_hash(cur_table->hashtable, "_init");
+	entry = cur_table->hashtable->entries[hash];
 	while (entry) {
 		if (entry->val != NULL && strcmp(entry->key, "_init") != 0) {
 			memcpy(tmp_entry, (table_entry*)entry->val, sizeof(table_entry));
+
+			zhash_set(tmp->hashtable, entry->key, tmp_entry);
 		}
-		zhash_set(tmp->hashtable, entry->key, tmp_entry);
 		entry = entry->next;
 	}
 
