@@ -1,134 +1,251 @@
-#include "Hash.h"
+#include <string.h>
+#include <stdlib.h>
+#include "./hash.h"
 
-/* Create a new hashtable. */
-hashtable_t *ht_create(int size) {
+// helper functions
+static size_t next_size_index(size_t size_index);
+static size_t previous_size_index(size_t size_index);
+static struct ZHashTable *zcreate_hash_table_with_size(size_t size_index);
+static void *zmalloc(size_t size);
+static void *zcalloc(size_t num, size_t size);
 
-	hashtable_t *hashtable = NULL;
-	int i;
+// possible sizes for hash table; must be prime numbers
+static const size_t hash_sizes[] = {
+	53, 101, 211, 503, 1553, 3407, 6803, 12503, 25013, 50261,
+	104729, 250007, 500009, 1000003, 2000029, 4000037, 10000019,
+	25000009, 50000047, 104395301, 217645177, 512927357, 1000000007
+};
 
-	if (size < 1) return NULL;
-
-	/* Allocate the table itself. */
-	if ((hashtable = malloc(sizeof(hashtable_t))) == NULL) {
-		return NULL;
-	}
-
-	/* Allocate pointers to the head nodes. */
-	if ((hashtable->table = malloc(sizeof(entry_t *) * size)) == NULL) {
-		return NULL;
-	}
-	for (i = 0; i < size; i++) {
-		hashtable->table[i] = NULL;
-	}
-
-	hashtable->size = size;
-
-	return hashtable;
+struct ZHashTable *zcreate_hash_table(void)
+{
+	return zcreate_hash_table_with_size(0);
 }
 
-/* Hash a string for a particular hash table. */
-int ht_hash(hashtable_t *hashtable, char *key) {
+static struct ZHashTable *zcreate_hash_table_with_size(size_t size_index)
+{
+	struct ZHashTable *hash_table;
 
-	unsigned long int hashval;
-	int i = 0;
+	hash_table = zmalloc(sizeof(struct ZHashTable));
 
-	/* Convert our string to an integer */
-	while (hashval < ULONG_MAX && i < strlen(key)) {
-		hashval = hashval << 8;
-		hashval += key[i];
-		i++;
-	}
+	hash_table->size_index = size_index;
+	hash_table->entry_count = 0;
+	hash_table->entries = zcalloc(hash_sizes[size_index], sizeof(void *));
 
-	return hashval % hashtable->size;
+	return hash_table;
 }
 
-/* Create a key-value pair. */
-entry_t *ht_newpair(char *key, table_entry *value) {
-	entry_t *newpair;
+void zfree_hash_table(struct ZHashTable *hash_table)
+{
+	size_t size, ii;
 
-	if ((newpair = malloc(sizeof(entry_t))) == NULL) {
-		return NULL;
+	size = hash_sizes[hash_table->size_index];
+
+	for (ii = 0; ii < size; ii++) {
+		struct ZHashEntry *entry;
+
+		if ((entry = hash_table->entries[ii])) zfree_entry(entry, true);
 	}
 
-	if ((newpair->key = strdup(key)) == NULL) {
-		return NULL;
-	}
-
-	if ((newpair->value = strdup(value)) == NULL) {
-		return NULL;
-	}
-
-	newpair->next = NULL;
-
-	return newpair;
+	zfree(hash_table->entries);
+	zfree(hash_table);
 }
 
-/* Insert a key-value pair into a hash table. */
-void ht_set(hashtable_t *hashtable, char *key, table_entry *value){
-	int bin = 0;
-	entry_t *newpair = NULL;
-	entry_t *next = NULL;
-	entry_t *last = NULL;
+void zhash_set(struct ZHashTable *hash_table, char *key, void *val)
+{
+	size_t size, hash;
+	struct ZHashEntry *entry;
 
-	bin = ht_hash(hashtable, key);
+	hash = zgenerate_hash(hash_table, key);
+	entry = hash_table->entries[hash];
 
-	next = hashtable->table[bin];
-
-	while (next != NULL && next->key != NULL && strcmp(key, next->key) > 0) {
-		last = next;
-		next = next->next;
+	while (entry) {
+		if (strcmp(key, entry->key) == 0) {
+			entry->val = val;
+			return;
+		}
+		entry = entry->next;
 	}
 
-	/* There's already a pair.  Let's replace that string. */
-	if (next != NULL && next->key != NULL && strcmp(key, next->key) == 0) {
+	entry = zcreate_entry(key, val);
 
-		free(next->value);
-		next->value = strdup(value);
+	entry->next = hash_table->entries[hash];
+	hash_table->entries[hash] = entry;
+	hash_table->entry_count++;
 
-		/* Nope, could't find it.  Time to grow a pair. */
+	size = hash_sizes[hash_table->size_index];
+
+	if (hash_table->entry_count > size / 2) {
+		zhash_rehash(hash_table, next_size_index(hash_table->size_index));
+	}
+}
+
+void *zhash_get(struct ZHashTable *hash_table, char *key)
+{
+	size_t hash;
+	struct ZHashEntry *entry;
+
+	hash = zgenerate_hash(hash_table, key);
+	entry = hash_table->entries[hash];
+
+	while (entry && strcmp(key, entry->key) != 0) entry = entry->next;
+
+	return entry ? entry->val : NULL;
+}
+
+void *zhash_delete(struct ZHashTable *hash_table, char *key)
+{
+	size_t size, hash;
+	struct ZHashEntry *entry;
+	void *val;
+
+	hash = zgenerate_hash(hash_table, key);
+	entry = hash_table->entries[hash];
+
+	if (entry && strcmp(key, entry->key) == 0) {
+		hash_table->entries[hash] = entry->next;
 	}
 	else {
-		newpair = ht_newpair(key, value);
+		while (entry) {
+			if (entry->next && strcmp(key, entry->next->key) == 0) {
+				struct ZHashEntry *deleted_entry;
 
-		/* We're at the start of the linked list in this bin. */
-		if (next == hashtable->table[bin]) {
-			newpair->next = next;
-			hashtable->table[bin] = newpair;
-
-			/* We're at the end of the linked list in this bin. */
-		}
-		else if (next == NULL) {
-			last->next = newpair;
-
-			/* We're in the middle of the list. */
-		}
-		else {
-			newpair->next = next;
-			last->next = newpair;
+				deleted_entry = entry->next;
+				entry->next = entry->next->next;
+				entry = deleted_entry;
+				break;
+			}
+			entry = entry->next;
 		}
 	}
+
+	if (!entry) return NULL;
+
+	val = entry->val;
+	zfree_entry(entry, false);
+	hash_table->entry_count--;
+
+	size = hash_sizes[hash_table->size_index];
+
+	if (hash_table->entry_count < size / 8) {
+		zhash_rehash(hash_table, previous_size_index(hash_table->size_index));
+	}
+
+	return val;
 }
 
-/* Retrieve a key-value pair from a hash table. */
-table_entry *ht_get(hashtable_t *hashtable, char *key) {
-	int bin = 0;
-	entry_t *pair;
+bool zhash_exists(struct ZHashTable *hash_table, char *key)
+{
+	size_t hash;
+	struct ZHashEntry *entry;
 
-	bin = ht_hash(hashtable, key);
+	hash = zgenerate_hash(hash_table, key);
+	entry = hash_table->entries[hash];
 
-	/* Step through the bin, looking for our value. */
-	pair = hashtable->table[bin];
-	while (pair != NULL && pair->key != NULL && strcmp(key, pair->key) > 0) {
-		pair = pair->next;
+	while (entry && strcmp(key, entry->key) != 0) entry = entry->next;
+
+	return entry ? true : false;
+}
+
+struct ZHashEntry *zcreate_entry(char *key, void *val)
+{
+	struct ZHashEntry *entry;
+	char *key_cpy;
+
+	key_cpy = zmalloc((strlen(key) + 1) * sizeof(char));
+	entry = zmalloc(sizeof(struct ZHashEntry));
+
+	strcpy(key_cpy, key);
+	entry->key = key_cpy;
+	entry->val = val;
+
+	return entry;
+}
+
+void zfree_entry(struct ZHashEntry *entry, bool recursive)
+{
+	if (recursive && entry->next) zfree_entry(entry->next, recursive);
+
+	zfree(entry->key);
+	zfree(entry);
+}
+
+size_t zgenerate_hash(struct ZHashTable *hash_table, char *key)
+{
+	size_t size, hash;
+	char ch;
+
+	size = hash_sizes[hash_table->size_index];
+	hash = 0;
+
+	while ((ch = *key++)) hash = (17 * hash + ch) % size;
+
+	return hash;
+}
+
+void zhash_rehash(struct ZHashTable *hash_table, size_t size_index)
+{
+	size_t hash, size, ii;
+	struct ZHashEntry **entries;
+
+	if (size_index == hash_table->size_index) return;
+
+	size = hash_sizes[hash_table->size_index];
+	entries = hash_table->entries;
+
+	hash_table->size_index = size_index;
+	hash_table->entries = zcalloc(hash_sizes[size_index], sizeof(void *));
+
+	for (ii = 0; ii < size; ii++) {
+		struct ZHashEntry *entry;
+
+		entry = entries[ii];
+		while (entry) {
+			struct ZHashEntry *next_entry;
+
+			hash = zgenerate_hash(hash_table, entry->key);
+			next_entry = entry->next;
+			entry->next = hash_table->entries[hash];
+			hash_table->entries[hash] = entry;
+
+			entry = next_entry;
+		}
 	}
 
-	/* Did we actually find anything? */
-	if (pair == NULL || pair->key == NULL || strcmp(key, pair->key) != 0) {
-		return NULL;
+	zfree(entries);
+}
 
-	}
-	else {
-		return pair->value;
-	}
+static size_t next_size_index(size_t size_index)
+{
+	if (size_index == COUNT_OF(hash_sizes)) return size_index;
 
+	return size_index + 1;
+}
+
+static size_t previous_size_index(size_t size_index)
+{
+	if (size_index == 0) return size_index;
+
+	return size_index - 1;
+}
+
+static void *zmalloc(size_t size)
+{
+	void *ptr;
+
+	ptr = malloc(size);
+
+	if (!ptr) exit(EXIT_FAILURE);
+
+	return ptr;
+}
+
+static void *zcalloc(size_t num, size_t size)
+{
+	void *ptr;
+
+	ptr = calloc(num, size);
+
+	if (!ptr) exit(EXIT_FAILURE);
+
+	return ptr;
 }

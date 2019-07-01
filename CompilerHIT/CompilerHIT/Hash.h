@@ -1,67 +1,46 @@
 #ifndef HASH_H
 #define HASH_H
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <limits.h>
-#include <string.h>
+#include <stdbool.h>
 
-typedef enum elm_type
-{
-	REAL,
-	INTEGER,
-	NULL_type
-} elm_type;
+// hash table
+// keys are strings
+// values are void *pointers
 
-typedef struct table_entry {
-	//scope table parameters
+#define COUNT_OF(arr) (sizeof(arr) / sizeof(*arr))
+#define zfree free
 
-	//variable
-	char *name;
-	elm_type type;
-	int size;
-
-	//function
-	elm_type return_type;
-	int num_of_parameters;
-	struct table_entry *parameters_list;
-
-	//settings
-	int is_function;
-	int depth;
-
-} table_entry;
-
-typedef struct entry_s
-{
+// struct representing an entry in the hash table
+struct ZHashEntry {
 	char *key;
-	table_entry *value;
-	struct entry_s *next;
-
-} entry_s;
-
-typedef struct entry_s entry_t;
-
-struct hashtable_s {
-	int size;
-	struct entry_s **table;
+	void *val;
+	struct ZHashEntry *next;
 };
 
-typedef struct hashtable_s hashtable_t;
+// struct representing the hash table
+// size_index is an index into the hash_sizes array in hash.c
+typedef struct ZHashTable {
+	size_t size_index;
+	size_t entry_count;
+	struct ZHashEntry **entries;
+}ZHashTable;
 
-/* Create a new hashtable. */
-hashtable_t *ht_create(int size);
+// hash table creation and destruction
+struct ZHashTable *zcreate_hash_table(void);
+void zfree_hash_table(struct ZHashTable *hash_table);
 
-/* Hash a string for a particular hash table. */
-int ht_hash(hashtable_t *hashtable, char *key);
+// hash operations
+void zhash_set(struct ZHashTable *hash_table, char *key, void *val);
+void *zhash_get(struct ZHashTable *hash_table, char *key);
+void *zhash_delete(struct ZHashTable *hash_table, char *key);
+bool zhash_exists(struct ZHashTable *hash_table, char *key);
 
-/* Create a key-value pair. */
-entry_t *ht_newpair(char *key, table_entry *value);
+// hash entry creation and destruction
+struct ZHashEntry *zcreate_entry(char *key, void *val);
+void zfree_entry(struct ZHashEntry *entry, bool recursive);
 
-/* Insert a key-value pair into a hash table. */
-void ht_set(hashtable_t *hashtable, char *key, table_entry *value);
-
-/* Retrieve a key-value pair from a hash table. */
-table_entry *ht_get(hashtable_t *hashtable, char *key);
+// other functions
+size_t zgenerate_hash(struct ZHashTable *hash, char *key);
+void zhash_rehash(struct ZHashTable *hash_table, size_t size_index);
 
 #endif

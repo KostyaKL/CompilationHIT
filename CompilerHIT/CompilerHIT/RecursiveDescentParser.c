@@ -8,15 +8,26 @@ void parser() { /*main parser methond*/
 void parse_program() { /*one case rule*/
 	print_parser_rule("PROGRAM -> program VAR_DEFINITIONS ; STATMENTS end FUNC_DEFINITIONS");
 
-	make_table(cur_table, "PROGRAM -> program VAR_DEFINITIONS ; STATMENTS end FUNC_DEFINITIONS");
+	make_table(cur_table, "GLOBAL");
 
 	match(TOKEN_PROGRAM);
+
+	make_table(cur_table, "PROGRAM -> program VAR_DEFINITIONS ; STATMENTS end");
+
 	parse_var_definitions();
 	match(TOKEN_SEMICOLON);
 	parse_statments();
 	match(TOKEN_END);
+
+	pop_table(cur_table, "PROGRAM -> program VAR_DEFINITIONS ; STATMENTS end");
+
+	make_table(cur_table, "FUNC_DEFINITIONS");
+
 	parse_func_definitions();
-	pop_table(cur_table, "PROGRAM -> program VAR_DEFINITIONS ; STATMENTS end FUNC_DEFINITIONS");
+
+	pop_table(cur_table, "FUNC_DEFINITIONS");
+
+	pop_table(cur_table, "GLOBAL");
 }
 
 void parse_var_definitions() {

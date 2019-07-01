@@ -2,6 +2,11 @@
 
 table_ptr *make_table(table_ptr *current_table, char *rule) {
 	table_ptr *tmp;
+
+	table_entry *tmp_entry = NULL;
+	struct ZHashEntry *entry;
+	size_t size, hash;
+
 	if (cur_table == NULL) {
 		cur_table = (table_ptr*)malloc(sizeof(table_ptr));
 		if (cur_table == NULL)
@@ -10,7 +15,8 @@ table_ptr *make_table(table_ptr *current_table, char *rule) {
 			exit(0);
 		}
 		cur_table->father = NULL;
-		cur_table->hashtable = ht_create(65536);
+		cur_table->hashtable = zcreate_hash_table();
+		zhash_set(cur_table->hashtable, "_init", NULL);
 		cur_table->entry = NULL;
 		cur_table->depth = 0;
 
@@ -38,7 +44,19 @@ table_ptr *make_table(table_ptr *current_table, char *rule) {
 		exit(0);
 	}
 	tmp->father = current_table;
-	memcpy(tmp->hashtable, current_table->hashtable, sizeof(current_table->hashtable));
+	tmp->hashtable = zcreate_hash_table();
+	zhash_set(tmp->hashtable, "_init", NULL);
+
+	hash = zgenerate_hash(tmp->hashtable, "_init");
+	entry = tmp->hashtable->entries[hash];
+	while (entry) {
+		if (entry->val != NULL) {
+			memcpy(tmp_entry, (table_entry*)entry->val, sizeof(table_entry));
+		}
+		zhash_set(tmp->hashtable, entry->key, tmp_entry);
+		entry = entry->next;
+	}
+
 	tmp->entry = NULL;
 	tmp->depth = current_table->depth + 1;
 
@@ -60,7 +78,7 @@ table_ptr *make_table(table_ptr *current_table, char *rule) {
 
 table_ptr *pop_table(table_ptr *current_table, char *rule) {
 	table_ptr *tmp;
-	free(current_table->entry); //free entry data structure????
+	//free(current_table->entry); //free entry data structure????
 								//free hash table?
 	tmp = current_table->father;
 	free(current_table);
@@ -110,17 +128,17 @@ table_entry *insert(table_ptr *current_table, char *id_name, int line) {
 	new_entry->size = 1;
 	new_entry->type = NULL_type;
 
-	ht_set(current_table->hashtable, id_name, new_entry);
+	zhash_set(current_table->hashtable, id_name, new_entry);
 
 	return new_entry;
 }
 
 table_entry *lookup(table_ptr *current_table, char *id_name) {
-	return ht_get(current_table->hashtable, id_name);
+	return zhash_get(current_table->hashtable, id_name);
 }
 
 table_entry *find(table_ptr *current_table, char *id_name, int line) {
-	table_entry *srch = ht_get(current_table->hashtable, id_name);
+	table_entry *srch = zhash_get(current_table->hashtable, id_name);
 	if (srch == NULL) {
 		fprintf(semantic_report, "ERROR line %d: undeclared identifier %s \n", line, id_name);
 		return NULL;
