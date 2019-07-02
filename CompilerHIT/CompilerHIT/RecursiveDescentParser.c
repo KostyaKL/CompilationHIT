@@ -165,13 +165,16 @@ void parse_variable(elm_type type, table_entry *entry_func) { /*one case rule*/
 	if (cur_token->kind == TOKEN_ID) {
 		entry = insert(cur_table, cur_token->lexeme, cur_token->lineNumber);
 	}
-	size = parse_variable_clean() - 10;
+	size = parse_variable_clean();
+	if (size) {
+		size -= 10;
+	}
 
 	if (entry != NULL) {
 		set_id_type(entry, type);
 		entry->size = size;
 		char tmp[10];
-		itoa(cur_token->lineNumber, tmp, 10);
+		itoa(size, tmp, 10);
 		char *msg[6] = { "\ttype: ", getTypeName(type), " id: ", entry->name, " size: ", tmp };
 		print_sem(msg, 6);
 
@@ -486,6 +489,7 @@ void parse_statments_clean() {
 void parse_statment() {
 	cur_token = next_token();
 	int *statment;
+	char *toke_not_found;
 	elm_type id_type;
 	table_entry *entry;
 	eTOKENS expected[3] = { TOKEN_ID, TOKEN_RETURN, TOKEN_OPEN_CURLY_PAR }; /*expected tokens for error printing purpose*/
@@ -493,25 +497,26 @@ void parse_statment() {
 	{
 	case TOKEN_ID:
 		print_parser_rule("STATEMENT -> id ID_STATEMENT_CLEAN");
-		entry = lookup(cur_table, cur_token->lexeme);
+		entry = find(cur_table, cur_token->lexeme, cur_token->lineNumber);
+		toke_not_found = cur_token->lexeme;
 		statment = parse_id_statment_clean();
 		if (entry == NULL) {
-			//print error id with no declaration
-			char line[10];
-			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": no declaration if id: ", cur_token->lexeme };
-			print_sem(msg, 4);
 			return NULL_type;
 		}
 		else {
 			id_type = get_id_type(entry);
-			if (statment[1] > 3) {
-				if (statment[0] < 0 || statment[0] >= entry->size) {
-					char line[10];
-					itoa(cur_token->lineNumber, line, 10);
-					char *msg[3] = { "\tERROR line ", line, ": index out of range" };
-					print_sem(msg, 3);
-				}
+			if (entry->size > 0 && statment[0] == -1) {
+				char line[10];
+				itoa(cur_token->lineNumber, line, 10);
+				char *msg[4] = { "\tERROR line ", line, ": no index for array: ", entry->name };
+				print_sem(msg, 4);
+				return id_type;
+			}
+			else if (entry->size > 0 && (statment[0] < 0 || statment[0] >= entry->size)) {
+				char line[10];
+				itoa(cur_token->lineNumber, line, 10);
+				char *msg[4] = { "\tERROR line ", line, ": index out of range for array", entry->name };
+				print_sem(msg, 4);
 				return id_type;
 			}
 			else if (statment[1] == NULL_type || id_type == NULL_type) {
@@ -583,26 +588,41 @@ void parse_return_statment_clean() {
 int *parse_id_statment_clean() {
 	cur_token = next_token();
 	elm_type var_c_type, exp_type;
+	int *ret = (int*)malloc(2 * sizeof(int));
 	eTOKENS expected[3] = { TOKEN_OPEN_SQUER_PAR, TOKEN_OPEN_CIRCULAR_PAR, TOKEN_ASSIGNMENT }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_OPEN_SQUER_PAR:
 		print_parser_rule("ID_STATEMENT_CLEAN -> VARIABLE_CLEAN = EXPRESSION");
 		cur_token = back_token();
-		var_c_type = parse_variable_clean() - 10;
+		var_c_type = parse_variable_clean();
+		if (var_c_type) {
+			var_c_type -= 10;
+		}
+		else {
+			var_c_type = -1;
+		}
 		match(TOKEN_ASSIGNMENT);
 		exp_type = parse_expression();
-		int ret1[2] = { var_c_type , exp_type };
-		return ret1;
+		ret[0] = var_c_type;
+		ret[1] = exp_type;
+		return ret;
 		break;
 	case TOKEN_ASSIGNMENT:
 		print_parser_rule("ID_STATEMENT_CLEAN -> VARIABLE_CLEAN = EXPRESSION");
 		cur_token = back_token();
-		var_c_type = parse_variable_clean() - 10;
+		var_c_type = parse_variable_clean();
+		if (var_c_type) {
+			var_c_type -= 10;
+		}
+		else {
+			var_c_type = -1;
+		}
 		match(TOKEN_ASSIGNMENT);
 		exp_type = parse_expression();
-		int ret2[2] = { var_c_type , exp_type };
-		return ret2;
+		ret[0] = var_c_type;
+		ret[1] = exp_type;
+		return ret;
 		break;
 	case TOKEN_OPEN_CIRCULAR_PAR:
 		print_parser_rule("ID_STATEMENT_CLEAN -> ( PARAMETERS_LIST )");
@@ -652,31 +672,35 @@ void parse_parameters_list() {
 elm_type parse_expression() {
 	elm_type exp_type, id_type;
 	table_entry *entry;
+	char *toke_not_found;
 	cur_token = next_token();
 	eTOKENS expected[3] = { TOKEN_ID, TOKEN_INT_NUMBER, TOKEN_REAL_NUMBER }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_ID:
 		print_parser_rule("EXPRESSION -> id EXPRESSION_CLEAN");
-		entry = lookup(cur_table, cur_token->lexeme);
+		entry = find(cur_table, cur_token->lexeme, cur_token->lineNumber);
+		toke_not_found = cur_token->lexeme;
 		exp_type = parse_expression_clean();
 		if (entry == NULL) {
-			//print error id with no declaration
-			char line[10];
-			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": no declaration if id: ", cur_token->lexeme };
-			print_sem(msg, 4);
 			return NULL_type;
 		}
 		else {
 			id_type = get_id_type(entry);
-			if (exp_type > 3) {
+			if (entry->size > 0 && exp_type < 8) {
+				char line[10];
+				itoa(cur_token->lineNumber, line, 10);
+				char *msg[4] = { "\tERROR line ", line, ": no index for array: ", entry->name };
+				print_sem(msg, 4);
+				return id_type;
+			}
+			else if (entry->size > 0 && exp_type > 3) {
 				exp_type -= 10;
 				if (exp_type < 0 || exp_type >= entry->size) {
 					char line[10];
 					itoa(cur_token->lineNumber, line, 10);
-					char *msg[3] = { "\tERROR line ", line, ": index out of range" };
-					print_sem(msg, 3);
+					char *msg[4] = { "\tERROR line ", line, ": index out of range for array", entry->name };
+					print_sem(msg, 4);
 				}
 				return id_type;
 			}
