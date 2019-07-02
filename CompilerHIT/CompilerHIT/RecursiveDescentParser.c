@@ -160,24 +160,18 @@ void parse_variable(elm_type type, table_entry *entry_func) { /*one case rule*/
 	table_entry *entry = NULL;
 	int size = 0;
 	int i = 1;
-	char *tmp;
 	print_parser_rule("VARIABLE -> id VARIABLE_CLEAN");
 	match(TOKEN_ID);
 	if (cur_token->kind == TOKEN_ID) {
 		entry = insert(cur_table, cur_token->lexeme, cur_token->lineNumber);
 	}
-	tmp = parse_variable_clean();
+	size = parse_variable_clean() - 10;
 
 	if (entry != NULL) {
 		set_id_type(entry, type);
-		size = tmp[0] - 48;
-		while (tmp[i] != '\0') {
-			size *= 10;
-			size += tmp[i] - 48;
-			i++;
-		}
 		entry->size = size;
-
+		char tmp[10];
+		itoa(cur_token->lineNumber, tmp, 10);
 		char *msg[6] = { "\ttype: ", getTypeName(type), " id: ", entry->name, " size: ", tmp };
 		print_sem(msg, 6);
 
@@ -189,8 +183,9 @@ void parse_variable(elm_type type, table_entry *entry_func) { /*one case rule*/
 	}
 }
 
-char *parse_variable_clean() {
-	int ret;
+int parse_variable_clean() {
+	int ret, i = 1;
+	char * tmp;
 	cur_token = next_token();
 	eTOKENS expected[5] = { TOKEN_OPEN_SQUER_PAR, TOKEN_ASSIGNMENT, TOKEN_COMMA, TOKEN_SEMICOLON, TOKEN_CLOSE_CIRCULAR_PAR }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
@@ -198,9 +193,17 @@ char *parse_variable_clean() {
 	case TOKEN_OPEN_SQUER_PAR:
 		print_parser_rule("VARIABLE_CLEAN -> [ int_number ]");
 		match(TOKEN_INT_NUMBER);
-		ret = cur_token->lexeme;
+		tmp = cur_token->lexeme;
 		match(TOKEN_CLOSE_SQUER_PAR);
-		return ret;
+
+		ret = tmp[0] - 48;
+		while (tmp[i] != '\0') {
+			ret *= 10;
+			ret += tmp[i] - 48;
+			i++;
+		}
+
+		return ret + 10;
 		break;
 	case TOKEN_ASSIGNMENT:
 		print_parser_rule("VARIABLE_CLEAN -> epsilon");
@@ -222,7 +225,7 @@ char *parse_variable_clean() {
 		error_recovery(VARIABLE_CLEAN, expected, 5); /*print error and try to recover*/
 		break;
 	}
-	return "0";
+	return 0;
 }
 
 void parse_func_definitions() {
@@ -482,12 +485,50 @@ void parse_statments_clean() {
 
 void parse_statment() {
 	cur_token = next_token();
+	int *statment;
+	elm_type id_type;
+	table_entry *entry;
 	eTOKENS expected[3] = { TOKEN_ID, TOKEN_RETURN, TOKEN_OPEN_CURLY_PAR }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_ID:
 		print_parser_rule("STATEMENT -> id ID_STATEMENT_CLEAN");
-		parse_id_statment_clean();
+		entry = lookup(cur_table, cur_token->lexeme);
+		statment = parse_id_statment_clean();
+		if (entry == NULL) {
+			//print error id with no declaration
+			char line[10];
+			itoa(cur_token->lineNumber, line, 10);
+			char *msg[4] = { "\tERROR line ", line, ": no declaration if id: ", cur_token->lexeme };
+			print_sem(msg, 4);
+			return NULL_type;
+		}
+		else {
+			id_type = get_id_type(entry);
+			if (statment[1] > 3) {
+				if (statment[0] < 0 || statment[0] >= entry->size) {
+					char line[10];
+					itoa(cur_token->lineNumber, line, 10);
+					char *msg[3] = { "\tERROR line ", line, ": index out of range" };
+					print_sem(msg, 3);
+				}
+				return id_type;
+			}
+			else if (statment[1] == NULL_type || id_type == NULL_type) {
+				//error bad type of elements
+				char line[10];
+				itoa(cur_token->lineNumber, line, 10);
+				char *msg[3] = { "\tERROR line ", line, ": on or more elements with no defined type" };
+				print_sem(msg, 3);
+				return NULL_type;
+			}
+			else if (statment[1] == INTEGER && id_type == INTEGER) {
+				return INTEGER;
+			}
+			else {
+				return REAL;
+			}
+		}
 		break;
 	case TOKEN_RETURN:
 		print_parser_rule("STATEMENT -> return RETURN_STATEMENT_CLEAN");
@@ -539,24 +580,29 @@ void parse_return_statment_clean() {
 	}
 }
 
-void parse_id_statment_clean() {
+int *parse_id_statment_clean() {
 	cur_token = next_token();
+	elm_type var_c_type, exp_type;
 	eTOKENS expected[3] = { TOKEN_OPEN_SQUER_PAR, TOKEN_OPEN_CIRCULAR_PAR, TOKEN_ASSIGNMENT }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_OPEN_SQUER_PAR:
 		print_parser_rule("ID_STATEMENT_CLEAN -> VARIABLE_CLEAN = EXPRESSION");
 		cur_token = back_token();
-		parse_variable_clean();
+		var_c_type = parse_variable_clean() - 10;
 		match(TOKEN_ASSIGNMENT);
-		parse_expression();
+		exp_type = parse_expression();
+		int ret1[2] = { var_c_type , exp_type };
+		return ret1;
 		break;
 	case TOKEN_ASSIGNMENT:
 		print_parser_rule("ID_STATEMENT_CLEAN -> VARIABLE_CLEAN = EXPRESSION");
 		cur_token = back_token();
-		parse_variable_clean();
+		var_c_type = parse_variable_clean() - 10;
 		match(TOKEN_ASSIGNMENT);
-		parse_expression();
+		exp_type = parse_expression();
+		int ret2[2] = { var_c_type , exp_type };
+		return ret2;
 		break;
 	case TOKEN_OPEN_CIRCULAR_PAR:
 		print_parser_rule("ID_STATEMENT_CLEAN -> ( PARAMETERS_LIST )");
@@ -603,56 +649,99 @@ void parse_parameters_list() {
 	}
 }
 
-void parse_expression() {
+elm_type parse_expression() {
+	elm_type exp_type, id_type;
+	table_entry *entry;
 	cur_token = next_token();
 	eTOKENS expected[3] = { TOKEN_ID, TOKEN_INT_NUMBER, TOKEN_REAL_NUMBER }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_ID:
 		print_parser_rule("EXPRESSION -> id EXPRESSION_CLEAN");
-		parse_expression_clean();
+		entry = lookup(cur_table, cur_token->lexeme);
+		exp_type = parse_expression_clean();
+		if (entry == NULL) {
+			//print error id with no declaration
+			char line[10];
+			itoa(cur_token->lineNumber, line, 10);
+			char *msg[4] = { "\tERROR line ", line, ": no declaration if id: ", cur_token->lexeme };
+			print_sem(msg, 4);
+			return NULL_type;
+		}
+		else {
+			id_type = get_id_type(entry);
+			if (exp_type > 3) {
+				exp_type -= 10;
+				if (exp_type < 0 || exp_type >= entry->size) {
+					char line[10];
+					itoa(cur_token->lineNumber, line, 10);
+					char *msg[3] = { "\tERROR line ", line, ": index out of range" };
+					print_sem(msg, 3);
+				}
+				return id_type;
+			}
+			else if (exp_type == NULL_type || id_type == NULL_type) {
+				//error bad type of elements
+				char line[10];
+				itoa(cur_token->lineNumber, line, 10);
+				char *msg[3] = { "\tERROR line ", line, ": on or more elements with no defined type"};
+				print_sem(msg, 3);
+				return NULL_type;
+			}
+			else if (exp_type == INTEGER && id_type == INTEGER) {
+				return INTEGER;
+			}
+			else {
+				return REAL;
+			}
+		}
+
 		break;
 	case TOKEN_INT_NUMBER:
 		print_parser_rule("EXPRESSION -> int_number");
+		return INTEGER;
 		break;
 	case TOKEN_REAL_NUMBER:
 		print_parser_rule("EXPRESSION -> real_number");
+		return REAL;
 		break;
 	default:
 		error_recovery(EXPRESSION, expected, 3); /*print error and try to recover*/
 		break;
 	}
+	return NULL_type;
 }
 
-void parse_expression_clean() {
+elm_type parse_expression_clean() {
 	cur_token = next_token();
 	eTOKENS expected[5] = { TOKEN_SEMICOLON, TOKEN_OPEN_SQUER_PAR, TOKEN_MUL, TOKEN_DIV, TOKEN_ASSIGNMENT }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_MUL:
 		print_parser_rule("EXPRESSION_CLEAN -> ar_op EXPRESSION");
-		parse_expression();
+		return parse_expression();
 		break;
 	case TOKEN_DIV:
 		print_parser_rule("EXPRESSION_CLEAN -> ar_op EXPRESSION");
-		parse_expression();
+		return parse_expression();
 		break;
-	case TOKEN_ASSIGNMENT:
+	/*case TOKEN_ASSIGNMENT:
 		print_parser_rule("EXPRESSION_CLEAN -> ar_op EXPRESSION");
 		parse_expression();
-		break;
+		break;*/
 	case TOKEN_SEMICOLON:
 		print_parser_rule("EXPRESSION_CLEAN -> VARIABLE_CLEAN");
 		cur_token = back_token();
-		parse_variable_clean();
+		return parse_variable_clean();
 		break;
 	case TOKEN_OPEN_SQUER_PAR:
 		print_parser_rule("EXPRESSION_CLEAN -> VARIABLE_CLEAN");
 		cur_token = back_token();
-		parse_variable_clean();
+		return parse_variable_clean();
 		break;
 	default:
 		error_recovery(EXPRESSION_CLEAN, expected, 5); /*print error and try to recover*/
 		break;
 	}
+	return 0;
 }

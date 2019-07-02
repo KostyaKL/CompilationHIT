@@ -12,7 +12,8 @@ typedef enum elm_type
 {
 	REAL,
 	INTEGER,
-	NULL_type
+	NULL_type,
+	INDEX
 } elm_type;
 
 typedef struct table_entry {

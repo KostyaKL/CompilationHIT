@@ -5,6 +5,7 @@ char *getTypeName(elm_type type) {
 	case REAL: return "Real";
 	case INTEGER: return "Integer";
 	case NULL_type: return "Void";
+	case INDEX: return "Index";
 	}
 }
 
