@@ -80,7 +80,7 @@ table_entry *insert(table_ptr *current_table, char *id_name, int line) {
 	table_entry *new_entry;
 	new_entry = lookup(current_table, id_name);
 	if (new_entry != NULL) {
-		fprintf(semantic_report, "\tERROR line %d: duplicate declaration of the same name %s \n", line, id_name);
+		fprintf(semantic_report, "\tERROR line %d: duplicate declaration of the same name: %s \n", line, id_name);
 		return NULL;
 	}
 	
@@ -119,7 +119,7 @@ table_entry *find(table_ptr *current_table, char *id_name, int line) {
 		else
 			tab = tab->father;
 	}
-	fprintf(semantic_report, "\tERROR line %d: undeclared identifier %s \n", line, id_name);
+	fprintf(semantic_report, "\tERROR line %d: undeclared identifier: %s \n", line, id_name);
 	return NULL;
 }
 

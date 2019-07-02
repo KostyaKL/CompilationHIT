@@ -43,23 +43,23 @@ void parse_expression_clean();
 void parse_func_definition();
 void parse_func_definitions();
 void parse_func_definitions_celan();
-void parse_param_definitions();
+void parse_param_definitions(table_entry *entry);
 void parse_parameters_list();
 void parse_program();
-void parse_returned_type();
+elm_type parse_returned_type();
 void parse_statment();
 void parse_statments_clean();
 void parse_statments();
 void parse_id_statment_clean();
 void parse_return_statment_clean();
 elm_type parse_type();
-void parse_var_definition();
-void parse_var_definitions();
-void parse_var_definitions_clean();
-void parse_variable(elm_type type);
+void parse_var_definition(table_entry *entry);
+void parse_var_definitions(table_entry *entry);
+void parse_var_definitions_clean(table_entry *entry);
+void parse_variable(elm_type type, table_entry *entry_func);
 char *parse_variable_clean();
-void parse_variables_list(elm_type type);
-void parse_variables_list_clean(elm_type type);
+void parse_variables_list(elm_type type, table_entry *entry);
+void parse_variables_list_clean(elm_type type, table_entry *entry);
 /*explained in RecursiveDescentParser.c*/
 
 /*explained in ParserUtilityFunctions.c*/
