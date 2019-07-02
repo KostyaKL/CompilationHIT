@@ -26,7 +26,7 @@ typedef struct table_entry {
 	//function
 	elm_type return_type;
 	int num_of_parameters;
-	struct table_entry **parameters_list;
+	ZHashTable *parameters_list;
 
 	//settings
 	int is_function;

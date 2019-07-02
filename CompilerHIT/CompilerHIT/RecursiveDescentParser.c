@@ -184,8 +184,7 @@ void parse_variable(elm_type type, table_entry *entry_func) { /*one case rule*/
 		//func argument
 		if (entry_func != NULL) {
 			entry_func->num_of_parameters += 1;
-			entry_func->parameters_list = (table_entry*)realloc(entry_func->parameters_list, sizeof(table_entry));
-			entry_func->parameters_list[entry_func->num_of_parameters - 1] = entry;
+			zhash_set(entry_func->parameters_list, entry->name, entry);
 		}
 	}
 }
@@ -305,6 +304,7 @@ void parse_func_definition() {
 			entry = insert(cur_table, cur_token->lexeme, cur_token->lineNumber);
 			if (entry != NULL) {
 				entry->is_function = 1;
+				entry->parameters_list = zcreate_hash_table();
 				cur_table = make_table(cur_table, "FUNC_DEFINITION -> RETURNED_TYPE id ( PARAM_DEFINITIONS ) BLOCK");
 			}
 		}
@@ -322,6 +322,7 @@ void parse_func_definition() {
 			entry = insert(cur_table, cur_token->lexeme, cur_token->lineNumber);
 			if (entry != NULL) {
 				entry->is_function = 1;
+				entry->parameters_list = zcreate_hash_table();
 				cur_table = make_table(cur_table, "FUNC_DEFINITION -> RETURNED_TYPE id ( PARAM_DEFINITIONS ) BLOCK");
 			}
 		}
@@ -339,6 +340,7 @@ void parse_func_definition() {
 			entry = insert(cur_table, cur_token->lexeme, cur_token->lineNumber);
 			if (entry != NULL) {
 				entry->is_function = 1;
+				entry->parameters_list = zcreate_hash_table();
 				cur_table = make_table(cur_table, "FUNC_DEFINITION -> RETURNED_TYPE id ( PARAM_DEFINITIONS ) BLOCK");
 			}
 		}
