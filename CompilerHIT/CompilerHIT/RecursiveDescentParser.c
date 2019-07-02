@@ -510,14 +510,14 @@ void parse_statment() {
 				itoa(cur_token->lineNumber, line, 10);
 				char *msg[4] = { "\tERROR line ", line, ": no index for array: ", entry->name };
 				print_sem(msg, 4);
-				return id_type;
+				//return id_type;
 			}
 			else if (entry->size > 0 && (statment[0] < 0 || statment[0] >= entry->size)) {
 				char line[10];
 				itoa(cur_token->lineNumber, line, 10);
-				char *msg[4] = { "\tERROR line ", line, ": index out of range for array", entry->name };
+				char *msg[4] = { "\tERROR line ", line, ": index out of range for array: ", entry->name };
 				print_sem(msg, 4);
-				return id_type;
+				//return id_type;
 			}
 			else if (statment[1] == NULL_type || id_type == NULL_type) {
 				//error bad type of elements
@@ -525,13 +525,20 @@ void parse_statment() {
 				itoa(cur_token->lineNumber, line, 10);
 				char *msg[3] = { "\tERROR line ", line, ": on or more elements with no defined type" };
 				print_sem(msg, 3);
-				return NULL_type;
+				//return NULL_type;
 			}
 			else if (statment[1] == INTEGER && id_type == INTEGER) {
-				return INTEGER;
+				//return INTEGER;
+			}
+			else if (statment[1] == REAL && id_type == REAL) {
+				//return REAL;
 			}
 			else {
-				return REAL;
+				char line[10];
+				itoa(cur_token->lineNumber, line, 10);
+				char *msg[3] = { "\tERROR line ", line, ": expression don't match variable type" };
+				print_sem(msg, 3);
+				//return NULL_type;
 			}
 		}
 		break;
@@ -699,7 +706,7 @@ elm_type parse_expression() {
 				if (exp_type < 0 || exp_type >= entry->size) {
 					char line[10];
 					itoa(cur_token->lineNumber, line, 10);
-					char *msg[4] = { "\tERROR line ", line, ": index out of range for array", entry->name };
+					char *msg[4] = { "\tERROR line ", line, ": index out of range for array: ", entry->name };
 					print_sem(msg, 4);
 				}
 				return id_type;
