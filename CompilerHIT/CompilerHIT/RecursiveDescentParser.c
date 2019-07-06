@@ -497,7 +497,7 @@ void parse_statment() {
 	{
 	case TOKEN_ID:
 		print_parser_rule("STATEMENT -> id ID_STATEMENT_CLEAN");
-		entry = find(cur_table, cur_token->lexeme, cur_token->lineNumber);
+		entry = find(cur_table, cur_token->lexeme, cur_token->lineNumber, 0);
 		toke_not_found = cur_token->lexeme;
 		statment = parse_id_statment_clean();
 		if (entry == NULL) {
@@ -686,7 +686,7 @@ elm_type parse_expression() {
 	{
 	case TOKEN_ID:
 		print_parser_rule("EXPRESSION -> id EXPRESSION_CLEAN");
-		entry = find(cur_table, cur_token->lexeme, cur_token->lineNumber);
+		entry = find(cur_table, cur_token->lexeme, cur_token->lineNumber, 1);
 		toke_not_found = cur_token->lexeme;
 		exp_type = parse_expression_clean();
 		if (entry == NULL) {

@@ -31,14 +31,14 @@ typedef struct table_entry {
 
 	//settings
 	int is_function;
-	int is_used;
 
 } table_entry;
 
 typedef struct table_ptr
 {
 	struct table_ptr *father;
-	ZHashTable *hashtable;
+	ZHashTable *used;
+	ZHashTable *unused;
 	table_entry *entry;
 } table_ptr;
 
@@ -56,11 +56,17 @@ table_entry *insert(table_ptr *current_table, char *id_name, int line);
 
 table_entry *lookup(table_ptr *current_table, char *id_name);
 
-table_entry *find(table_ptr *current_table, char *id_name, int line);
+table_entry *find(table_ptr *current_table, char *id_name, int line, int use);
 
 void set_id_type(table_entry *id_entry, elm_type id_type);                                                             
 
 elm_type get_id_type(table_entry *id_entry);
+
+void use_id(table_ptr *current_table, char *id_name);
+
+int is_unused(table_ptr *current_table);
+
+void print_unused(table_ptr *current_table);
 
 void reset_table();
 

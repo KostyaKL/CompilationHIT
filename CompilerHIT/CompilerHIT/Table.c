@@ -38,8 +38,11 @@ table_ptr *make_table(table_ptr *current_table, char *rule) {
 			exit(0);
 		}
 		current_table->father = NULL;
-		current_table->hashtable = zcreate_hash_table();
+		current_table->unused = zcreate_hash_table();
+		current_table->used = zcreate_hash_table();
 		current_table->entry = NULL;
+
+		zhash_set(current_table->unused, "0", NULL);
 
 		char *msg[2] = { "new scope ", rule };
 		print_sem(msg, 2);
@@ -54,8 +57,11 @@ table_ptr *make_table(table_ptr *current_table, char *rule) {
 		exit(0);
 	}
 	tmp->father = current_table;
-	tmp->hashtable = zcreate_hash_table();
+	tmp->unused = zcreate_hash_table();
+	tmp->used = zcreate_hash_table();
 	tmp->entry = NULL;
+
+	zhash_set(tmp->unused, "0", NULL);
 
 	char *msg[2] = { "new scope ", rule };
 	print_sem(msg, 2);
@@ -65,6 +71,10 @@ table_ptr *make_table(table_ptr *current_table, char *rule) {
 
 table_ptr *pop_table(table_ptr *current_table, char *rule) {
 	table_ptr *tmp;
+	int is_unused_exist = is_unused(current_table);
+	if (is_unused_exist) {
+		print_unused(current_table);
+	}
 
 	//free(current_table->entry); //free entry data structure????
 								//free hash table?
@@ -92,7 +102,6 @@ table_entry *insert(table_ptr *current_table, char *id_name, int line) {
 		exit(0);
 	}
 	new_entry->is_function = 0;
-	new_entry->is_used = 0;
 	new_entry->name = id_name;
 	new_entry->num_of_parameters = 0;
 	new_entry->parameters_list = NULL;
@@ -100,23 +109,33 @@ table_entry *insert(table_ptr *current_table, char *id_name, int line) {
 	new_entry->size = 1;
 	new_entry->type = NULL_type;
 
-	zhash_set(cur_table->hashtable, id_name, new_entry);
+	zhash_set(cur_table->unused, id_name, new_entry);
 
 	return new_entry;
 }
 
 table_entry *lookup(table_ptr *current_table, char *id_name) {
-	return zhash_get(current_table->hashtable, id_name);
+	table_entry *exist = NULL;
+	exist = zhash_get(current_table->unused, id_name);
+	if (exist != NULL) {
+		return exist;
+	}
+	exist = zhash_get(current_table->used, id_name);
+	return exist;
 }
 
-table_entry *find(table_ptr *current_table, char *id_name, int line) {
+table_entry *find(table_ptr *current_table, char *id_name, int line, int use) {
 	table_ptr *tab = current_table;
 	table_entry *id_entry;
 	while (tab != NULL)
 	{
 		id_entry = lookup(tab, id_name);
-		if (id_entry != NULL)
+		if (id_entry != NULL) {
+			if (use) {
+				use_id(tab, id_name);
+			}
 			return (id_entry);
+		}
 		else
 			tab = tab->father;
 	}
@@ -132,13 +151,44 @@ elm_type get_id_type(table_entry *id_entry) {
 	return id_entry->type;
 }
 
+void use_id(table_ptr *current_table, char *id_name) {
+	table_entry *tmp = NULL;
+	tmp = zhash_get(current_table->unused, id_name);
+	if (tmp != NULL) {
+		zhash_delete(current_table->unused, id_name);
+		zhash_set(cur_table->used, tmp->name, tmp);
+	}
+}
+
+int is_unused(table_ptr *current_table) {
+	if (current_table->unused->entry_count == 1) {
+		return 0;
+	}
+	return 1;
+}
+
+void print_unused(table_ptr *current_table) {
+	size_t hash;
+	struct ZHashEntry *entry;
+
+	hash = zgenerate_hash(current_table->unused, "0");
+	entry = current_table->unused->entries[hash];
+
+	fprintf(semantic_report, "\tthere is %d unsused idss and %d used ids\n", current_table->unused->entry_count, current_table->used->entry_count );
+	/*while (entry) {
+		fprintf(semantic_report, "\t\t%s\n", ((table_entry*)entry)->name);
+		entry = entry->next;
+	}*/
+}
+
 void reset_table() {
 	table_ptr *tmp;
 	if(cur_table != NULL)
 	while (cur_table != NULL && cur_table->father != NULL) {
 		free(cur_table->entry); //free entry data structure????
 								//free hash table?
-		zfree_hash_table(cur_table->hashtable);
+		zfree_hash_table(cur_table->unused);
+		zfree_hash_table(cur_table->used);
 
 		tmp = cur_table;
 		cur_table = cur_table->father;
@@ -147,7 +197,8 @@ void reset_table() {
 	if (cur_table != NULL) {
 		free(cur_table->entry); //free entry data structure????
 								//free hash table?
-		zfree_hash_table(cur_table->hashtable);
+		zfree_hash_table(cur_table->unused);
+		zfree_hash_table(cur_table->used);
 	}
 
 	cur_table = NULL;
