@@ -124,12 +124,12 @@ elm_type parse_type() {
 	return NULL_type;
 }
 
-void parse_variables_list(elm_type type, table_entry *entry, int param_list) { /*one case rule*/
+int parse_variables_list(elm_type type, table_entry *entry, int param_list) { /*one case rule*/
 	print_parser_rule("VARIABLES_LIST -> VARIABLE VARIABLES_LIST_CLEAN");
 	match(TOKEN_ID);
 	cur_token = back_token();
 	parse_variable(type, entry, param_list, 0);
-	parse_variables_list_clean(type, entry, param_list, 0);
+	return parse_variables_list_clean(type, entry, param_list, 0);
 }
 
 int parse_variables_list_clean(elm_type type, table_entry *entry, int param_list, int index) {
@@ -633,6 +633,7 @@ int *parse_id_statment_clean(table_entry *entry) {
 	cur_token = next_token();
 	elm_type var_c_type, exp_type;
 	int *ret = (int*)malloc(3 * sizeof(int));
+	int param_count = 0;
 	eTOKENS expected[3] = { TOKEN_OPEN_SQUER_PAR, TOKEN_OPEN_CIRCULAR_PAR, TOKEN_ASSIGNMENT }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
@@ -672,7 +673,13 @@ int *parse_id_statment_clean(table_entry *entry) {
 		break;
 	case TOKEN_OPEN_CIRCULAR_PAR:
 		print_parser_rule("ID_STATEMENT_CLEAN -> ( PARAMETERS_LIST )");
-		parse_parameters_list(entry);
+		param_count = parse_parameters_list(entry);
+		if (entry != NULL && param_count != entry->param_num) {
+			char line[10];
+			itoa(cur_token->lineNumber, line, 10);
+			char *msg[3] = { "\tERROR line ", line, ": wrong number of parameters" };
+			print_sem(msg, 3);
+		}
 		match(TOKEN_CLOSE_CIRCULAR_PAR);
 		ret[2] = 0;
 		return ret;		
@@ -701,7 +708,7 @@ void parse_block() { /*one case rule*/
 	//cur_table = pop_table(cur_table, "BLOCK -> { VAR_DEFINITIONS ; STATMENTS }");
 }
 
-void parse_parameters_list(table_entry *entry) {
+int parse_parameters_list(table_entry *entry) {
 	cur_token = next_token();
 	eTOKENS expected[2] = { TOKEN_ID, TOKEN_CLOSE_CIRCULAR_PAR }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
@@ -709,7 +716,7 @@ void parse_parameters_list(table_entry *entry) {
 	case TOKEN_ID:
 		print_parser_rule("PARAMETERS_LIST -> VARIABLES_LIST");
 		cur_token = back_token();
-		parse_variables_list(0, entry, 1);
+		return parse_variables_list(0, entry, 1);
 		break;
 	case TOKEN_CLOSE_CIRCULAR_PAR:
 		print_parser_rule("PARAMETERS_LIST -> epsilon");
@@ -719,6 +726,7 @@ void parse_parameters_list(table_entry *entry) {
 		error_recovery(PARAMETERS_LIST, expected, 2); /*print error and try to recover*/
 		break;
 	}
+	return 0;
 }
 
 elm_type parse_expression() {
