@@ -90,13 +90,13 @@ void parse_var_definition(table_entry *entry) {
 		print_parser_rule("VAR_DEFINITION -> TYPE VARIABLES_LIST");
 		cur_token = back_token();
 		type = parse_type();
-		parse_variables_list(type, entry);
+		parse_variables_list(type, entry, 0);
 		break;
 	case TOKEN_INTEGER:
 		print_parser_rule("VAR_DEFINITION -> TYPE VARIABLES_LIST");
 		cur_token = back_token();
 		type = parse_type();
-		parse_variables_list(type, entry);
+		parse_variables_list(type, entry, 0);
 		break;
 	default:
 		error_recovery(VAR_DEFINITION, expected, 2); /*print error and try to recover*/
@@ -124,23 +124,23 @@ elm_type parse_type() {
 	return NULL_type;
 }
 
-void parse_variables_list(elm_type type, table_entry *entry) { /*one case rule*/
+void parse_variables_list(elm_type type, table_entry *entry, int param_list) { /*one case rule*/
 	print_parser_rule("VARIABLES_LIST -> VARIABLE VARIABLES_LIST_CLEAN");
 	match(TOKEN_ID);
 	cur_token = back_token();
-	parse_variable(type, entry);
-	parse_variables_list_clean(type, entry);
+	parse_variable(type, entry, param_list, 0);
+	parse_variables_list_clean(type, entry, param_list, 0);
 }
 
-void parse_variables_list_clean(elm_type type, table_entry *entry) {
+int parse_variables_list_clean(elm_type type, table_entry *entry, int param_list, int index) {
 	cur_token = next_token();
 	eTOKENS expected[3] = { TOKEN_COMMA, TOKEN_SEMICOLON, TOKEN_CLOSE_CIRCULAR_PAR }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_COMMA:
 		print_parser_rule("VARIABLES_LIST_CLEAN -> , VARIABLE VARIABLES_LIST_CLEAN");
-		parse_variable(type, entry);
-		parse_variables_list_clean(type, entry);
+		index = parse_variable(type, entry, param_list, index);
+		index = parse_variables_list_clean(type, entry, param_list, index);
 		break;
 	case TOKEN_SEMICOLON:
 		print_parser_rule("VARIABLES_LIST_CLEAN -> epsilon");
@@ -156,13 +156,17 @@ void parse_variables_list_clean(elm_type type, table_entry *entry) {
 	}
 }
 
-void parse_variable(elm_type type, table_entry *entry_func) { /*one case rule*/
-	table_entry *entry = NULL;
+int parse_variable(elm_type type, table_entry *entry_func, int param_list, int index) { /*one case rule*/
+	table_entry *entry = NULL, *defined = NULL;
 	int size = 0;
 	int i = 1;
+	char *id;
+	int line_num = cur_token->lineNumber;
+	char line[10];
 	print_parser_rule("VARIABLE -> id VARIABLE_CLEAN");
 	match(TOKEN_ID);
-	if (cur_token->kind == TOKEN_ID) {
+	id = cur_token->lexeme;;
+	if (cur_token->kind == TOKEN_ID && param_list == 0) {
 		entry = insert(cur_table, cur_token->lexeme, cur_token->lineNumber);
 	}
 	size = parse_variable_clean();
@@ -170,7 +174,7 @@ void parse_variable(elm_type type, table_entry *entry_func) { /*one case rule*/
 		size -= 10;
 	}
 
-	if (entry != NULL) {
+	if (entry != NULL && param_list == 0) {
 		set_id_type(entry, type);
 		entry->size = size;
 		char tmp[10];
@@ -181,9 +185,42 @@ void parse_variable(elm_type type, table_entry *entry_func) { /*one case rule*/
 		//func argument
 		if (entry_func != NULL) {
 			entry_func->num_of_parameters += 1;
-			zhash_set(entry_func->parameters_list, entry->name, entry);
+			entry->param_num = entry_func->num_of_parameters;
+			char tmp[10];
+			itoa(index + 1, tmp, 10);
+			zhash_set(entry_func->parameters_list, tmp, entry);
 		}
 	}
+
+	if (param_list) {
+		entry = find(cur_table, id, line_num, 1);
+		if (entry == NULL) {
+			itoa(line_num, line, 10);
+			char *msg[5] = { "\tERROR line ", line, ": no definition for id: ", id, "in function" };
+			print_sem(msg, 5);
+		}
+		if (entry_func == NULL) {
+			itoa(line_num, line, 10);
+			char *msg[3] = { "\tERROR line ", line, ": no definition for functoin" };
+			//print_sem(msg, 3);
+		}
+		else {
+			char tmp[10];
+			itoa(index + 1, tmp, 10);
+			defined = zhash_get(entry_func->parameters_list, tmp);
+			if (index + 1 > entry_func->num_of_parameters) {
+				itoa(line_num, line, 10);
+				char *msg[3] = { "\tERROR line ", line, ": wrong number of parameters" };
+				print_sem(msg, 3);
+			}
+			else if (defined->type != entry->type) {
+				itoa(line_num, line, 10);
+				char *msg[3] = { "\tERROR line ", line, ": wrong argument type" };
+				print_sem(msg, 3);
+			}
+		}
+	}
+	return index + 1;
 }
 
 int parse_variable_clean() {
@@ -499,11 +536,11 @@ void parse_statment() {
 		print_parser_rule("STATEMENT -> id ID_STATEMENT_CLEAN");
 		entry = find(cur_table, cur_token->lexeme, cur_token->lineNumber, 0);
 		toke_not_found = cur_token->lexeme;
-		statment = parse_id_statment_clean();
+		statment = parse_id_statment_clean(entry);
 		if (entry == NULL) {
 			return NULL_type;
 		}
-		else {
+		else if (statment[2]){
 			id_type = get_id_type(entry);
 			if (entry->size > 0 && statment[0] == -1) {
 				char line[10];
@@ -592,10 +629,10 @@ void parse_return_statment_clean() {
 	}
 }
 
-int *parse_id_statment_clean() {
+int *parse_id_statment_clean(table_entry *entry) {
 	cur_token = next_token();
 	elm_type var_c_type, exp_type;
-	int *ret = (int*)malloc(2 * sizeof(int));
+	int *ret = (int*)malloc(3 * sizeof(int));
 	eTOKENS expected[3] = { TOKEN_OPEN_SQUER_PAR, TOKEN_OPEN_CIRCULAR_PAR, TOKEN_ASSIGNMENT }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
@@ -613,6 +650,7 @@ int *parse_id_statment_clean() {
 		exp_type = parse_expression();
 		ret[0] = var_c_type;
 		ret[1] = exp_type;
+		ret[2] = 1;
 		return ret;
 		break;
 	case TOKEN_ASSIGNMENT:
@@ -629,17 +667,24 @@ int *parse_id_statment_clean() {
 		exp_type = parse_expression();
 		ret[0] = var_c_type;
 		ret[1] = exp_type;
+		ret[2] = 1;
 		return ret;
 		break;
 	case TOKEN_OPEN_CIRCULAR_PAR:
 		print_parser_rule("ID_STATEMENT_CLEAN -> ( PARAMETERS_LIST )");
-		parse_parameters_list();
+		parse_parameters_list(entry);
 		match(TOKEN_CLOSE_CIRCULAR_PAR);
+		ret[2] = 0;
+		return ret;		
 		break;
 	default:
 		error_recovery(ID_STATEMENT_CLEAN, expected, 3); /*print error and try to recover*/
 		break;
 	}
+	ret[0] = 0;
+	ret[1] = 0;
+	ret[2] = 0;
+	return ret;
 }
 
 void parse_block() { /*one case rule*/
@@ -656,7 +701,7 @@ void parse_block() { /*one case rule*/
 	//cur_table = pop_table(cur_table, "BLOCK -> { VAR_DEFINITIONS ; STATMENTS }");
 }
 
-void parse_parameters_list() {
+void parse_parameters_list(table_entry *entry) {
 	cur_token = next_token();
 	eTOKENS expected[2] = { TOKEN_ID, TOKEN_CLOSE_CIRCULAR_PAR }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
@@ -664,7 +709,7 @@ void parse_parameters_list() {
 	case TOKEN_ID:
 		print_parser_rule("PARAMETERS_LIST -> VARIABLES_LIST");
 		cur_token = back_token();
-		parse_variables_list(0, NULL);
+		parse_variables_list(0, entry, 1);
 		break;
 	case TOKEN_CLOSE_CIRCULAR_PAR:
 		print_parser_rule("PARAMETERS_LIST -> epsilon");

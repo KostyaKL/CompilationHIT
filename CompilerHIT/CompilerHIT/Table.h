@@ -31,6 +31,7 @@ typedef struct table_entry {
 
 	//settings
 	int is_function;
+	int param_num;
 
 } table_entry;
 
@@ -39,7 +40,6 @@ typedef struct table_ptr
 	struct table_ptr *father;
 	ZHashTable *used;
 	ZHashTable *unused;
-	table_entry *entry;
 } table_ptr;
 
 char *getTypeName(elm_type type);

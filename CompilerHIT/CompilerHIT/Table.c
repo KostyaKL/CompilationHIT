@@ -40,7 +40,6 @@ table_ptr *make_table(table_ptr *current_table, char *rule) {
 		current_table->father = NULL;
 		current_table->unused = zcreate_hash_table();
 		current_table->used = zcreate_hash_table();
-		current_table->entry = NULL;
 
 		zhash_set(current_table->unused, "0", NULL);
 
@@ -59,7 +58,6 @@ table_ptr *make_table(table_ptr *current_table, char *rule) {
 	tmp->father = current_table;
 	tmp->unused = zcreate_hash_table();
 	tmp->used = zcreate_hash_table();
-	tmp->entry = NULL;
 
 	zhash_set(tmp->unused, "0", NULL);
 
@@ -108,6 +106,7 @@ table_entry *insert(table_ptr *current_table, char *id_name, int line) {
 	new_entry->return_type = NULL_type;
 	new_entry->size = 1;
 	new_entry->type = NULL_type;
+	new_entry->param_num = 0;
 
 	zhash_set(cur_table->unused, id_name, new_entry);
 
@@ -185,7 +184,7 @@ void reset_table() {
 	table_ptr *tmp;
 	if(cur_table != NULL)
 	while (cur_table != NULL && cur_table->father != NULL) {
-		free(cur_table->entry); //free entry data structure????
+		 //free entry data structure????
 								//free hash table?
 		zfree_hash_table(cur_table->unused);
 		zfree_hash_table(cur_table->used);
@@ -195,7 +194,7 @@ void reset_table() {
 		free(tmp);
 	}
 	if (cur_table != NULL) {
-		free(cur_table->entry); //free entry data structure????
+		; //free entry data structure????
 								//free hash table?
 		zfree_hash_table(cur_table->unused);
 		zfree_hash_table(cur_table->used);
