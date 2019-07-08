@@ -62,7 +62,7 @@ void set_id_type(table_entry *id_entry, elm_type id_type);
 
 elm_type get_id_type(table_entry *id_entry);
 
-void use_id(table_ptr *current_table, char *id_name);
+table_entry *use_id(table_ptr *current_table, char *id_name);
 
 int is_unused(table_ptr *current_table);
 

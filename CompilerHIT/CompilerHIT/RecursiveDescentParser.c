@@ -16,7 +16,7 @@ void parse_program() { /*one case rule*/
 
 	parse_var_definitions(NULL);
 	match(TOKEN_SEMICOLON);
-	parse_statments();
+	parse_statments(NULL);
 	match(TOKEN_END);
 
 	cur_table = pop_table(cur_table, "PROGRAM -> program VAR_DEFINITIONS ; STATMENTS end");
@@ -196,12 +196,12 @@ int parse_variable(elm_type type, table_entry *entry_func, int param_list, int i
 		entry = find(cur_table, id, line_num, 1);
 		if (entry == NULL) {
 			itoa(line_num, line, 10);
-			char *msg[5] = { "\tERROR line ", line, ": no definition for id: ", id, "in function" };
+			char *msg[5] = { "\tERROR line ", line, ": no definition for id: ", id, " in function" };
 			print_sem(msg, 5);
 		}
 		if (entry_func == NULL) {
 			itoa(line_num, line, 10);
-			char *msg[3] = { "\tERROR line ", line, ": no definition for functoin" };
+			char *msg[3] = { "\tERROR line ", line, ": no definition for functoin " };
 			//print_sem(msg, 3);
 		}
 		else {
@@ -348,13 +348,15 @@ void parse_func_definition() {
 			if (entry != NULL) {
 				entry->is_function = 1;
 				entry->parameters_list = zcreate_hash_table();
+				entry->type = type;
+				entry->return_type = type;
 				cur_table = make_table(cur_table, "FUNC_DEFINITION -> RETURNED_TYPE id ( PARAM_DEFINITIONS ) BLOCK");
 			}
 		}
 		match(TOKEN_OPEN_CIRCULAR_PAR);
 		parse_param_definitions(entry);
 		match(TOKEN_CLOSE_CIRCULAR_PAR);
-		parse_block();
+		parse_block(entry);
 		break;
 	case TOKEN_INTEGER:
 		print_parser_rule("FUNC_DEFINITION -> RETURNED_TYPE id ( PARAM_DEFINITIONS ) BLOCK");
@@ -366,13 +368,15 @@ void parse_func_definition() {
 			if (entry != NULL) {
 				entry->is_function = 1;
 				entry->parameters_list = zcreate_hash_table();
+				entry->type = type;
+				entry->return_type = type;
 				cur_table = make_table(cur_table, "FUNC_DEFINITION -> RETURNED_TYPE id ( PARAM_DEFINITIONS ) BLOCK");
 			}
 		}
 		match(TOKEN_OPEN_CIRCULAR_PAR);
 		parse_param_definitions(entry);
 		match(TOKEN_CLOSE_CIRCULAR_PAR);
-		parse_block();
+		parse_block(entry);
 		break;
 	case TOKEN_VOID:
 		print_parser_rule("FUNC_DEFINITION -> RETURNED_TYPE id ( PARAM_DEFINITIONS ) BLOCK");
@@ -384,13 +388,15 @@ void parse_func_definition() {
 			if (entry != NULL) {
 				entry->is_function = 1;
 				entry->parameters_list = zcreate_hash_table();
+				entry->type = type;
+				entry->return_type = type;
 				cur_table = make_table(cur_table, "FUNC_DEFINITION -> RETURNED_TYPE id ( PARAM_DEFINITIONS ) BLOCK");
 			}
 		}
 		match(TOKEN_OPEN_CIRCULAR_PAR);
 		parse_param_definitions(entry);
 		match(TOKEN_CLOSE_CIRCULAR_PAR);
-		parse_block();
+		parse_block(entry);
 		break;
 	default:
 		error_recovery(FUNC_DEFINITION, expected, 3); /*print error and try to recover*/
@@ -457,7 +463,7 @@ void parse_param_definitions(table_entry *entry) {
 	}
 }
 
-void parse_statments() {
+void parse_statments(table_entry *entry) {
 	cur_token = next_token();
 	eTOKENS expected[3] = { TOKEN_ID, TOKEN_RETURN, TOKEN_OPEN_CURLY_PAR }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
@@ -465,23 +471,23 @@ void parse_statments() {
 	case TOKEN_ID:
 		print_parser_rule("STATEMENTS -> STATEMENT ; STATEMENTS_CLEAN");
 		cur_token = back_token();
-		parse_statment();
+		parse_statment(entry);
 		match(TOKEN_SEMICOLON);
-		parse_statments_clean();
+		parse_statments_clean(entry);
 		break;
 	case TOKEN_RETURN:
 		print_parser_rule("STATEMENTS -> STATEMENT ; STATEMENTS_CLEAN");
 		cur_token = back_token();
-		parse_statment();
+		parse_statment(entry);
 		match(TOKEN_SEMICOLON);
-		parse_statments_clean();
+		parse_statments_clean(entry);
 		break;
 	case TOKEN_OPEN_CURLY_PAR:
 		print_parser_rule("STATEMENTS -> STATEMENT ; STATEMENTS_CLEAN");
 		cur_token = back_token();
-		parse_statment();
+		parse_statment(entry);
 		match(TOKEN_SEMICOLON);
-		parse_statments_clean();
+		parse_statments_clean(entry);
 		break;
 	default:
 		error_recovery(STATEMENTS, expected, 3); /*print error and try to recover*/
@@ -489,7 +495,7 @@ void parse_statments() {
 	}
 }
 
-void parse_statments_clean() {
+void parse_statments_clean(table_entry *entry) {
 	cur_token = next_token();
 	eTOKENS expected[5] = { TOKEN_ID, TOKEN_RETURN, TOKEN_OPEN_CURLY_PAR, TOKEN_END, TOKEN_CLOSE_CURLY_PAR }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
@@ -497,17 +503,17 @@ void parse_statments_clean() {
 	case TOKEN_ID:
 		print_parser_rule("STATEMENTS_CLEAN -> STATMENTS");
 		cur_token = back_token();
-		parse_statments();
+		parse_statments(entry);
 		break;
 	case TOKEN_RETURN:
 		print_parser_rule("STATEMENTS_CLEAN -> STATMENTS");
 		cur_token = back_token();
-		parse_statments();
+		parse_statments(entry);
 		break;
 	case TOKEN_OPEN_CURLY_PAR:
 		print_parser_rule("STATEMENTS_CLEAN -> STATMENTS");
 		cur_token = back_token();
-		parse_statments();
+		parse_statments(entry);
 		break;
 	case TOKEN_END:
 		print_parser_rule("STATEMENTS_CLEAN -> epsilon");
@@ -523,7 +529,7 @@ void parse_statments_clean() {
 	}
 }
 
-void parse_statment() {
+void parse_statment(table_entry *entry_func) {
 	cur_token = next_token();
 	int *statment;
 	char *toke_not_found;
@@ -534,7 +540,12 @@ void parse_statment() {
 	{
 	case TOKEN_ID:
 		print_parser_rule("STATEMENT -> id ID_STATEMENT_CLEAN");
-		entry = find(cur_table, cur_token->lexeme, cur_token->lineNumber, 0);
+		if (entry_func == NULL) {
+			entry = find(cur_table, cur_token->lexeme, cur_token->lineNumber, 1);
+		}
+		else {
+			entry = find(cur_table, cur_token->lexeme, cur_token->lineNumber, 1);
+		}
 		toke_not_found = cur_token->lexeme;
 		statment = parse_id_statment_clean(entry);
 		if (entry == NULL) {
@@ -581,7 +592,7 @@ void parse_statment() {
 		break;
 	case TOKEN_RETURN:
 		print_parser_rule("STATEMENT -> return RETURN_STATEMENT_CLEAN");
-		parse_return_statment_clean();
+		parse_return_statment_clean(entry_func);
 		break;
 	case TOKEN_OPEN_CURLY_PAR:
 		print_parser_rule("STATEMENT -> BLOCK");
@@ -589,7 +600,7 @@ void parse_statment() {
 
 		cur_table = make_table(cur_table, "STATEMENT -> BLOCK");
 
-		parse_block();
+		parse_block(entry_func);
 
 		cur_table = pop_table(cur_table, "STATEMENT -> BLOCK");
 		break;
@@ -599,29 +610,52 @@ void parse_statment() {
 	}
 }
 
-void parse_return_statment_clean() {
+void parse_return_statment_clean(table_entry * entry) {
 	cur_token = next_token();
+	elm_type type = NULL_type;
 	eTOKENS expected[4] = { TOKEN_ID, TOKEN_INT_NUMBER, TOKEN_REAL_NUMBER, TOKEN_SEMICOLON }; /*expected tokens for error printing purpose*/
 	switch (cur_token->kind)
 	{
 	case TOKEN_ID:
 		print_parser_rule("RETURN_STATEMENT_CLEAN -> EXPRESSION");
 		cur_token = back_token();
-		parse_expression();
+		type = parse_expression();
+		if (entry != NULL && type != entry->type) {
+			char line[10];
+			itoa(cur_token->lineNumber, line, 10);
+			char *msg[3] = { "\tERROR line ", line, ": return type don't match"  };
+			print_sem(msg, 3);
+		}
 		break;
 	case TOKEN_INT_NUMBER:
 		print_parser_rule("RETURN_STATEMENT_CLEAN -> EXPRESSION");
 		cur_token = back_token();
-		parse_expression();
-		break;
+		type = parse_expression();
+		if (entry != NULL && type != entry->type) {
+			char line[10];
+			itoa(cur_token->lineNumber, line, 10);
+			char *msg[3] = { "\tERROR line ", line, ": return type don't match" };
+			print_sem(msg, 3);
+		}		break;
 	case TOKEN_REAL_NUMBER:
 		print_parser_rule("RETURN_STATEMENT_CLEAN -> EXPRESSION");
 		cur_token = back_token();
-		parse_expression();
-		break;
+		type = parse_expression();
+		if (entry != NULL && type != entry->type) {
+			char line[10];
+			itoa(cur_token->lineNumber, line, 10);
+			char *msg[3] = { "\tERROR line ", line, ": return type don't match" };
+			print_sem(msg, 3);
+		}		break;
 	case TOKEN_SEMICOLON:
 		print_parser_rule("RETURN_STATEMENT_CLEAN -> epsilon");
 		cur_token = back_token();
+		if (entry != NULL && type != entry->type) {
+			char line[10];
+			itoa(cur_token->lineNumber, line, 10);
+			char *msg[3] = { "\tERROR line ", line, ": return type don't match" };
+			print_sem(msg, 3);
+		}
 		break;
 	default:
 		error_recovery(RETURN_STATEMENT_CLEAN, expected, 4); /*print error and try to recover*/
@@ -694,7 +728,7 @@ int *parse_id_statment_clean(table_entry *entry) {
 	return ret;
 }
 
-void parse_block() { /*one case rule*/
+void parse_block(table_entry * entry) { /*one case rule*/
 	print_parser_rule("BLOCK -> { VAR_DEFINITIONS ; STATMENTS }");
 	match(TOKEN_OPEN_CURLY_PAR);
 
@@ -702,7 +736,7 @@ void parse_block() { /*one case rule*/
 
 	parse_var_definitions(NULL);
 	match(TOKEN_SEMICOLON);
-	parse_statments();
+	parse_statments(entry);
 	match(TOKEN_CLOSE_CURLY_PAR);
 
 	//cur_table = pop_table(cur_table, "BLOCK -> { VAR_DEFINITIONS ; STATMENTS }");

@@ -131,7 +131,7 @@ table_entry *find(table_ptr *current_table, char *id_name, int line, int use) {
 		id_entry = lookup(tab, id_name);
 		if (id_entry != NULL) {
 			if (use) {
-				use_id(tab, id_name);
+				id_entry = use_id(tab, id_name);
 			}
 			return (id_entry);
 		}
@@ -150,13 +150,15 @@ elm_type get_id_type(table_entry *id_entry) {
 	return id_entry->type;
 }
 
-void use_id(table_ptr *current_table, char *id_name) {
+table_entry *use_id(table_ptr *current_table, char *id_name) {
 	table_entry *tmp = NULL;
 	tmp = zhash_get(current_table->unused, id_name);
 	if (tmp != NULL) {
 		zhash_delete(current_table->unused, id_name);
 		zhash_set(cur_table->used, tmp->name, tmp);
+		return zhash_get(current_table->used, id_name);
 	}
+	return tmp;
 }
 
 int is_unused(table_ptr *current_table) {
