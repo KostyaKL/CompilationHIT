@@ -201,7 +201,7 @@ int parse_variable(elm_type type, table_entry *entry_func, int param_list, int i
 		}
 		if (entry_func == NULL) {
 			itoa(line_num, line, 10);
-			char *msg[3] = { "\tERROR line ", line, ": no definition for functoin " };
+			char *msg[3] = { "\tERROR line ", line, ": no definition for function " };
 			//print_sem(msg, 3);
 		}
 		else {
@@ -361,7 +361,7 @@ void parse_func_definition() {
 		if (entry != NULL && entry->return_type != NULL_type && ret == 0) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": return type don't match function: ", entry->name };
+			char *msg[4] = { "\tERROR line ", line, ": return type doesn't match function: ", entry->name };
 			print_sem(msg, 4);
 		}
 		break;
@@ -387,7 +387,7 @@ void parse_func_definition() {
 		if (entry != NULL && entry->return_type != NULL_type && ret == 0) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": return type don't match function: ", entry->name };
+			char *msg[4] = { "\tERROR line ", line, ": return type doesn't match function: ", entry->name };
 			print_sem(msg, 4);
 		}
 		break;
@@ -413,7 +413,7 @@ void parse_func_definition() {
 		if (entry != NULL && entry->return_type != NULL_type && ret == 0) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": return type don't match function: ", entry->name };
+			char *msg[4] = { "\tERROR line ", line, ": return type doesn't match function: ", entry->name };
 			print_sem(msg, 4);
 		}
 		break;
@@ -624,7 +624,7 @@ int parse_statment(table_entry *entry_func) {
 			else {
 				char line[10];
 				itoa(cur_token->lineNumber, line, 10);
-				char *msg[4] = { "\tERROR line ", line, ": expression don't match type of variable: ", entry->name };
+				char *msg[4] = { "\tERROR line ", line, ": expression doesn't match type of variable: ", entry->name };
 				print_sem(msg, 4);
 				//return NULL_type;
 			}
@@ -664,7 +664,7 @@ int parse_return_statment_clean(table_entry * entry) {
 		if (entry != NULL && type != entry->type && entry->return_type != NULL_type) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": return type don't match function: ", entry->name  };
+			char *msg[4] = { "\tERROR line ", line, ": return type doesn't match function: ", entry->name  };
 			print_sem(msg, 4);
 		}
 		break;
@@ -675,7 +675,7 @@ int parse_return_statment_clean(table_entry * entry) {
 		if (entry != NULL && type != entry->type && entry->return_type != NULL_type) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": return type don't match function: ", entry->name };
+			char *msg[4] = { "\tERROR line ", line, ": return type doesn't match function: ", entry->name };
 			print_sem(msg, 4);
 		}		break;
 	case TOKEN_REAL_NUMBER:
@@ -685,7 +685,7 @@ int parse_return_statment_clean(table_entry * entry) {
 		if (entry != NULL && type != entry->type && entry->return_type != NULL_type) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": return type don't match function: ", entry->name };
+			char *msg[4] = { "\tERROR line ", line, ": return type doesn't match function: ", entry->name };
 			print_sem(msg, 4);
 		}		break;
 	case TOKEN_SEMICOLON:
@@ -694,7 +694,7 @@ int parse_return_statment_clean(table_entry * entry) {
 		if (entry != NULL && type != entry->type && entry->return_type != NULL_type) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": return type don't match function: ", entry->name };
+			char *msg[4] = { "\tERROR line ", line, ": return type doesn't match function: ", entry->name };
 			print_sem(msg, 4);
 		}
 		break;
@@ -719,7 +719,7 @@ int *parse_id_statment_clean(table_entry *entry) {
 		if (entry != NULL && entry->is_function) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": illegal address as an array to function: ", entry->name };
+			char *msg[4] = { "\tERROR line ", line, ": illegal address as an array for function: ", entry->name };
 			print_sem(msg, 4);
 		}
 		cur_token = back_token();
@@ -742,7 +742,7 @@ int *parse_id_statment_clean(table_entry *entry) {
 		if (entry != NULL && entry->is_function) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": illegal asignment to function: ", entry->name };
+			char *msg[4] = { "\tERROR line ", line, ": illegal assignment for function: ", entry->name };
 			print_sem(msg, 4);
 		}
 		cur_token = back_token();
