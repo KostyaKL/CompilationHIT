@@ -27,8 +27,10 @@ void print_sem(char **msg, int num) {
 	fprintf(semantic_report, new_str);
 }
 
-table_ptr *make_table(table_ptr *current_table, char *rule) {
+table_ptr *make_table(table_ptr *current_table, int line) {
 	table_ptr *tmp;
+	char tmp_line[10];
+	char tmp_scope[10];
 
 	if (current_table == NULL) {
 		current_table = (table_ptr*)malloc(sizeof(table_ptr));
@@ -40,10 +42,12 @@ table_ptr *make_table(table_ptr *current_table, char *rule) {
 		current_table->father = NULL;
 		current_table->unused = zcreate_hash_table();
 		current_table->used = zcreate_hash_table();
+		current_table->scope_number = 0;
 
 		//zhash_set(current_table->unused, "0", NULL);
-
-		char *msg[2] = { "new scope ", rule };
+		
+		itoa(line, tmp_line, 10);
+		char *msg[2] = { "start global scope at line: ", tmp_line };
 		print_sem(msg, 2);
 		
 		return current_table;
@@ -58,16 +62,19 @@ table_ptr *make_table(table_ptr *current_table, char *rule) {
 	tmp->father = current_table;
 	tmp->unused = zcreate_hash_table();
 	tmp->used = zcreate_hash_table();
+	tmp->scope_number = current_table->scope_number + 1;
 
 	//zhash_set(tmp->unused, "0", NULL);
 
-	char *msg[2] = { "new scope ", rule };
-	print_sem(msg, 2);
+	itoa(line, tmp_line, 10);
+	itoa(tmp->scope_number, tmp_scope, 10);
+	char *msg[4] = { "start scope number: ", tmp_scope," at line: ", tmp_line };
+	print_sem(msg, 4);
 
 	return tmp;
 }
 
-table_ptr *pop_table(table_ptr *current_table, char *rule) {
+table_ptr *pop_table(table_ptr *current_table, int line) {
 	table_ptr *tmp;
 	int is_unused_exist = is_unused(current_table);
 	if (is_unused_exist) {
@@ -77,11 +84,22 @@ table_ptr *pop_table(table_ptr *current_table, char *rule) {
 	//free(current_table->entry); //free entry data structure????
 								//free hash table?
 	tmp = current_table->father;
+
+	if (tmp != NULL && current_table->scope_number) {
+		char tmp_line[10];
+		char tmp_scope[10];
+		itoa(line, tmp_line, 10);
+		itoa(current_table->scope_number, tmp_scope, 10);
+		char *msg[4] = { "end scope number: ", tmp_scope," at line: ", tmp_line };
+		print_sem(msg, 4);
+	}
+	else {
+		char tmp_line[10];
+		itoa(line, tmp_line, 10);
+		char *msg[2] = { "end global scope at line: ", tmp_line };
+		print_sem(msg, 2);
+	}
 	free(current_table);
-
-	char *msg[2] = { "end scope ", rule };
-	print_sem(msg, 2);
-
 	return tmp;
 }
 
@@ -156,9 +174,8 @@ table_entry *use_id(table_ptr *current_table, char *id_name) {
 	if (tmp != NULL) {
 		zhash_delete(current_table->unused, id_name);
 		zhash_set(cur_table->used, tmp->name, tmp);
-		return zhash_get(current_table->used, id_name);
 	}
-	return tmp;
+	return zhash_get(current_table->used, id_name);
 }
 
 int is_unused(table_ptr *current_table) {

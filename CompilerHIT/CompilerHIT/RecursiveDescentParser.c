@@ -8,26 +8,26 @@ void parser() { /*main parser methond*/
 void parse_program() { /*one case rule*/
 	print_parser_rule("PROGRAM -> program VAR_DEFINITIONS ; STATMENTS end FUNC_DEFINITIONS");
 
-	cur_table = make_table(cur_table, "GLOBAL");
+	cur_table = make_table(cur_table, 1);
 
 	match(TOKEN_PROGRAM);
 
-	cur_table = make_table(cur_table, "PROGRAM -> program VAR_DEFINITIONS ; STATMENTS end");
+	cur_table = make_table(cur_table, cur_token->lineNumber);
 
 	parse_var_definitions(NULL);
 	match(TOKEN_SEMICOLON);
 	parse_statments(NULL);
 	match(TOKEN_END);
 
-	cur_table = pop_table(cur_table, "PROGRAM -> program VAR_DEFINITIONS ; STATMENTS end");
+	cur_table = pop_table(cur_table, cur_token->lineNumber);
 
-	cur_table = make_table(cur_table, "FUNC_DEFINITIONS");
+	cur_table = make_table(cur_table, cur_token->lineNumber);
 
 	parse_func_definitions();
 
-	cur_table = pop_table(cur_table, "FUNC_DEFINITIONS");
+	cur_table = pop_table(cur_table, cur_token->lineNumber);
 
-	cur_table = pop_table(cur_table, "GLOBAL");
+	cur_table = pop_table(cur_table, cur_token->lineNumber);
 }
 
 void parse_var_definitions(table_entry *entry) {
@@ -351,7 +351,7 @@ void parse_func_definition() {
 				entry->parameters_list = zcreate_hash_table();
 				entry->type = type;
 				entry->return_type = type;
-				cur_table = make_table(cur_table, "FUNC_DEFINITION -> RETURNED_TYPE id ( PARAM_DEFINITIONS ) BLOCK");
+				cur_table = make_table(cur_table, cur_token->lineNumber);
 			}
 		}
 		match(TOKEN_OPEN_CIRCULAR_PAR);
@@ -377,7 +377,7 @@ void parse_func_definition() {
 				entry->parameters_list = zcreate_hash_table();
 				entry->type = type;
 				entry->return_type = type;
-				cur_table = make_table(cur_table, "FUNC_DEFINITION -> RETURNED_TYPE id ( PARAM_DEFINITIONS ) BLOCK");
+				cur_table = make_table(cur_table, cur_token->lineNumber);
 			}
 		}
 		match(TOKEN_OPEN_CIRCULAR_PAR);
@@ -403,7 +403,7 @@ void parse_func_definition() {
 				entry->parameters_list = zcreate_hash_table();
 				entry->type = type;
 				entry->return_type = type;
-				cur_table = make_table(cur_table, "FUNC_DEFINITION -> RETURNED_TYPE id ( PARAM_DEFINITIONS ) BLOCK");
+				cur_table = make_table(cur_table, cur_token->lineNumber);
 			}
 		}
 		match(TOKEN_OPEN_CIRCULAR_PAR);
@@ -423,7 +423,7 @@ void parse_func_definition() {
 	}
 
 	if (entry != NULL) {
-		cur_table = pop_table(cur_table, "FUNC_DEFINITION -> RETURNED_TYPE id ( PARAM_DEFINITIONS ) BLOCK");
+		cur_table = pop_table(cur_table, cur_token->lineNumber);
 		set_id_type(entry, type);
 		char noa[2] = { (char)(entry->num_of_parameters + 48) , '\0' };
 		char *msg[6] = { "\ttype: ", getTypeName(type), " id: ", entry->name, " num of arg: ", noa };
@@ -591,7 +591,7 @@ int parse_statment(table_entry *entry_func) {
 		if (entry == NULL) {
 			return 0;
 		}
-		else if (statment[2]){
+		else if (statment[2] == 1){
 			id_type = get_id_type(entry);
 			if (entry->size > 0 && statment[0] == -1) {
 				char line[10];
@@ -611,7 +611,7 @@ int parse_statment(table_entry *entry_func) {
 				//error bad type of elements
 				char line[10];
 				itoa(cur_token->lineNumber, line, 10);
-				char *msg[3] = { "\tERROR line ", line, ": on or more elements with no defined type" };
+				char *msg[3] = { "\tERROR line ", line, ": one or more elements with no defined type" };
 				print_sem(msg, 3);
 				//return NULL_type;
 			}
@@ -638,11 +638,11 @@ int parse_statment(table_entry *entry_func) {
 		print_parser_rule("STATEMENT -> BLOCK");
 		cur_token = back_token();
 
-		cur_table = make_table(cur_table, "STATEMENT -> BLOCK");
+		cur_table = make_table(cur_table, cur_token->lineNumber);
 
 		parse_block(entry_func);
 
-		cur_table = pop_table(cur_table, "STATEMENT -> BLOCK");
+		cur_table = pop_table(cur_table, cur_token->lineNumber);
 		break;
 	default:
 		error_recovery(STATEMENT, expected, 3); /*print error and try to recover*/
@@ -717,7 +717,7 @@ int *parse_id_statment_clean(table_entry *entry) {
 	case TOKEN_OPEN_SQUER_PAR:
 		print_parser_rule("ID_STATEMENT_CLEAN -> VARIABLE_CLEAN = EXPRESSION");
 		cur_token = back_token();
-		if (entry != NULL) {
+		if (entry != NULL && entry->is_function) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
 			char *msg[3] = { "\tERROR line ", line, ": illegal address to function as an array" };

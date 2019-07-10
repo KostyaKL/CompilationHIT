@@ -40,6 +40,7 @@ typedef struct table_ptr
 	struct table_ptr *father;
 	ZHashTable *used;
 	ZHashTable *unused;
+	int scope_number;
 } table_ptr;
 
 char *getTypeName(elm_type type);
@@ -48,9 +49,9 @@ void print_sem(char **msg, int num);
 
 table_ptr *cur_table;
 
-table_ptr *make_table(table_ptr *current_table, char *rule);
+table_ptr *make_table(table_ptr *current_table, int line);
 
-table_ptr *pop_table(table_ptr *current_table, char *rule);
+table_ptr *pop_table(table_ptr *current_table, int line);
 
 table_entry *insert(table_ptr *current_table, char *id_name, int line);
 
