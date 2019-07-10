@@ -41,7 +41,7 @@ table_ptr *make_table(table_ptr *current_table, char *rule) {
 		current_table->unused = zcreate_hash_table();
 		current_table->used = zcreate_hash_table();
 
-		zhash_set(current_table->unused, "0", NULL);
+		//zhash_set(current_table->unused, "0", NULL);
 
 		char *msg[2] = { "new scope ", rule };
 		print_sem(msg, 2);
@@ -59,7 +59,7 @@ table_ptr *make_table(table_ptr *current_table, char *rule) {
 	tmp->unused = zcreate_hash_table();
 	tmp->used = zcreate_hash_table();
 
-	zhash_set(tmp->unused, "0", NULL);
+	//zhash_set(tmp->unused, "0", NULL);
 
 	char *msg[2] = { "new scope ", rule };
 	print_sem(msg, 2);
@@ -162,20 +162,20 @@ table_entry *use_id(table_ptr *current_table, char *id_name) {
 }
 
 int is_unused(table_ptr *current_table) {
-	if (current_table->unused->entry_count == 1) {
+	if (current_table->unused->entry_count == 0) {
 		return 0;
 	}
 	return 1;
 }
 
 void print_unused(table_ptr *current_table) {
-	size_t hash;
-	struct ZHashEntry *entry;
+	//size_t hash;
+	//struct ZHashEntry *entry;
 
-	hash = zgenerate_hash(current_table->unused, "0");
-	entry = current_table->unused->entries[hash];
+	//hash = zgenerate_hash(current_table->unused, "0");
+	//entry = current_table->unused->entries[hash];
 
-	fprintf(semantic_report, "\tthere is %d unsused idss and %d used ids\n", current_table->unused->entry_count, current_table->used->entry_count );
+	fprintf(semantic_report, "\tthere is %d unsused ids and %d used ids\n", current_table->unused->entry_count, current_table->used->entry_count );
 	/*while (entry) {
 		fprintf(semantic_report, "\t\t%s\n", ((table_entry*)entry)->name);
 		entry = entry->next;
