@@ -37,7 +37,7 @@ typedef enum eVARIABLE /*enum for each variable in grammar*/
 /*explained in RecursiveDescentParser.c*/
 void parser();
 
-void parse_block(table_entry *entry);
+int parse_block(table_entry *entry);
 elm_type parse_expression();
 elm_type parse_expression_clean();
 void parse_func_definition();

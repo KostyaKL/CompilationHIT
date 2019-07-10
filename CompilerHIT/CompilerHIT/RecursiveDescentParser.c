@@ -331,6 +331,7 @@ void parse_func_definitions_celan() {
 }
 
 void parse_func_definition() {
+	int ret;
 	cur_token = next_token();
 	eTOKENS expected[3] = { TOKEN_REAL, TOKEN_INTEGER, TOKEN_VOID }; /*expected tokens for error printing purpose*/
 	elm_type type;
@@ -356,7 +357,13 @@ void parse_func_definition() {
 		match(TOKEN_OPEN_CIRCULAR_PAR);
 		parse_param_definitions(entry);
 		match(TOKEN_CLOSE_CIRCULAR_PAR);
-		parse_block(entry);
+		ret = parse_block(entry);
+		if (entry != NULL && entry->return_type != NULL_type && ret == 0) {
+			char line[10];
+			itoa(cur_token->lineNumber, line, 10);
+			char *msg[3] = { "\tERROR line ", line, ": return type don't match" };
+			print_sem(msg, 3);
+		}
 		break;
 	case TOKEN_INTEGER:
 		print_parser_rule("FUNC_DEFINITION -> RETURNED_TYPE id ( PARAM_DEFINITIONS ) BLOCK");
@@ -376,7 +383,13 @@ void parse_func_definition() {
 		match(TOKEN_OPEN_CIRCULAR_PAR);
 		parse_param_definitions(entry);
 		match(TOKEN_CLOSE_CIRCULAR_PAR);
-		parse_block(entry);
+		ret = parse_block(entry);
+		if (entry != NULL && entry->return_type != NULL_type && ret == 0) {
+			char line[10];
+			itoa(cur_token->lineNumber, line, 10);
+			char *msg[3] = { "\tERROR line ", line, ": return type don't match" };
+			print_sem(msg, 3);
+		}
 		break;
 	case TOKEN_VOID:
 		print_parser_rule("FUNC_DEFINITION -> RETURNED_TYPE id ( PARAM_DEFINITIONS ) BLOCK");
@@ -396,7 +409,13 @@ void parse_func_definition() {
 		match(TOKEN_OPEN_CIRCULAR_PAR);
 		parse_param_definitions(entry);
 		match(TOKEN_CLOSE_CIRCULAR_PAR);
-		parse_block(entry);
+		ret = parse_block(entry);
+		if (entry != NULL && entry->return_type != NULL_type && ret == 0) {
+			char line[10];
+			itoa(cur_token->lineNumber, line, 10);
+			char *msg[3] = { "\tERROR line ", line, ": return type don't match" };
+			print_sem(msg, 3);
+		}
 		break;
 	default:
 		error_recovery(FUNC_DEFINITION, expected, 3); /*print error and try to recover*/
@@ -568,7 +587,7 @@ int parse_statment(table_entry *entry_func) {
 			entry = find(cur_table, cur_token->lexeme, cur_token->lineNumber, 1);
 		}
 		toke_not_found = cur_token->lexeme;
-		statment = parse_id_statment_clean(entry);
+		statment = parse_id_statment_clean(entry_func);
 		if (entry == NULL) {
 			return 0;
 		}
@@ -698,6 +717,12 @@ int *parse_id_statment_clean(table_entry *entry) {
 	case TOKEN_OPEN_SQUER_PAR:
 		print_parser_rule("ID_STATEMENT_CLEAN -> VARIABLE_CLEAN = EXPRESSION");
 		cur_token = back_token();
+		if (entry != NULL) {
+			char line[10];
+			itoa(cur_token->lineNumber, line, 10);
+			char *msg[3] = { "\tERROR line ", line, ": illegal address to function as an array" };
+			print_sem(msg, 3);
+		}
 		var_c_type = parse_variable_clean();
 		if (var_c_type) {
 			var_c_type -= 10;
@@ -715,6 +740,12 @@ int *parse_id_statment_clean(table_entry *entry) {
 	case TOKEN_ASSIGNMENT:
 		print_parser_rule("ID_STATEMENT_CLEAN -> VARIABLE_CLEAN = EXPRESSION");
 		cur_token = back_token();
+		if (entry != NULL) {
+			char line[10];
+			itoa(cur_token->lineNumber, line, 10);
+			char *msg[3] = { "\tERROR line ", line, ": illegal asignment to function" };
+			print_sem(msg, 3);
+		}
 		var_c_type = parse_variable_clean();
 		if (var_c_type) {
 			var_c_type -= 10;
@@ -752,20 +783,21 @@ int *parse_id_statment_clean(table_entry *entry) {
 	return ret;
 }
 
-void parse_block(table_entry * entry) { /*one case rule*/
-	int ret;
+int parse_block(table_entry * entry) { /*one case rule*/
+	int ret = 0;
 	print_parser_rule("BLOCK -> { VAR_DEFINITIONS ; STATMENTS }");
 	match(TOKEN_OPEN_CURLY_PAR);
 	parse_var_definitions(NULL);
 	match(TOKEN_SEMICOLON);
 	ret = parse_statments(entry);
 	match(TOKEN_CLOSE_CURLY_PAR);
-	if (entry != NULL && entry->return_type != NULL_type && ret == 0) {
+	/*if (entry != NULL && entry->return_type != NULL_type && ret == 0) {
 		char line[10];
 		itoa(cur_token->lineNumber, line, 10);
 		char *msg[3] = { "\tERROR line ", line, ": return type don't match" };
 		print_sem(msg, 3);
-	}
+	}*/
+	return ret;
 }
 
 int parse_parameters_list(table_entry *entry) {
