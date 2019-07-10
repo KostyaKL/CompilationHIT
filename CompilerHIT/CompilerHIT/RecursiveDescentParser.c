@@ -351,6 +351,7 @@ void parse_func_definition() {
 				entry->parameters_list = zcreate_hash_table();
 				entry->type = type;
 				entry->return_type = type;
+				use_id(cur_table, entry->name);
 				cur_table = make_table(cur_table, cur_token->lineNumber);
 			}
 		}
@@ -377,6 +378,7 @@ void parse_func_definition() {
 				entry->parameters_list = zcreate_hash_table();
 				entry->type = type;
 				entry->return_type = type;
+				use_id(cur_table, entry->name);
 				cur_table = make_table(cur_table, cur_token->lineNumber);
 			}
 		}
@@ -403,6 +405,7 @@ void parse_func_definition() {
 				entry->parameters_list = zcreate_hash_table();
 				entry->type = type;
 				entry->return_type = type;
+				use_id(cur_table, entry->name);
 				cur_table = make_table(cur_table, cur_token->lineNumber);
 			}
 		}

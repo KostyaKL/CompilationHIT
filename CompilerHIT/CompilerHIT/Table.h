@@ -16,6 +16,11 @@ typedef enum elm_type
 	INDEX
 } elm_type;
 
+typedef struct ids_list{
+	struct ids_list *prev;
+	char *id;
+}ids_list;
+
 typedef struct table_entry {
 	//scope table parameters
 
@@ -32,6 +37,7 @@ typedef struct table_entry {
 	//settings
 	int is_function;
 	int param_num;
+	int line_number;
 
 } table_entry;
 
@@ -40,6 +46,7 @@ typedef struct table_ptr
 	struct table_ptr *father;
 	ZHashTable *used;
 	ZHashTable *unused;
+	ids_list *ids;
 	int scope_number;
 } table_ptr;
 

@@ -43,6 +43,9 @@ table_ptr *make_table(table_ptr *current_table, int line) {
 		current_table->unused = zcreate_hash_table();
 		current_table->used = zcreate_hash_table();
 		current_table->scope_number = 0;
+		current_table->ids = (ids_list*)malloc(sizeof(ids_list));
+		current_table->ids->prev = NULL;
+		current_table->ids->id = NULL;
 
 		//zhash_set(current_table->unused, "0", NULL);
 		
@@ -63,6 +66,9 @@ table_ptr *make_table(table_ptr *current_table, int line) {
 	tmp->unused = zcreate_hash_table();
 	tmp->used = zcreate_hash_table();
 	tmp->scope_number = current_table->scope_number + 1;
+	tmp->ids = (ids_list*)malloc(sizeof(ids_list));
+	tmp->ids->prev = NULL;
+	tmp->ids->id = NULL;
 
 	//zhash_set(tmp->unused, "0", NULL);
 
@@ -125,7 +131,14 @@ table_entry *insert(table_ptr *current_table, char *id_name, int line) {
 	new_entry->size = 0;
 	new_entry->type = NULL_type;
 	new_entry->param_num = 0;
+	new_entry->line_number = line;
 
+	current_table->ids->id = (char*)calloc(sizeof(char),strlen(id_name));
+	strcat(current_table->ids->id, id_name);
+	ids_list *tmp = (ids_list*)malloc(sizeof(ids_list));
+	tmp->prev = current_table->ids;
+	tmp->id = NULL;
+	current_table->ids = tmp;
 	zhash_set(current_table->unused, id_name, new_entry);
 
 	return new_entry;
@@ -196,17 +209,18 @@ int is_unused(table_ptr *current_table) {
 }
 
 void print_unused(table_ptr *current_table) {
-	//size_t hash;
-	//struct ZHashEntry *entry;
-
-	//hash = zgenerate_hash(current_table->unused, "0");
-	//entry = current_table->unused->entries[hash];
-
-	fprintf(semantic_report, "\tERROR scope %d: there is %d unsused ids and %d used ids\n", current_table->scope_number, current_table->unused->entry_count, current_table->used->entry_count );
-	/*while (entry) {
-		fprintf(semantic_report, "\t\t%s\n", ((table_entry*)entry)->name);
-		entry = entry->next;
-	}*/
+	table_entry *entry = NULL;
+	fprintf(semantic_report, "\tERROR scope %d: there is %d unsused ids:\n", current_table->scope_number, current_table->unused->entry_count );
+	
+	ids_list *tmp = current_table->ids;
+	while (tmp != NULL) {
+		if(tmp->id != NULL)
+		entry = zhash_get(current_table->unused, tmp->id);
+		if (entry != NULL) {
+			fprintf(semantic_report, "\t\tline: %d, id: %s\n", entry->line_number, entry->name);
+		}
+		tmp = tmp->prev;
+	}
 }
 
 void reset_table() {
