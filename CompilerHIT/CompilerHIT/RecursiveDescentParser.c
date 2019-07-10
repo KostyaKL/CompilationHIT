@@ -180,7 +180,7 @@ int parse_variable(elm_type type, table_entry *entry_func, int param_list, int i
 		char tmp[10];
 		itoa(size, tmp, 10);
 		char *msg[6] = { "\ttype: ", getTypeName(type), " id: ", entry->name, " size: ", tmp };
-		print_sem(msg, 6);
+		//print_sem(msg, 6);
 
 		//func argument
 		if (entry_func != NULL) {
@@ -361,8 +361,8 @@ void parse_func_definition() {
 		if (entry != NULL && entry->return_type != NULL_type && ret == 0) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[3] = { "\tERROR line ", line, ": return type don't match" };
-			print_sem(msg, 3);
+			char *msg[4] = { "\tERROR line ", line, ": return type don't match function: ", entry->name };
+			print_sem(msg, 4);
 		}
 		break;
 	case TOKEN_INTEGER:
@@ -387,8 +387,8 @@ void parse_func_definition() {
 		if (entry != NULL && entry->return_type != NULL_type && ret == 0) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[3] = { "\tERROR line ", line, ": return type don't match" };
-			print_sem(msg, 3);
+			char *msg[4] = { "\tERROR line ", line, ": return type don't match function: ", entry->name };
+			print_sem(msg, 4);
 		}
 		break;
 	case TOKEN_VOID:
@@ -413,8 +413,8 @@ void parse_func_definition() {
 		if (entry != NULL && entry->return_type != NULL_type && ret == 0) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[3] = { "\tERROR line ", line, ": return type don't match" };
-			print_sem(msg, 3);
+			char *msg[4] = { "\tERROR line ", line, ": return type don't match function: ", entry->name };
+			print_sem(msg, 4);
 		}
 		break;
 	default:
@@ -427,7 +427,7 @@ void parse_func_definition() {
 		set_id_type(entry, type);
 		char noa[2] = { (char)(entry->num_of_parameters + 48) , '\0' };
 		char *msg[6] = { "\ttype: ", getTypeName(type), " id: ", entry->name, " num of arg: ", noa };
-		print_sem(msg, 6);
+		//print_sem(msg, 6);
 		
 	}
 }
@@ -624,8 +624,8 @@ int parse_statment(table_entry *entry_func) {
 			else {
 				char line[10];
 				itoa(cur_token->lineNumber, line, 10);
-				char *msg[3] = { "\tERROR line ", line, ": expression don't match variable type" };
-				print_sem(msg, 3);
+				char *msg[4] = { "\tERROR line ", line, ": expression don't match type of variable: ", entry->name };
+				print_sem(msg, 4);
 				//return NULL_type;
 			}
 		}
@@ -661,41 +661,41 @@ int parse_return_statment_clean(table_entry * entry) {
 		print_parser_rule("RETURN_STATEMENT_CLEAN -> EXPRESSION");
 		cur_token = back_token();
 		type = parse_expression();
-		if (entry != NULL && type != entry->type) {
+		if (entry != NULL && type != entry->type && entry->return_type != NULL_type) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[3] = { "\tERROR line ", line, ": return type don't match"  };
-			print_sem(msg, 3);
+			char *msg[4] = { "\tERROR line ", line, ": return type don't match function: ", entry->name  };
+			print_sem(msg, 4);
 		}
 		break;
 	case TOKEN_INT_NUMBER:
 		print_parser_rule("RETURN_STATEMENT_CLEAN -> EXPRESSION");
 		cur_token = back_token();
 		type = parse_expression();
-		if (entry != NULL && type != entry->type) {
+		if (entry != NULL && type != entry->type && entry->return_type != NULL_type) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[3] = { "\tERROR line ", line, ": return type don't match" };
-			print_sem(msg, 3);
+			char *msg[4] = { "\tERROR line ", line, ": return type don't match function: ", entry->name };
+			print_sem(msg, 4);
 		}		break;
 	case TOKEN_REAL_NUMBER:
 		print_parser_rule("RETURN_STATEMENT_CLEAN -> EXPRESSION");
 		cur_token = back_token();
 		type = parse_expression();
-		if (entry != NULL && type != entry->type) {
+		if (entry != NULL && type != entry->type && entry->return_type != NULL_type) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[3] = { "\tERROR line ", line, ": return type don't match" };
-			print_sem(msg, 3);
+			char *msg[4] = { "\tERROR line ", line, ": return type don't match function: ", entry->name };
+			print_sem(msg, 4);
 		}		break;
 	case TOKEN_SEMICOLON:
 		print_parser_rule("RETURN_STATEMENT_CLEAN -> epsilon");
 		cur_token = back_token();
-		if (entry != NULL && type != entry->type) {
+		if (entry != NULL && type != entry->type && entry->return_type != NULL_type) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[3] = { "\tERROR line ", line, ": return type don't match" };
-			print_sem(msg, 3);
+			char *msg[4] = { "\tERROR line ", line, ": return type don't match function: ", entry->name };
+			print_sem(msg, 4);
 		}
 		break;
 	default:
@@ -716,13 +716,13 @@ int *parse_id_statment_clean(table_entry *entry) {
 	{
 	case TOKEN_OPEN_SQUER_PAR:
 		print_parser_rule("ID_STATEMENT_CLEAN -> VARIABLE_CLEAN = EXPRESSION");
-		cur_token = back_token();
 		if (entry != NULL && entry->is_function) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[3] = { "\tERROR line ", line, ": illegal address to function as an array" };
-			print_sem(msg, 3);
+			char *msg[4] = { "\tERROR line ", line, ": illegal address as an array to function: ", entry->name };
+			print_sem(msg, 4);
 		}
+		cur_token = back_token();
 		var_c_type = parse_variable_clean();
 		if (var_c_type) {
 			var_c_type -= 10;
@@ -739,13 +739,13 @@ int *parse_id_statment_clean(table_entry *entry) {
 		break;
 	case TOKEN_ASSIGNMENT:
 		print_parser_rule("ID_STATEMENT_CLEAN -> VARIABLE_CLEAN = EXPRESSION");
-		cur_token = back_token();
-		if (entry != NULL) {
+		if (entry != NULL && entry->is_function) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[3] = { "\tERROR line ", line, ": illegal asignment to function" };
-			print_sem(msg, 3);
+			char *msg[4] = { "\tERROR line ", line, ": illegal asignment to function: ", entry->name };
+			print_sem(msg, 4);
 		}
+		cur_token = back_token();
 		var_c_type = parse_variable_clean();
 		if (var_c_type) {
 			var_c_type -= 10;

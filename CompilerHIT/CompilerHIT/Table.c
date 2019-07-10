@@ -122,11 +122,11 @@ table_entry *insert(table_ptr *current_table, char *id_name, int line) {
 	new_entry->num_of_parameters = 0;
 	new_entry->parameters_list = NULL;
 	new_entry->return_type = NULL_type;
-	new_entry->size = 1;
+	new_entry->size = 0;
 	new_entry->type = NULL_type;
 	new_entry->param_num = 0;
 
-	zhash_set(cur_table->unused, id_name, new_entry);
+	zhash_set(current_table->unused, id_name, new_entry);
 
 	return new_entry;
 }
@@ -170,10 +170,20 @@ elm_type get_id_type(table_entry *id_entry) {
 
 table_entry *use_id(table_ptr *current_table, char *id_name) {
 	table_entry *tmp = NULL;
+	table_entry *new_entry = NULL;
 	tmp = zhash_get(current_table->unused, id_name);
 	if (tmp != NULL) {
+		new_entry = (table_entry*)malloc(sizeof(table_entry));
+		new_entry->is_function = tmp->is_function;
+		new_entry->name = tmp->name;
+		new_entry->num_of_parameters = tmp->num_of_parameters;
+		new_entry->parameters_list = tmp->parameters_list;
+		new_entry->param_num = tmp->param_num;
+		new_entry->return_type = tmp->return_type;
+		new_entry->size = tmp->size;
+		new_entry->type = tmp->type;
+		zhash_set(current_table->used, new_entry->name, new_entry);
 		zhash_delete(current_table->unused, id_name);
-		zhash_set(cur_table->used, tmp->name, tmp);
 	}
 	return zhash_get(current_table->used, id_name);
 }
@@ -192,7 +202,7 @@ void print_unused(table_ptr *current_table) {
 	//hash = zgenerate_hash(current_table->unused, "0");
 	//entry = current_table->unused->entries[hash];
 
-	fprintf(semantic_report, "\tthere is %d unsused ids and %d used ids\n", current_table->unused->entry_count, current_table->used->entry_count );
+	fprintf(semantic_report, "\tERROR scope %d: there is %d unsused ids and %d used ids\n", current_table->scope_number, current_table->unused->entry_count, current_table->used->entry_count );
 	/*while (entry) {
 		fprintf(semantic_report, "\t\t%s\n", ((table_entry*)entry)->name);
 		entry = entry->next;
