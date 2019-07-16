@@ -213,7 +213,7 @@ int parse_variable(elm_type type, table_entry *entry_func, int param_list, int i
 				char *msg[3] = { "\tERROR line ", line, ": wrong number of parameters" };
 				print_sem(msg, 3);
 			}
-			else if (defined->type != entry->type) {
+			else if (defined != NULL && defined->type != entry->type) {
 				itoa(line_num, line, 10);
 				char *msg[3] = { "\tERROR line ", line, ": wrong argument type" };
 				print_sem(msg, 3);

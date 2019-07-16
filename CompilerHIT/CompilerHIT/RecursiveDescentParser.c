@@ -196,12 +196,12 @@ int parse_variable(elm_type type, table_entry *entry_func, int param_list, int i
 		entry = find(cur_table, id, line_num, 1);
 		if (entry == NULL) {
 			itoa(line_num, line, 10);
-			char *msg[5] = { "\tERROR line ", line, ": no definition for id: ", id, " in function" };
+			char *msg[5] = { "ERROR line ", line, ": no definition for id: ", id, " in function" };
 			print_sem(msg, 5);
 		}
 		if (entry_func == NULL) {
 			itoa(line_num, line, 10);
-			char *msg[3] = { "\tERROR line ", line, ": no definition for function " };
+			char *msg[3] = { "ERROR line ", line, ": no definition for function " };
 			//print_sem(msg, 3);
 		}
 		else {
@@ -210,12 +210,12 @@ int parse_variable(elm_type type, table_entry *entry_func, int param_list, int i
 			defined = zhash_get(entry_func->parameters_list, tmp);
 			if (index + 1 > entry_func->num_of_parameters) {
 				itoa(line_num, line, 10);
-				char *msg[3] = { "\tERROR line ", line, ": wrong number of parameters" };
+				char *msg[3] = { "ERROR line ", line, ": wrong number of parameters" };
 				print_sem(msg, 3);
 			}
-			else if (defined->type != entry->type) {
+			else if (defined != NULL && defined->type != entry->type) {
 				itoa(line_num, line, 10);
-				char *msg[3] = { "\tERROR line ", line, ": wrong argument type" };
+				char *msg[3] = { "ERROR line ", line, ": wrong argument type" };
 				print_sem(msg, 3);
 			}
 		}
@@ -362,7 +362,7 @@ void parse_func_definition() {
 		if (entry != NULL && entry->return_type != NULL_type && ret == 0) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": return type doesn't match function: ", entry->name };
+			char *msg[4] = { "ERROR line ", line, ": return type doesn't match function: ", entry->name };
 			print_sem(msg, 4);
 		}
 		break;
@@ -389,7 +389,7 @@ void parse_func_definition() {
 		if (entry != NULL && entry->return_type != NULL_type && ret == 0) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": return type doesn't match function: ", entry->name };
+			char *msg[4] = { "ERROR line ", line, ": return type doesn't match function: ", entry->name };
 			print_sem(msg, 4);
 		}
 		break;
@@ -416,7 +416,7 @@ void parse_func_definition() {
 		if (entry != NULL && entry->return_type != NULL_type && ret == 0) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": return type doesn't match function: ", entry->name };
+			char *msg[4] = { "ERROR line ", line, ": return type doesn't match function: ", entry->name };
 			print_sem(msg, 4);
 		}
 		break;
@@ -429,7 +429,7 @@ void parse_func_definition() {
 		cur_table = pop_table(cur_table, cur_token->lineNumber);
 		set_id_type(entry, type);
 		char noa[2] = { (char)(entry->num_of_parameters + 48) , '\0' };
-		char *msg[6] = { "\ttype: ", getTypeName(type), " id: ", entry->name, " num of arg: ", noa };
+		char *msg[6] = { "type: ", getTypeName(type), " id: ", entry->name, " num of arg: ", noa };
 		//print_sem(msg, 6);
 		
 	}
@@ -599,14 +599,14 @@ int parse_statment(table_entry *entry_func) {
 			if (entry->size > 0 && statment[0] == -1) {
 				char line[10];
 				itoa(cur_token->lineNumber, line, 10);
-				char *msg[4] = { "\tERROR line ", line, ": no index for array: ", entry->name };
+				char *msg[4] = { "ERROR line ", line, ": no index for array: ", entry->name };
 				print_sem(msg, 4);
 				//return id_type;
 			}
 			else if (entry->size > 0 && (statment[0] < 0 || statment[0] >= entry->size)) {
 				char line[10];
 				itoa(cur_token->lineNumber, line, 10);
-				char *msg[4] = { "\tERROR line ", line, ": index out of range for array: ", entry->name };
+				char *msg[4] = { "ERROR line ", line, ": index out of range for array: ", entry->name };
 				print_sem(msg, 4);
 				//return id_type;
 			}
@@ -614,7 +614,7 @@ int parse_statment(table_entry *entry_func) {
 				//error bad type of elements
 				char line[10];
 				itoa(cur_token->lineNumber, line, 10);
-				char *msg[3] = { "\tERROR line ", line, ": one or more elements with no defined type" };
+				char *msg[3] = { "ERROR line ", line, ": one or more elements with no defined type" };
 				print_sem(msg, 3);
 				//return NULL_type;
 			}
@@ -627,7 +627,7 @@ int parse_statment(table_entry *entry_func) {
 			else {
 				char line[10];
 				itoa(cur_token->lineNumber, line, 10);
-				char *msg[4] = { "\tERROR line ", line, ": expression doesn't match type of variable: ", entry->name };
+				char *msg[4] = { "ERROR line ", line, ": expression doesn't match type of variable: ", entry->name };
 				print_sem(msg, 4);
 				//return NULL_type;
 			}
@@ -667,7 +667,7 @@ int parse_return_statment_clean(table_entry * entry) {
 		if (entry != NULL && type != entry->type && entry->return_type != NULL_type) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": return type doesn't match function: ", entry->name  };
+			char *msg[4] = { "ERROR line ", line, ": return type doesn't match function: ", entry->name  };
 			print_sem(msg, 4);
 		}
 		break;
@@ -678,7 +678,7 @@ int parse_return_statment_clean(table_entry * entry) {
 		if (entry != NULL && type != entry->type && entry->return_type != NULL_type) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": return type doesn't match function: ", entry->name };
+			char *msg[4] = { "ERROR line ", line, ": return type doesn't match function: ", entry->name };
 			print_sem(msg, 4);
 		}		break;
 	case TOKEN_REAL_NUMBER:
@@ -688,7 +688,7 @@ int parse_return_statment_clean(table_entry * entry) {
 		if (entry != NULL && type != entry->type && entry->return_type != NULL_type) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": return type doesn't match function: ", entry->name };
+			char *msg[4] = { "ERROR line ", line, ": return type doesn't match function: ", entry->name };
 			print_sem(msg, 4);
 		}		break;
 	case TOKEN_SEMICOLON:
@@ -697,7 +697,7 @@ int parse_return_statment_clean(table_entry * entry) {
 		if (entry != NULL && type != entry->type && entry->return_type != NULL_type) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": return type doesn't match function: ", entry->name };
+			char *msg[4] = { "ERROR line ", line, ": return type doesn't match function: ", entry->name };
 			print_sem(msg, 4);
 		}
 		break;
@@ -722,7 +722,7 @@ int *parse_id_statment_clean(table_entry *entry) {
 		if (entry != NULL && entry->is_function) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": illegal address as an array for function: ", entry->name };
+			char *msg[4] = { "ERROR line ", line, ": illegal address as an array for function: ", entry->name };
 			print_sem(msg, 4);
 		}
 		cur_token = back_token();
@@ -745,7 +745,7 @@ int *parse_id_statment_clean(table_entry *entry) {
 		if (entry != NULL && entry->is_function) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[4] = { "\tERROR line ", line, ": illegal assignment for function: ", entry->name };
+			char *msg[4] = { "ERROR line ", line, ": illegal assignment for function: ", entry->name };
 			print_sem(msg, 4);
 		}
 		cur_token = back_token();
@@ -769,7 +769,7 @@ int *parse_id_statment_clean(table_entry *entry) {
 		if (entry != NULL && param_count != entry->param_num) {
 			char line[10];
 			itoa(cur_token->lineNumber, line, 10);
-			char *msg[3] = { "\tERROR line ", line, ": wrong number of parameters" };
+			char *msg[3] = { "ERROR line ", line, ": wrong number of parameters" };
 			print_sem(msg, 3);
 		}
 		match(TOKEN_CLOSE_CIRCULAR_PAR);
@@ -797,7 +797,7 @@ int parse_block(table_entry * entry) { /*one case rule*/
 	/*if (entry != NULL && entry->return_type != NULL_type && ret == 0) {
 		char line[10];
 		itoa(cur_token->lineNumber, line, 10);
-		char *msg[3] = { "\tERROR line ", line, ": return type don't match" };
+		char *msg[3] = { "ERROR line ", line, ": return type don't match" };
 		print_sem(msg, 3);
 	}*/
 	return ret;
@@ -845,7 +845,7 @@ elm_type parse_expression() {
 			if (entry->size > 0 && exp_type < 8) {
 				char line[10];
 				itoa(cur_token->lineNumber, line, 10);
-				char *msg[4] = { "\tERROR line ", line, ": no index for array: ", entry->name };
+				char *msg[4] = { "ERROR line ", line, ": no index for array: ", entry->name };
 				print_sem(msg, 4);
 				return id_type;
 			}
@@ -854,7 +854,7 @@ elm_type parse_expression() {
 				if (exp_type < 0 || exp_type >= entry->size) {
 					char line[10];
 					itoa(cur_token->lineNumber, line, 10);
-					char *msg[4] = { "\tERROR line ", line, ": index out of range for array: ", entry->name };
+					char *msg[4] = { "ERROR line ", line, ": index out of range for array: ", entry->name };
 					print_sem(msg, 4);
 				}
 				return id_type;
@@ -863,7 +863,7 @@ elm_type parse_expression() {
 				//error bad type of elements
 				char line[10];
 				itoa(cur_token->lineNumber, line, 10);
-				char *msg[3] = { "\tERROR line ", line, ": on or more elements with no defined type"};
+				char *msg[3] = { "ERROR line ", line, ": on or more elements with no defined type"};
 				print_sem(msg, 3);
 				return NULL_type;
 			}

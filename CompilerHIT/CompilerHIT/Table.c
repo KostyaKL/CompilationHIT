@@ -51,7 +51,7 @@ table_ptr *make_table(table_ptr *current_table, int line) {
 		
 		itoa(line, tmp_line, 10);
 		char *msg[2] = { "start global scope at line: ", tmp_line };
-		print_sem(msg, 2);
+		//print_sem(msg, 2);
 		
 		return current_table;
 	}
@@ -75,7 +75,7 @@ table_ptr *make_table(table_ptr *current_table, int line) {
 	itoa(line, tmp_line, 10);
 	itoa(tmp->scope_number, tmp_scope, 10);
 	char *msg[4] = { "start scope number: ", tmp_scope," at line: ", tmp_line };
-	print_sem(msg, 4);
+	//print_sem(msg, 4);
 
 	return tmp;
 }
@@ -97,13 +97,13 @@ table_ptr *pop_table(table_ptr *current_table, int line) {
 		itoa(line, tmp_line, 10);
 		itoa(current_table->scope_number, tmp_scope, 10);
 		char *msg[4] = { "end scope number: ", tmp_scope," at line: ", tmp_line };
-		print_sem(msg, 4);
+		//print_sem(msg, 4);
 	}
 	else {
 		char tmp_line[10];
 		itoa(line, tmp_line, 10);
 		char *msg[2] = { "end global scope at line: ", tmp_line };
-		print_sem(msg, 2);
+		//print_sem(msg, 2);
 	}
 	free(current_table);
 	return tmp;
@@ -113,7 +113,7 @@ table_entry *insert(table_ptr *current_table, char *id_name, int line) {
 	table_entry *new_entry;
 	new_entry = lookup(current_table, id_name);
 	if (new_entry != NULL) {
-		fprintf(semantic_report, "\tERROR line %d: duplicated declaration of the same name: %s \n", line, id_name);
+		fprintf(semantic_report, "ERROR line %d: duplicated declaration of the same name: %s \n", line, id_name);
 		return NULL;
 	}
 	
@@ -169,7 +169,7 @@ table_entry *find(table_ptr *current_table, char *id_name, int line, int use) {
 		else
 			tab = tab->father;
 	}
-	fprintf(semantic_report, "\tERROR line %d: undeclared identifier: %s \n", line, id_name);
+	fprintf(semantic_report, "ERROR line %d: undeclared identifier: %s \n", line, id_name);
 	return NULL;
 }
 
@@ -210,14 +210,14 @@ int is_unused(table_ptr *current_table) {
 
 void print_unused(table_ptr *current_table) {
 	table_entry *entry = NULL;
-	fprintf(semantic_report, "\tERROR scope %d: there is %d unsused ids:\n", current_table->scope_number, current_table->unused->entry_count );
+	fprintf(semantic_report, "ERROR scope %d: there is %d unsused ids:\n", current_table->scope_number, current_table->unused->entry_count );
 	
 	ids_list *tmp = current_table->ids;
 	while (tmp != NULL) {
 		if(tmp->id != NULL)
 		entry = zhash_get(current_table->unused, tmp->id);
 		if (entry != NULL) {
-			fprintf(semantic_report, "\t\tline: %d, id: %s\n", entry->line_number, entry->name);
+			fprintf(semantic_report, "\tline: %d, id: %s\n", entry->line_number, entry->name);
 		}
 		tmp = tmp->prev;
 	}
